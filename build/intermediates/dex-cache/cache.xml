@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\pre-dexed\debug\classes-f14f812590f22a5f470672e6b271c175f17b245f.jar" />
+    </item>
+    <item
+        jar="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-0630fcbc7319b22b0a87bb21ac47436371267e05.jar" />
+    </item>
+    <item
+        jar="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\pre-dexed\debug\classes-c3710a07e1890909993c1220f305adc6b15afbdd.jar" />
+    </item>
+    <item
+        jar="C:\Users\kostello\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-baffdc4ccfbbad1bbaa6aecb2f0fd1ba4c0260e1.jar" />
+    </item>
+    <item
+        jar="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\21.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
+        <dex dex="C:\Users\kostello\Desktop\Pokedex\app\build\intermediates\pre-dexed\debug\classes-59035922620d7d99f43930758f190eb0f5086146.jar" />
+    </item>
+
+</items>
