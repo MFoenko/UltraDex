@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+	android:gravity="center">
+    
+	<ImageView
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:gravity="center"
+		android:scaleType="centerInside"
+		android:layout_gravity="center"
+		/>
+	<ProgressBar
+		style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+		android:id="@+id/splashProgressBar"
+		android:layout_height="20dp"
+		android:layout_width="fill_parent"
+		android:layout_margin="50dp"
+		android:visibility="gone"
+		/>
+	
+</LinearLayout>
