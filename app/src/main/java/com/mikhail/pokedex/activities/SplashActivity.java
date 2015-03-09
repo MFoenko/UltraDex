@@ -1,207 +1,92 @@
 package com.mikhail.pokedex.activities;
 
 
+import android.app.*;
 import android.content.*;
+import android.content.res.*;
 import android.os.*;
+import android.util.*;
+import android.widget.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.*;
 import java.io.*;
-
-import android.app.Activity;
-import android.content.res.AssetManager;
-import android.database.SQLException;
-import android.util.Log;
-import android.widget.ProgressBar;
-import com.mikhail.pokedex.R;
-import com.mikhail.pokedex.data.PokedexDatabase;
+import java.util.*;
+import java.util.zip.*;
 
 
-public class SplashActivity extends Activity
-{
+public class SplashActivity extends Activity{
 
+	public static final int MEDIA_VERSION = 30;
     public static final String ICONS_LOC = "Icons/";
     public static final String MODELS_LOC = "Models/";
 
-	public boolean spritesDone;
-	public boolean iconsDone;
-	public boolean dataDone;
+	public static final int WAIT_TIME = 300;
 	
+	public boolean mediaDone;
+	public boolean dataDone;
+	public boolean mediaZipNotExists= false;
+	
+	public File version;
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		// TODO: Implement this method
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 
-		PokedexDatabase db = PokedexDatabase.getInstance(this);
 
 		File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
 		//System.out.println(root.getAbsolutePath());
 
-		File sprites = new File("/sdcard/PokeTools/Models");
-		File icons = new File("/sdcard/PokeTools/Icons");
-		
-		if (!sprites.exists())
-		{
-			sprites.mkdirs();
-			new SpritesSetup(this).execute(this);
-
-		}else{
-			spritesDone = true;
+		version = new File(getExternalFilesDir(null), "version");
+		try{
+			Scanner reader = new Scanner(version);
+			if (reader.nextInt() != MEDIA_VERSION){
+				new MediaSetup(this).execute();
+			}else{
+				mediaDone = true;
+			}
+		}catch (FileNotFoundException e){
+			new MediaSetup(this).execute();
+		}catch(NoSuchElementException e){
+			new MediaSetup(this).execute();
 		}
 
-		if (!icons.exists())
-		{
-			icons.mkdirs();
-			new IconsSetup(this).execute(this);
-
-		}else{
-			iconsDone = true;
-		}
-		
 		new PokedexSetup(this).execute(this);
-		
-		if(spritesDone && dataDone && iconsDone){
-			moveOn();
-		}
+
+		moveOn();
 	}
-	
+
 	public void moveOn(){
-		new Handler().postDelayed(new Runnable(){
+		if (dataDone && mediaDone && !mediaZipNotExists){
 
-				public void run()
-				{
+			new Handler().postDelayed(new Runnable(){
+
+					public void run(){
 
 
-					Intent i = new Intent(SplashActivity.this, MainActivity.class);
-					startActivity(i);
+						Intent i = new Intent(SplashActivity.this, MainActivity.class);
+						startActivity(i);
 
-					finish();
+						finish();
 
-				}
-			}, 1000);
+					}
+				}, WAIT_TIME);
+		}
 	}
 
-	private class SpritesSetup extends AsyncTask<Context, Integer, Void>
-	{
-	
-		
-		public SplashActivity act;
-
-		public SpritesSetup(SplashActivity act)
-		{
-			this.act = act;
-		}
-
-		@Override
-		protected void onPreExecute()
-		{
-			ProgressBar bar = (ProgressBar)findViewById(R.id.splashProgressBar);
-			bar.setVisibility(ProgressBar.VISIBLE);
-			bar.setProgress(0);
-			super.onPreExecute();
-		};
-
-		
-		
-		@Override
-		protected Void doInBackground(Context[] p1)
-		{
-
-			AssetManager assetManager = getAssets();
-			String[] files = null;
-			try
-			{
-				files = assetManager.list("Models");
-			}
-			catch (IOException e)
-			{
-				Log.e("tag", "Failed to get asset file list.", e);
-			}
-			for (int i=0;i<files.length;i++)
-			{
-				publishProgress(i/files.length*100);
-				
-				String filename = files[i];
-				
-				//System.out.println(filename);
-				InputStream in = null;
-				OutputStream fout = null;
-				try
-				{
-					in = assetManager.open("Models/"+filename);
- 
-					String out= getExternalFilesDir(null).getAbsolutePath()+ICONS_LOC;
-
-					File outFile = new File(out, filename);
-
-
-					fout = new FileOutputStream(outFile);
-					copyFile(in, fout);
-					in.close();
-					in = null;
-					fout.flush();
-					fout.close();
-					out = null;
-				}
-				catch (IOException e)
-				{
-					Log.e("tag", "Failed to copy asset file: " + filename, e);
-				}       
-				
-			}
-			return null;
-		}
-
-
-		protected void publishProgress(Integer values)
-		{
-			// TODO: Implement this method
-			ProgressBar bar = (ProgressBar)findViewById(R.id.splashProgressBar);
-			bar.setProgress(values);
-		}
-		
-		
-		
-		private void copyFile(InputStream in, OutputStream out) throws IOException
-		{
-			byte[] buffer = new byte[1024];
-			int read;
-			while ((read = in.read(buffer)) != -1)
-			{
-				out.write(buffer, 0, read);
-			}
-
-		}
-
-		@Override
-		protected void onPostExecute(Void result)
-		{
-			
-			super.onPostExecute(result);
-			
-			act.spritesDone = true;
-			if(act.spritesDone && act.dataDone && act.iconsDone)
-				act.moveOn();
-			
-		}
-		
-		
-	}
-
-	private class IconsSetup extends AsyncTask<Context, Integer, Void>
-	{
+	private class MediaSetup extends AsyncTask<Context, Integer, Void>{
 
 
 		public SplashActivity act;
 
-		public IconsSetup(SplashActivity act)
-		{
+		public MediaSetup(SplashActivity act){
 			this.act = act;
 		}
 
 		@Override
-		protected void onPreExecute()
-		{
+		protected void onPreExecute(){
 			ProgressBar bar = (ProgressBar)findViewById(R.id.splashProgressBar);
 			bar.setVisibility(ProgressBar.VISIBLE);
 			bar.setProgress(0);
@@ -211,58 +96,113 @@ public class SplashActivity extends Activity
 
 
 		@Override
-		protected Void doInBackground(Context[] p1)
-		{
+		protected Void doInBackground(Context[] p1){
 
-			AssetManager assetManager = getAssets();
-			String[] files = null;
-			try
-			{
-				files = assetManager.list("Icons");
-			}
-			catch (IOException e)
-			{
-				Log.e("tag", "Failed to get asset file list.", e);
-			}
-			for (int i=0;i<files.length;i++)
-			{
-				publishProgress(i/files.length*100);
-
-				String filename = files[i];
-
-				//System.out.println(filename);
-				InputStream in = null;
-				OutputStream fout = null;
-				try
-				{
-					in = assetManager.open("Icons/"+filename);
-
-					String out= getExternalFilesDir(null).getAbsolutePath()+MODELS_LOC;
-
-					File outFile = new File(out, filename);
-
-
-					fout = new FileOutputStream(outFile);
-					copyFile(in, fout);
-					in.close();
-					in = null;
-					fout.flush();
-					fout.close();
-					out = null;
-				}
-				catch (IOException e)
-				{
-					Log.e("tag", "Failed to copy asset file: " + filename, e);
-				}       
-
-			}
+			extract();
 			return null;
+
+		}
+
+		public void extract(){
+
+            String packageName = getApplicationContext().getPackageName();
+
+            File root = Environment.getExternalStorageDirectory();
+            File expPath = new File(root.toString() + "/Android/obb/" + packageName);
+
+            if (expPath.exists()){
+                String strMainPath = null;
+                try{
+                    strMainPath = expPath + File.separator + "main."
+                        + MEDIA_VERSION + "."
+						+ packageName + ".obb";
+
+
+					Log.e("Extract File path", "===>" + strMainPath);
+
+					File f=new File(strMainPath);
+					if (f.exists()){
+						Log.e("Extract From File path", "===> not exist");
+					}else{
+						Log.e("Extract From File path", "===> exist");
+					}
+
+					boolean flag = extractZip(strMainPath, getExternalFilesDir(null).getAbsolutePath());
+
+					Log.e("After Extract Zip", "===>" + flag);
+                }catch (Exception e){
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }else{
+				mediaZipNotExists = true;
+			}
+
+		}
+
+		private boolean extractZip(String pathOfZip, String pathToExtract){
+
+
+			int BUFFER_SIZE = 1024;
+			int size;
+			byte[] buffer = new byte[BUFFER_SIZE];
+
+
+			try{
+				File f = new File(pathToExtract);
+				if (!f.isDirectory()){
+					f.mkdirs();
+				}
+				ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(pathOfZip), BUFFER_SIZE));
+				final long fileSize = new File(pathOfZip).length();
+				long sizeUnzipped = 0;
+				try{
+					ZipEntry ze = null;
+					while ((ze = zin.getNextEntry()) != null){
+						String path = pathToExtract  + "/" + ze.getName();
+
+						if (ze.isDirectory()){
+							File unzipFile = new File(path);
+							if (!unzipFile.isDirectory()){
+								unzipFile.mkdirs();
+							}
+						}else{
+							FileOutputStream out = new FileOutputStream(path, false);
+							BufferedOutputStream fout = new BufferedOutputStream(out, BUFFER_SIZE);
+							try{
+								while ((size = zin.read(buffer, 0, BUFFER_SIZE)) != -1){
+									fout.write(buffer, 0, size);
+									sizeUnzipped+=size;
+									publishProgress((int)(((double)sizeUnzipped / fileSize) * 100));
+									
+								}
+								
+								zin.closeEntry();
+							}catch (Exception e){
+								Log.e("Exception", "Unzip exception 1:" + e.toString());
+							}finally{
+								fout.flush();
+								fout.close();
+							}
+						}
+						}
+				}catch (Exception e){
+					Log.e("Exception", "Unzip exception2 :" + e.toString());
+				}finally{
+					zin.close();
+				}
+				return true;
+			}catch (Exception e){
+				Log.e("Exception", "Unzip exception :" + e.toString());
+			}
+			return false;
+
 		}
 
 
 
-		protected void publishProgress(Integer values)
-		{
+		protected void publishProgress(Integer values){
 			// TODO: Implement this method
 			ProgressBar bar = (ProgressBar)findViewById(R.id.splashProgressBar);
 			bar.setProgress(values);
@@ -270,47 +210,42 @@ public class SplashActivity extends Activity
 
 
 
-		private void copyFile(InputStream in, OutputStream out) throws IOException
-		{
-			byte[] buffer = new byte[1024];
-			int read;
-			while ((read = in.read(buffer)) != -1)
-			{
-				out.write(buffer, 0, read);
-			}
-
-		}
-
 		@Override
-		protected void onPostExecute(Void result)
-		{
+		protected void onPostExecute(Void result){
 
 			super.onPostExecute(result);
 
-			act.iconsDone = true;
-			if(act.spritesDone && act.dataDone && act.iconsDone)
+			try{
+				version.createNewFile();
+				FileWriter writer = new FileWriter(version, false);
+				writer.write(String.valueOf(MEDIA_VERSION));
+				writer.flush();
+				writer.close();
+			}catch (IOException e){
+				e.printStackTrace();
+			}
+
+			act.mediaDone = true;
 				act.moveOn();
 
 		}
 
 
 	}
-	
-	private class PokedexSetup extends AsyncTask<Context, Void, Void>
-	{
-		
-		
+
+
+	private class PokedexSetup extends AsyncTask<Context, Void, Void>{
+
+
 		public SplashActivity act;
 
-		public PokedexSetup(SplashActivity act)
-		{
+		public PokedexSetup(SplashActivity act){
 			this.act = act;
 		}
-		
+
 
 		@Override
-		protected void onPreExecute()
-		{
+		protected void onPreExecute(){
 			// TODO: Implement this method
 			super.onPreExecute();
 		}
@@ -318,24 +253,19 @@ public class SplashActivity extends Activity
 
 
 		@Override
-		protected Void doInBackground(Context[] p1)
-		{
+		protected Void doInBackground(Context[] p1){
 
-
-			PokedexDatabase myDbHelper;
-			myDbHelper = new PokedexDatabase(p1[0]);
+			PokedexDatabase.getInstance(act);
 
 			return null;
 		}
 
 		@Override
-		protected void onPostExecute(Void result)
-		{
+		protected void onPostExecute(Void result){
 			// TODO: Implement this method
 			super.onPostExecute(result);
 
 			act.dataDone = true;
-			if(act.dataDone && act.spritesDone && act.iconsDone)
 				act.moveOn();
 
 
