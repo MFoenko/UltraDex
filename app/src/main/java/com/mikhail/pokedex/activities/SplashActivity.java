@@ -3,7 +3,6 @@ package com.mikhail.pokedex.activities;
 
 import android.app.*;
 import android.content.*;
-import android.content.res.*;
 import android.os.*;
 import android.util.*;
 import android.widget.*;
@@ -21,11 +20,12 @@ public class SplashActivity extends Activity{
     public static final String MODELS_LOC = "Models/";
 
 	public static final int WAIT_TIME = 300;
-	
+
 	public boolean mediaDone;
+	public boolean mediaFail;
 	public boolean dataDone;
 	public boolean mediaZipNotExists= false;
-	
+
 	public File version;
 
 	@Override
@@ -49,7 +49,7 @@ public class SplashActivity extends Activity{
 			}
 		}catch (FileNotFoundException e){
 			new MediaSetup(this).execute();
-		}catch(NoSuchElementException e){
+		}catch (NoSuchElementException e){
 			new MediaSetup(this).execute();
 		}
 
@@ -76,7 +76,26 @@ public class SplashActivity extends Activity{
 		}
 	}
 
-	private class MediaSetup extends AsyncTask<Context, Integer, Void>{
+	@Override
+	protected void onStart(){
+		super.onStart();
+		
+		new AlertDialog.Builder(this).setTitle("File Install Failed").setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface p1, int p2){
+					mediaDone = true;
+					moveOn();
+				}
+
+			
+		}).create();
+		
+	}
+
+	
+	
+	private class MediaSetup extends AsyncTask<Context, Integer, Boolean>{
 
 
 		public SplashActivity act;
@@ -96,15 +115,16 @@ public class SplashActivity extends Activity{
 
 
 		@Override
-		protected Void doInBackground(Context[] p1){
+		protected Boolean doInBackground(Context[] p1){
 
-			extract();
-			return null;
+
+			return extract();
 
 		}
 
-		public void extract(){
+		public boolean extract(){
 
+			boolean result = false;
             String packageName = getApplicationContext().getPackageName();
 
             File root = Environment.getExternalStorageDirectory();
@@ -127,9 +147,9 @@ public class SplashActivity extends Activity{
 						Log.e("Extract From File path", "===> exist");
 					}
 
-					boolean flag = extractZip(strMainPath, getExternalFilesDir(null).getAbsolutePath());
+					result = extractZip(strMainPath, getExternalFilesDir(null).getAbsolutePath());
 
-					Log.e("After Extract Zip", "===>" + flag);
+					Log.e("After Extract Zip", "===>" + result);
                 }catch (Exception e){
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -138,7 +158,7 @@ public class SplashActivity extends Activity{
             }else{
 				mediaZipNotExists = true;
 			}
-
+			return result;
 		}
 
 		private boolean extractZip(String pathOfZip, String pathToExtract){
@@ -173,11 +193,11 @@ public class SplashActivity extends Activity{
 							try{
 								while ((size = zin.read(buffer, 0, BUFFER_SIZE)) != -1){
 									fout.write(buffer, 0, size);
-									sizeUnzipped+=size;
+									sizeUnzipped += size;
 									publishProgress((int)(((double)sizeUnzipped / fileSize) * 100));
-									
+
 								}
-								
+
 								zin.closeEntry();
 							}catch (Exception e){
 								Log.e("Exception", "Unzip exception 1:" + e.toString());
@@ -186,7 +206,7 @@ public class SplashActivity extends Activity{
 								fout.close();
 							}
 						}
-						}
+					}
 				}catch (Exception e){
 					Log.e("Exception", "Unzip exception2 :" + e.toString());
 				}finally{
@@ -211,23 +231,27 @@ public class SplashActivity extends Activity{
 
 
 		@Override
-		protected void onPostExecute(Void result){
+		protected void onPostExecute(Boolean result){
 
 			super.onPostExecute(result);
 
-			try{
-				version.createNewFile();
-				FileWriter writer = new FileWriter(version, false);
-				writer.write(String.valueOf(MEDIA_VERSION));
-				writer.flush();
-				writer.close();
-			}catch (IOException e){
-				e.printStackTrace();
-			}
+			if (result){
+				try{
+					version.createNewFile();
+					FileWriter writer = new FileWriter(version, false);
+					writer.write(String.valueOf(MEDIA_VERSION));
+					writer.flush();
+					writer.close();
+				}catch (IOException e){
+					e.printStackTrace();
+				}
 
-			act.mediaDone = true;
+
+				act.mediaDone = true;
 				act.moveOn();
-
+			}else{
+				mediaFail = true;
+			}
 		}
 
 
@@ -255,8 +279,9 @@ public class SplashActivity extends Activity{
 		@Override
 		protected Void doInBackground(Context[] p1){
 
-			PokedexDatabase.getInstance(act);
-
+			PokedexDatabase dex = PokedexDatabase.getInstance(act);
+			dex.getAllPokemon();
+			dex.getAllMoves();
 			return null;
 		}
 
@@ -266,7 +291,7 @@ public class SplashActivity extends Activity{
 			super.onPostExecute(result);
 
 			act.dataDone = true;
-				act.moveOn();
+			act.moveOn();
 
 
 		}

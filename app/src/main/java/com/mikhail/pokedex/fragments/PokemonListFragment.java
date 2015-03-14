@@ -2,58 +2,68 @@ package com.mikhail.pokedex.fragments;
 import android.content.*;
 import android.os.*;
 import android.support.v7.widget.*;
-import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.activities.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
+import java.text.*;
 import java.util.*;
-import com.mikhail.pokedex.activities.*;
+import com.mikhail.pokedex.fragments.RecyclerFragment.*;
 
-public class PokemonListFragment extends RecyclerFragment implements DrawerItem{
+public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder>{
 
-	public static final String DRAWER_ITEM_NAME = "Pokedex";
-	public static final int DRAWER_ITEM_ICON = DRAWER_ICON_NONE;
+
 	public LoadIconsTask task;
 
-	PokemonListAdapter adapter;
+
 
 	@Override
-	public void onCreate(Bundle savedInstanceState){
-		// TODO: Implement this method
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState){
-
-		mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-		
-		Pokemon[] pokes = PokedexDatabase.getInstance(view.getContext()).getAllPokemon();
-		mRecyclerView.setAdapter(adapter = new PokemonListAdapter(pokes));
-		task = new LoadIconsTask(view.getContext());
-		task.execute(pokes);
+	public RecyclerFragment.ListItemAdapter<Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> getNewAdapter(){
+		return new PokemonListAdapter();
 	}
 
 
-	private static class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.PokemonViewHolder>{
-
-		ArrayList<Pokemon> pokemonList;
-
-		public PokemonListAdapter(Pokemon[] pokemonList){
-			this.pokemonList = new ArrayList<Pokemon>(Arrays.asList(pokemonList));
+	
+	
+	@Override
+	public boolean displayData(){
+		if(!super.displayData()){
+			return false;
 		}
-		
-		
+		task = new LoadIconsTask(getActivity());
+		task.execute(mData);
+		return true;
+	}
+
+	@Override
+	public void onPause(){
+		// TODO: Implement this method
+		super.onPause();
+	}
+
+	@Override
+	public RecyclerFragment.Filter<PokedexClasses.Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> getNewFilter(){
+		return new PokemonFilter(mAdapter);
+	}
+
+	
+	
+	
+	
+	protected static class PokemonListAdapter extends ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder>{
+
+		DecimalFormat df = new DecimalFormat("000");
+
 
 		@Override
 		public void onBindViewHolder(PokemonListAdapter.PokemonViewHolder p1, int p2){
-			Pokemon p = pokemonList.get(p2);
+			Pokemon p = listItems.get(p2);
 			p1.name.setText(p.name);
-			p1.id.setText(String.valueOf(p.dispId));
+			p1.id.setText(df.format(p.dispId));
 			p1.icon.setImageBitmap(p.icon);
 		}
 
@@ -67,18 +77,11 @@ public class PokemonListFragment extends RecyclerFragment implements DrawerItem{
 			return holder;
 		}
 
-		@Override
-		public int getItemCount(){
-			// TODO: Implement this method
-			return pokemonList.size();
-		}
-
-
 		public int[] getIdArray(){
-			int[] idArray = new int[pokemonList.size()];
+			int[] idArray = new int[listItems.size()];
 			int len = idArray.length;
 			for(int i=0;i<len;i++){
-				idArray[i] = pokemonList.get(i).id;
+				idArray[i] = listItems.get(i).id;
 			}
 			return idArray;
 		}
@@ -102,37 +105,33 @@ public class PokemonListFragment extends RecyclerFragment implements DrawerItem{
 			public void onClick(View p1){
 				Intent intent = new Intent(p1.getContext(), PokemonInfoActivity.class);
 				intent.putExtra(PokemonInfoActivity.EXTRA_ID_ARRAY, getIdArray());
-				Log.i("AAA", "click position "+getPosition());
 				intent.putExtra(PokemonInfoActivity.EXTRA_ID_INDEX, this.getPosition());
 				p1.getContext().startActivity(intent);
 			}
 		}
 		
 	}
-	
-	
-	
-	@Override
-	public String getDrawerItemName(){
-		return DRAWER_ITEM_NAME;
-	}
+	private static class PokemonFilter extends Filter<Pokemon, PokemonListAdapter.PokemonViewHolder>{
 
-	@Override
-	public int getDrawerItemIconResourceId(){
-		return DRAWER_ITEM_ICON;
-	}
+		public PokemonFilter(ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder> adapter){
+			super(adapter);
+		}
+		
+		@Override
+		public boolean isMatchSearch(PokedexClasses.Pokemon item){
+			
+			return item.getName().toLowerCase().indexOf(search.toString().toLowerCase())>-1 || String.valueOf(item.getId()).indexOf(search.toString())>-1; 
+				
+		}
 
-	@Override
-	public byte getDrawerItemType(){
-		return DRAWER_ITEM_TYPE_CLICKABLE;
-	}
-
-	@Override
-	public boolean onDrawerItemClick(Context context){
-		return true;
+		
+		
+		
 	}
 	
-	private class LoadIconsTask extends AsyncTask<Pokemon,Integer, Void>{
+	
+	
+	private class LoadIconsTask extends AsyncTask<Pokemon ,Integer, Void>{
 
 		Context con;
 
@@ -147,7 +146,6 @@ public class PokemonListFragment extends RecyclerFragment implements DrawerItem{
 			for(int i=0;i<len;i++){
 				Pokemon p = p1[i];
 				p.loadBitmap(con);
-				Log.i("AAA", ""+p.icon);
 				publishProgress(i);
 				if(isCancelled()){
 					break;
@@ -162,11 +160,9 @@ public class PokemonListFragment extends RecyclerFragment implements DrawerItem{
 		@Override
 		protected void onProgressUpdate(Integer[] values){
 			super.onProgressUpdate(values);
-			adapter.notifyItemChanged(values[0]);
+			mAdapter.notifyItemChanged(values[0]);
 		}
-
-		
-		
 	}
-
+	
+	
 }

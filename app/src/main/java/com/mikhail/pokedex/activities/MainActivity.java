@@ -13,6 +13,7 @@ import com.mikhail.pokedex.misc.*;
 
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.content.res.*;
+import com.mikhail.pokedex.data.*;
 
 /**
  * Created by MFoenko on 3/7/2015.
@@ -20,8 +21,10 @@ import android.content.res.*;
 public class MainActivity extends ActionBarActivity implements OnItemClickListener {
 
 
-    public static final DrawerItem[] DRAWER_ITEMS = new DrawerItem[]{new PokemonListFragment()};
+    public static final DrawerItem[] DRAWER_ITEMS = new DrawerItem[]{new MainPokemonListFragment(), new MainMoveListFragment()};
 	public static final int DEFAULT_INDEX = 0;
+	public static final int POKEDEX_FRAGMENT = 0;
+	public static final int MOVEDEX_FRAGMENT = 1;
 	
 	
     DrawerLayout mDrawerLayout;
@@ -35,6 +38,10 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+		
+		((MainPokemonListFragment)DRAWER_ITEMS[POKEDEX_FRAGMENT]).loadData(PokedexDatabase.getInstance(this).getAllPokemon());
+		((MainMoveListFragment)DRAWER_ITEMS[MOVEDEX_FRAGMENT]).loadData(PokedexDatabase.getInstance(this).getAllMoves());
+		
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mLeftDrawer = (ListView) findViewById(R.id.left_drawer);
         mLeftDrawer.setAdapter(mLeftDrawerAdapter = new DrawerItemAdapter(DRAWER_ITEMS));

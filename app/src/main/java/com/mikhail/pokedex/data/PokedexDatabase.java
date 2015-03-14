@@ -3,11 +3,14 @@ package com.mikhail.pokedex.data;
 import android.content.*;
 import android.database.*;
 import android.database.sqlite.*;
+import android.text.*;
+import android.text.style.*;
 import android.util.*;
+import android.view.*;
+import com.mikhail.pokedex.activities.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 
 /**
  * Created by MFoenko on 3/7/2015.
@@ -68,38 +71,146 @@ public class PokedexDatabase extends SQLiteOpenHelper{
     }
 
 
+	public static final int[] GEN_STAT_VERSIONS = {0,1,1,1,1,1};
+	public static final String[][] STAT_LABELS = {
+		{"HP", "Attack", "Defense", "Special", "Speed"},
+		{"HP", "Attack", "Defense", "Sp. Attack", "Sp. Defence", "Speed"}
+	};
+	public static final int[][] STAT_COLORS = {
+		{0xFF0000, 0xFFA500, 0xFFFF00, 0x1E90FF, 0xFFC0CB },
+		{0xFF0000, 0xFFA500, 0xFFFF00, 0x1E90FF, 0x008000, 0xFFC0CB },
+	};
+	public static final int[][] STAT_MAXES = {
+		{250, 150, 200, 150, 150},
+		{250, 200, 250, 200, 250, 200}
+	};
+
+	public static final int[] GEN_TYPE_VERSIONS = {0,1,1,1,1,2};
+	public static final String[][] TYPE_NAMES = {
+		{"Normal","Fighting","Flying","Poison","Ground","Rock","Bug","Ghost","","Fire","Water","Grass","Electric","Psychic","Ice","Dragon"},
+		{"Normal","Fighting","Flying","Poison","Ground","Rock","Bug","Ghost","Steel","Fire","Water","Grass","Electric","Psychic","Ice","Dragon","Dark"},
+		{"Normal","Fighting","Flying","Poison","Ground","Rock","Bug","Ghost","Steel","Fire","Water","Grass","Electric","Psychic","Ice","Dragon","Dark","Fairy"}
+	};
+	public static final int[][] TYPE_COLORS ={
+		{0xFFA8A77A, 0xFFC22E28, 0xFFA98FF3, 0xFFA33EA1, 0xFFE2BF65, 0xFFB6A136, 0xFFA6B91A, 0xFF735797, 0 , 0xFFEE8130, 0xFF6390F0, 0xFF7AC74C, 0xFFF7D02C, 0xFFF95587, 0xFF96D9D6, 0xFF6F35FC},
+		{0xFFA8A77A, 0xFFC22E28, 0xFFA98FF3, 0xFFA33EA1, 0xFFE2BF65, 0xFFB6A136, 0xFFA6B91A, 0xFF735797, 0xFFB7B7CE, 0xFFEE8130, 0xFF6390F0, 0xFF7AC74C, 0xFFF7D02C, 0xFFF95587, 0xFF96D9D6, 0xFF6F35FC, 0xFF705746},
+		{0xFFA8A77A, 0xFFC22E28, 0xFFA98FF3, 0xFFA33EA1, 0xFFE2BF65, 0xFFB6A136, 0xFFA6B91A, 0xFF735797, 0xFFB7B7CE, 0xFFEE8130, 0xFF6390F0, 0xFF7AC74C, 0xFFF7D02C, 0xFFF95587, 0xFF96D9D6, 0xFF6F35FC, 0xFF705746, 0xFFFF00FF}
+	};
+	//TYPE_EFFICIENCY[TYPE_VERSION][ATTACK_TYPE][DEFEND_TYPE];
+	public static final float[][][] TYPE_EFFICIENCY=
+	{ 
+		{ 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,0.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{2.0f,1.0f,0.5f,0.5f,1.0f,2.0f,0.5f,0.0f,2.0f,1.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,2.0f,0.5f}, 
+			{1.0f,2.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,0.5f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,2.0f,0.5f,0.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f}, 
+			{1.0f,1.0f,0.0f,2.0f,1.0f,2.0f,0.5f,1.0f,2.0f,2.0f,1.0f,0.5f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,0.5f,2.0f,1.0f,0.5f,1.0f,2.0f,1.0f,0.5f,2.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,0.5f,0.5f,2.0f,1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,2.0f,0.5f}, 
+			{0.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f,0.0f,1.0f,1.0f,0.5f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,0.5f,1.0f,2.0f,1.0f,1.0f,2.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,2.0f,0.5f,0.5f,2.0f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,2.0f,2.0f,1.0f,1.0f,1.0f,2.0f,0.5f,0.5f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,0.5f,0.5f,2.0f,2.0f,0.5f,1.0f,0.5f,0.5f,2.0f,0.5f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,2.0f,1.0f,0.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,0.5f,0.5f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,0.0f,1.0f}, 
+			{1.0f,1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,1.0f,0.5f,1.0f,0.5f,2.0f,1.0f,1.0f,0.5f,2.0f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,0.0f}, 
+			{1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,0.5f}, 
+			{1.0f,2.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,0.5f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,2.0f,1.0f} 
+		},
+		{ 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,0.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{2.0f,1.0f,0.5f,0.5f,1.0f,2.0f,0.5f,0.0f,2.0f,1.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,2.0f,0.5f}, 
+			{1.0f,2.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,0.5f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,0.5f,0.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f}, 
+			{1.0f,1.0f,0.0f,2.0f,1.0f,2.0f,0.5f,1.0f,2.0f,2.0f,1.0f,0.5f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,0.5f,2.0f,1.0f,0.5f,1.0f,2.0f,1.0f,0.5f,2.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,0.5f,0.5f,0.5f,1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,2.0f,0.5f}, 
+			{0.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,0.5f,1.0f,2.0f,1.0f,1.0f,2.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,2.0f,0.5f,0.5f,2.0f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,2.0f,2.0f,1.0f,1.0f,1.0f,2.0f,0.5f,0.5f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,0.5f,0.5f,2.0f,2.0f,0.5f,1.0f,0.5f,0.5f,2.0f,0.5f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,2.0f,1.0f,0.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,0.5f,0.5f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,0.0f,1.0f}, 
+			{1.0f,1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,2.0f,1.0f,1.0f,0.5f,2.0f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,0.0f}, 
+			{1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,0.5f}, 
+			{1.0f,2.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,0.5f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,2.0f,1.0f} 
+		},
+		{ 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,0.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{2.0f,1.0f,0.5f,0.5f,1.0f,2.0f,0.5f,0.0f,2.0f,1.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,2.0f,0.5f}, 
+			{1.0f,2.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,0.5f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,0.5f,0.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f}, 
+			{1.0f,1.0f,0.0f,2.0f,1.0f,2.0f,0.5f,1.0f,2.0f,2.0f,1.0f,0.5f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,0.5f,2.0f,1.0f,0.5f,1.0f,2.0f,1.0f,0.5f,2.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f}, 
+			{1.0f,0.5f,0.5f,0.5f,1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,2.0f,0.5f}, 
+			{0.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,0.5f,0.5f,1.0f,0.5f,1.0f,2.0f,1.0f,1.0f,2.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,2.0f,1.0f,2.0f,0.5f,0.5f,2.0f,1.0f,1.0f,2.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,2.0f,2.0f,1.0f,1.0f,1.0f,2.0f,0.5f,0.5f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,0.5f,0.5f,2.0f,2.0f,0.5f,1.0f,0.5f,0.5f,2.0f,0.5f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,1.0f,2.0f,1.0f,0.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,0.5f,0.5f,1.0f,1.0f,0.5f,1.0f,1.0f}, 
+			{1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,0.0f,1.0f}, 
+			{1.0f,1.0f,2.0f,1.0f,2.0f,1.0f,1.0f,1.0f,0.5f,0.5f,0.5f,2.0f,1.0f,1.0f,0.5f,2.0f,1.0f,1.0f}, 
+			{1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,0.0f}, 
+			{1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,1.0f,1.0f,0.5f,0.5f}, 
+			{1.0f,2.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,0.5f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,2.0f,1.0f} 
+		}
+	};
+
+	public static final String[] DAMAGE_CLASS_NAMES = {"Physical", "Special", "Status"};
+
+	public static final int[] VERSION_VERSION_GROUP = {0,0,1,2,2,3,4,4,5,6,6,7,7,8,9,9,10,10,11,12,13,13,14,14};
+	public static final int[] VERSION_GROUP_GENERATION = {0,0,1,1,2,2,2,3,3,3,4,2,2,4,5};
 
 
-
-
-
-
-	public static final int GEN = 6;
+	public static final int VERSION = 22;
 	public static final int LANG = 9;
 
+	public static final int VERSION_GROUP = VERSION_VERSION_GROUP[VERSION];
+	public static final int GEN = VERSION_GROUP_GENERATION[VERSION_GROUP];
 
 
+	private static Pokemon[] preloadedPokemon;
 
 
-	public Pokemon[] getAllPokemon(){
-		return getAllPokemon(GEN, LANG);
+	private static final String BASE_POKEMON_QUERY_W_O_SELECT = "p._id, p.species_id, CASE f.form_order WHEN 1 THEN sn.name ELSE fn.pokemon_name END, f.form_identifier, (SELECT GROUP_CONCAT(t.type_id-1,',') FROM pokemon_types AS t WHERE t.pokemon_id=p._id AND generation_id <= ? GROUP BY pokemon_id,generation_id ORDER BY slot, generation_id DESC LIMIT 1), (SELECT GROUP_CONCAT(s.base_stat,',') FROM pokemon_stats AS s WHERE s.pokemon_id = p._id AND stat_id != (5*(?=='1')) AND generation_id <= ? GROUP BY s.generation_id ORDER BY stat_id, generation_id DESC LIMIT 1), sn.genus		 FROM  pokemon AS p JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ?";
+	private static final String BASE_POKEMON_QUERY = "SELECT " + BASE_POKEMON_QUERY_W_O_SELECT;
+	private static final String ALL_POKEMON_QUERY = BASE_POKEMON_QUERY + "AND f.introduced_in_version_group_id <= ? AND f.is_default = 1 ORDER BY p.species_id;";
+	private static final String SINGLE_POKEMON_QUERY = BASE_POKEMON_QUERY + " AND p._id = ? ORDER BY RANDOM();";
+	private static final String MOVE_POKEMON_QUERY = "SELECT DISTINCT " + BASE_POKEMON_QUERY_W_O_SELECT + " AND p._id IN (SELECT pokemon_id FROM pokemon_moves WHERE version_group_id <= ? AND move_id = ?) ;";
+
+	
+	public Pokemon getPokemon(int id){
+		return getPokemon(id, VERSION, LANG);
 	}
 
+	public Pokemon getPokemon(int id, int ver, int lang){
+		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
 
-	public Pokemon[] getAllPokemon(int gen, int lang){
-		/*
 
-		 SELECT p._id, p.species_id, IFNULL(fn.pokemon_name, sn.name)
-		 FROM pokemon AS p JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) 
-		 JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id)
-		 JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id )
-		 WHERE fn.local_language_id = ?; 
+		Cursor c = this.dex.rawQuery(SINGLE_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang), String.valueOf(id)});
 
-		 */
-		String query = 
-			"SELECT p._id, p.species_id, IFNULL(fn.pokemon_name, sn.name), f.form_identifier FROM pokemon AS p JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ? ORDER BY p.species_id"; 
+		Pokemon.Builder builder = new Pokemon.Builder();
+		c.moveToFirst();
+		builder.id(c.getInt(0))
+			.dispId(c.getInt(1))
+			.name(c.getString(2))
+			.suffix(c.getString(3))
+			.types(stringArrToIntArr(c.getString(4).split(",")))
+			.stats(stringArrToIntArr(c.getString(5).split(",")))
+			.hasUniqueIcon(builder.id != builder.dispId)
+			.genus(c.getString(6))
+			;
 
-		Cursor c = this.dex.rawQuery(query, new String[]{String.valueOf(lang)});
+		c.close();
+		return builder.build();
+	}
+	
+	public Pokemon[] getPokemonArrayFromCursor(Cursor c){
 		int length;
 		Pokemon[] pokemon = new Pokemon[length = c.getCount()];
 		Pokemon.Builder builder = new Pokemon.Builder();
@@ -108,43 +219,413 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 			builder.id(c.getInt(0))
 				.dispId(c.getInt(1))
 				.name(c.getString(2))
-				.suffix(c.getString(3));
+				.suffix(c.getString(3))
+				.types(stringArrToIntArr(c.getString(4).split(",")))
+				.stats(stringArrToIntArr(c.getString(5).split(",")))
+				.hasUniqueIcon(builder.id != builder.dispId)
+				.genus(c.getString(6))
+				;
 			pokemon[i] = builder.build();
 		}
 		c.close();
 		return pokemon;
 	}
-
-	public Pokemon getPokemon(int id){
-		return getPokemon(id, GEN, LANG);
+	
+	public Pokemon[] getAllPokemon(){
+		return getAllPokemon(VERSION, LANG);
 	}
 
-	public Pokemon getPokemon(int id, int gen, int lang){
-		/*
+	public Pokemon[] getAllPokemon(int ver, int lang){
+		if (preloadedPokemon != null){
+			return preloadedPokemon;
+		}
 
-		 SELECT p._id, p.species_id, IFNULL(fn.pokemon_name, sn.name)
-		 FROM pokemon AS p JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) 
-		 JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id)
-		 JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id )
-		 WHERE fn.local_language_id = ?; 
+		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
+		int vgr = VERSION_VERSION_GROUP[ver] + 1;
 
-		 */
-		String query = 
-			"SELECT p._id, p.species_id, IFNULL(fn.pokemon_name, sn.name), f.form_identifier FROM pokemon AS p JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE p._id = ? AND fn.local_language_id = ? ORDER BY p.species_id"; 
+		Cursor c = this.dex.rawQuery(ALL_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(vgr)});
+		
+		return preloadedPokemon = getPokemonArrayFromCursor(c);
+	}
 
-		Cursor c = this.dex.rawQuery(query, new String[]{String.valueOf(id), String.valueOf(lang)});
-		int length;
-		Pokemon.Builder builder = new Pokemon.Builder();
-		c.moveToFirst();
-		builder.id(c.getInt(0))
-			.dispId(c.getInt(1))
-			.name(c.getString(2))
-			.suffix(c.getString(3));
+
+	public Pokemon[] getPokemonByCommonMove(int id){
+		return getPokemonByCommonMove(id, VERSION, LANG);
+	}
+
+	public Pokemon[] getPokemonByCommonMove(int id, int ver, int lang){
+		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
+		int vgr = VERSION_VERSION_GROUP[ver] + 1;
+
+		Cursor c = this.dex.rawQuery(MOVE_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(vgr), String.valueOf(id)});
+		return getPokemonArrayFromCursor(c);
+	}
+
+	private int[] stringArrToIntArr(String[] sArr){
+		int len = sArr.length;
+		int[] iArr = new int[len];
+		for (int i=0;i < len;i++){
+			iArr[i] = Integer.parseInt(sArr[i]);
+		}
+		return iArr;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public static final String EFFECT_CHANCE_SYMBOL = "$effect_chance";
+
+	private static Move[] preloadedMoves;
+
+	public static final String BASE_MOVE_QUERY = "SELECT m.id, mn.name, m.type_id-1,m.damage_class_id-1, m.power, m.accuracy, m.pp, m.priority , mp.effect, m.effect_chance FROM moves AS m JOIN move_names AS mn ON (m.id = mn.move_id) JOIN move_effect_prose AS mp ON (m.effect_id = mp.move_effect_id AND mp.local_language_id=mn.local_language_id) WHERE mp.local_language_id = ?";
+	public static final String ALL_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.generation_id <= ? AND m.id < 10000 ORDER BY mn.name;";
+	public static final String SINGLE_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.id = ?;";
+	public static final String POKEMON_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.id IN (SELECT move_id FROM pokemon_moves WHERE version_group_id = ? AND pokemon_id = ?) ;";
+	
+	
+	
+
+
+	public Move getMove(int id){
+		return getMove(id, VERSION, LANG);
+	}
+
+	public Move getMove(int id, int ver, int lang){
+		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
+
+		Cursor c=dex.rawQuery(SINGLE_MOVE_QUERY, new String[]{String.valueOf(lang), String.valueOf(id)});
+
+		Move move = null;
+		if (c.moveToFirst()){
+			Move.Builder builder = new Move.Builder();
+			builder
+				.id(c.getInt(0))
+				.name(c.getString(1))
+				.type(c.getInt(2))
+				.damageClass(c.getInt(3))
+				.power(c.getInt(4))
+				.accuracy(c.getInt(5))
+				.pp(c.getInt(6))
+				.priority(c.getInt(7));
+			StringBuilder effect = new StringBuilder(c.getString(8));
+			int effectIndex = effect.indexOf(EFFECT_CHANCE_SYMBOL);
+			if (effectIndex != -1){
+				effect.replace(effectIndex, effectIndex + EFFECT_CHANCE_SYMBOL.length(), c.getString(9));
+			}
+			builder
+				.description(parseEffectString(effect));
+			move = builder.build();
+		}
 
 		c.close();
-		return builder.build();
+		return move;
+	}
+
+	public Move getMove(CharSequence id){
+		return getMove(id, VERSION, LANG);
+	}
+
+	public Move getMove(CharSequence id, int ver, int lang){
+		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
+
+		String query = "SELECT m.id, mn.name, m.type_id-1,m.damage_class_id-1, m.power, m.accuracy, m.pp, m.priority , mp.effect, m.effect_chance FROM moves AS m JOIN move_names AS mn ON (m.id = mn.move_id) JOIN move_effect_prose AS mp ON (m.effect_id = mp.move_effect_id AND mp.local_language_id=mn.local_language_id) WHERE m.identifier = ? AND m.generation_id <= ? AND mp.local_language_id = ?";
+		Cursor c=dex.rawQuery(query, new String[]{id.toString(), String.valueOf(gen), String.valueOf(lang)});
+
+		Move move = null;
+		if (c.moveToFirst()){
+			Move.Builder builder = new Move.Builder();
+			builder
+				.id(c.getInt(0))
+				.name(c.getString(1))
+				.type(c.getInt(2))
+				.damageClass(c.getInt(3))
+				.power(c.getInt(4))
+				.accuracy(c.getInt(5))
+				.pp(c.getInt(6))
+				.priority(c.getInt(7));
+			StringBuilder effect = new StringBuilder(c.getString(8));
+			int effectIndex = effect.indexOf(EFFECT_CHANCE_SYMBOL);
+			if (effectIndex != -1){
+				effect.replace(effectIndex, effectIndex + EFFECT_CHANCE_SYMBOL.length(), c.getString(9));
+			}
+			builder
+				.description(parseEffectString(effect));
+			move = builder.build();
+		}
+
+		c.close();
+		return move;
+	}
+	 public Move[] getMovesFromCursor(Cursor c){
+		 int len = c.getCount();
+		 Move[] moves = new Move[len];
+		 Move.Builder builder = new Move.Builder();
+		 for (int i=0;i < len;i++){
+			 c.moveToNext();
+			 builder
+				 .id(c.getInt(0))
+				 .name(c.getString(1))
+				 .type(c.getInt(2))
+				 .damageClass(c.getInt(3))
+				 .power(c.getInt(4))
+				 .accuracy(c.getInt(5))
+				 .pp(c.getInt(6))
+				 .priority(c.getInt(7));
+			 StringBuilder effect = new StringBuilder(c.getString(8));
+			 int effectIndex = effect.indexOf(EFFECT_CHANCE_SYMBOL);
+			 if (effectIndex != -1){
+				 effect.replace(effectIndex, effectIndex + EFFECT_CHANCE_SYMBOL.length(), c.getString(9));
+			 }
+			 builder
+				 .description(parseEffectString(effect));
+			 moves[i] = builder.build();
+		 }
+
+		 c.close();
+		 return moves;
+	 }
+	
+	public Move[] getAllMoves(){
+		return getAllMoves(VERSION, LANG);
+	}
+
+	public Move[] getAllMoves(int ver, int lang){
+		if (preloadedMoves != null)
+			return preloadedMoves;
+
+		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
+
+		Cursor c=dex.rawQuery(ALL_MOVE_QUERY, new String[]{String.valueOf(lang), String.valueOf(gen)});
+
+		
+		return preloadedMoves = getMovesFromCursor(c);
+	}
+	
+	public Move[] getMovesByPokemon(int id){
+		return getMovesByPokemon(id, VERSION, LANG);
+	}
+	
+	public Move[] getMovesByPokemon(int id, int ver, int lang){
+		int vergrp = VERSION_VERSION_GROUP[ver];
+		Cursor c = dex.rawQuery(POKEMON_MOVE_QUERY, new String[]{String.valueOf(lang), String.valueOf(vergrp), String.valueOf(id)});
+		return getMovesFromCursor(c);
+	}
+	
+	public static final String[] LINK_TYPES = {"ability", "item", "move", "pokemon"};
+	public static final String LINK_MOVE =  "move";
+	public static final String LINK_POKEMON =  "pokemon";
+	public static final String LINK_ABILITY =  "ability";
+	public static final String LINK_ITEM =  "item";
+
+
+
+	private static String parseEffectString(String effect){
+		return parseEffectString(new StringBuilder(effect));
+	}
+	private static String parseEffectString(StringBuilder effect){
+		int start;
+		String type;
+		String item;
+		int end;
+		while ((start = effect.indexOf("[")) != -1){
+
+			type = effect.substring(effect.indexOf("]{") + "]{".length(), effect.indexOf(":", start));
+			item = effect.substring(effect.indexOf(":", start) + 1, end = effect.indexOf("}", start));
+			String replacementString;
+			if (isInArray(LINK_TYPES, type)){
+				replacementString = new StringBuilder()
+					.append("<").append(type).append(">")
+					.append(item)
+					.append("</").append(type).append(">").toString();
+			}else{
+				replacementString = item.replaceAll("-", " ");
+			}
+			effect.replace(start, end + 1, replacementString);
+		}
+
+		return effect.toString();		
+	}
+
+	public Linkable getLinkableData(CharSequence tag, CharSequence data){
+		if (LINK_MOVE.equals(tag.toString())){
+			return getMove(data);
+		}
+		if (LINK_POKEMON.equals(tag)){
+
+		}
+		if (LINK_MOVE.equals(tag)){
+
+		}
+		if (LINK_ITEM.equals(tag)){
+
+		}
+		return null;
 	}
 
 
+	public Spannable parseLinks(String unparsedString){
+		ArrayList<SpanHolder> spans = new ArrayList<SpanHolder>();
 
+		SpannableStringBuilder builder = new SpannableStringBuilder(unparsedString);
+		int length = builder.length();
+		CharSequence tag = null;
+		CharSequence data = null;
+		int tagStartIndex = -1;
+		int tagOpenerEndIndex = -1;
+		for (int i=0;i < length;i++){
+			switch (builder.charAt(i)){
+				case '<':
+					if (tagStartIndex == -1){
+						tagStartIndex = i;
+					}else{
+						data = builder.subSequence(tagOpenerEndIndex + 1, i);
+
+						Linkable target = getLinkableData(tag, data);
+						if (target != null){
+							int tagEndIndex = i + tag.length() + 3;
+							builder.replace(tagStartIndex, tagEndIndex, target.getName());
+
+							spans.add(new SpanHolder(target, tagStartIndex));
+
+							length -= tagEndIndex - tagStartIndex + 1;
+							length += target.getName().length();
+							i -= tagEndIndex - tagStartIndex + 1;
+							i += target.getName().length();			
+						}
+
+
+						tagStartIndex = -1;
+						tagOpenerEndIndex = -1;
+						tag = null;
+						data = null;
+					}
+					break;
+				case '>':
+					tag = builder.subSequence(tagStartIndex + 1, i);
+					tagOpenerEndIndex = i;
+
+			}
+
+		}
+
+		int[] ids = new int[length = spans.size()];
+		for (int i=0;i < length;i++){
+			SpanHolder span = spans.get(i);
+			Linkable target = span.target;
+			ids[i] = target.getId();
+			builder.setSpan(new LinkSpan(target, ids, i), span.start, span.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
+
+
+		return builder;
+
+	}
+
+	private static class SpanHolder{
+
+		public Linkable target;
+		public int start;
+		public int end;
+
+		public SpanHolder(Linkable target, int start){
+			this.target = target;
+			this.start = start;
+			end = start + target.getName().length();
+		}
+
+		public SpanHolder(Linkable target, int start, int end){
+			this.target = target;
+			this.start = start;
+			this.end = end;
+		}
+
+	}
+
+	public static class LinkSpan extends ClickableSpan{
+
+		public Linkable mLinkable;
+		public final int[] ids;
+		public final int index;
+
+		public LinkSpan(Linkable mLinkable, int[] ids, int index){
+			this.mLinkable = mLinkable;
+			this.ids = ids;
+			this.index = index;
+		}
+
+
+		@Override
+		public void onClick(View p1){
+			Intent intent = new Intent(p1.getContext(), mLinkable.getInfoActivityClass());
+			intent.putExtra(InfoActivity.EXTRA_ID_ARRAY, ids);
+			intent.putExtra(InfoActivity.EXTRA_ID_INDEX, index);
+			p1.getContext().startActivity(intent);
+
+		}
+
+
+
+	}
+
+	private static boolean isInArray(String[] array, String string){
+		for (String s:array){
+			if (s.equals(string))
+				return true;
+		}
+
+		return false;
+	}
 }
+
+/*
+	 public void getTypeChart(){
+
+	 try{
+	 File f = new File("/sdcard/f.txt");
+	 f.createNewFile();
+	 FileWriter w = new FileWriter(f);
+
+
+
+
+	 int[] gens = {1,2,6};
+	 String q1 = "SELECT group_concat((damage_factor/100.0) ||'f') FROM type_efficacy WHERE generation_id = ? AND damage_type_id = ? GROUP BY damage_type_id ORDER BY target_type_id;";
+	 w.write( "{ \n");
+	 for(int gen = 0; gen<3;gen++){
+	 w.write(" { \n");
+	 for(int t=1;t<19;t++){
+	 Cursor c = dex.rawQuery(q1, new String[]{String.valueOf(gens[gen]),String.valueOf(t)});
+	 c.moveToFirst();
+	 w.write("{");
+	 w.write(c.getString(0));
+	 w.write("}, \n");		
+	 c.close();
+	 }
+	 w.write(" },\n");
+	 }
+	 w.write("}");
+	 w.flush();
+	 w.close();
+	 }catch (Exception e){
+
+	 e.printStackTrace();
+	 }
+	 }
+	 */
+

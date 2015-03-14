@@ -19,6 +19,9 @@
 		<activity
             android:name=".activities.PokemonInfoActivity"
         />
+		<activity
+            android:name=".activities.MoveInfoActivity"
+        />
 		
     </application>
 
