@@ -1,6 +1,7 @@
 package com.mikhail.pokedex.activities;
 import android.os.*;
 import android.support.v4.view.*;
+import android.support.v4.widget.*;
 import android.view.*;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.misc.*;
@@ -10,12 +11,15 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 	
 	ViewPager mViewPager;
 	InfoFragmentPagerAdapter<T> mAdapter;
-	
+	ViewGroup mRightDrawer;
+	DrawerLayout mDrawerLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pager_info_activity);
+		mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+		mRightDrawer = (ViewGroup)findViewById(R.id.right_drawer);
 		mViewPager = (ViewPager)findViewById(R.id.details);
 		mViewPager.setAdapter(mAdapter = getNewAdapter());
 		mViewPager.setCurrentItem(getDefaultPage());
@@ -35,7 +39,15 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 	public void onPageSelected(int p1){
 		mAdapter.onPageSelected(p1);
 		invalidateOptionsMenu();
-	}
+		if(mAdapter.getFragment(p1) instanceof UsesRightDrawer){
+			mRightDrawer.addView(((UsesRightDrawer)mAdapter.getFragment(p1)).getRightDrawerLayout(getLayoutInflater()));
+		}
+		mDrawerLayout.setDrawerLockMode(
+		mAdapter.getFragment(p1) instanceof UsesRightDrawer
+		? DrawerLayout.LOCK_MODE_UNLOCKED
+		: DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+		
+		}
 
 
 	

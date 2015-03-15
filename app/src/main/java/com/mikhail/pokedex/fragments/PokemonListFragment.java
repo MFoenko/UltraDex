@@ -14,7 +14,7 @@ import java.text.*;
 import java.util.*;
 import com.mikhail.pokedex.fragments.RecyclerFragment.*;
 
-public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder>{
+public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> implements UsesRightDrawer{
 
 
 	public LoadIconsTask task;
@@ -49,6 +49,12 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	public RecyclerFragment.Filter<PokedexClasses.Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> getNewFilter(){
 		return new PokemonFilter(mAdapter);
 	}
+
+	@Override
+	public View getRightDrawerLayout(LayoutInflater inflater){
+		return new View(inflater.getContext());
+	}
+
 
 	
 	
