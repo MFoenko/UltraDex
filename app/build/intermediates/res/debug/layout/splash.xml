@@ -16,9 +16,10 @@
 		android:id="@+id/splashProgressBar"
 		android:layout_height="20dp"
 		android:layout_width="fill_parent"
-		android:layout_margin="50dp"
+		android:layout_marginBottom="50dp"
 		android:visibility="gone"
+		android:max="100"
 		/>
 	
 </LinearLayout>
-<!-- From: file:/C:/Users/kostello/Desktop/Pokedex/app/src/main/res/layout/splash.xml -->
+<!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/layout/splash.xml -->

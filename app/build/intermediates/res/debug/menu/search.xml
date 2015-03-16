@@ -1,0 +1,15 @@
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:menu="http://schemas.android.com/apk/res-auto"
+	>
+    
+    <item
+        android:id="@+id/search"
+        android:title="Search"
+		android:icon="@drawable/ic_search_white_48dp"
+		menu:showAsAction="ifRoom|collapseActionView"
+		menu:actionLayout="@layout/search_bar"
+		/>
+    
+</menu>
+<!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/menu/search.xml -->

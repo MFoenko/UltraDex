@@ -1,0 +1,6 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:padding="2dp"
+   	style="@style/SubHeaderText"/>
+<!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/layout/header.xml -->

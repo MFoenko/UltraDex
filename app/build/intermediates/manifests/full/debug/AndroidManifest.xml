@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.mikhail.pokedex.activities.MainActivity" />
+        <activity android:name="com.mikhail.pokedex.activities.PokemonInfoActivity" />
+        <activity android:name="com.mikhail.pokedex.activities.MoveInfoActivity" />
         <activity
             android:name="android.support.v7.widget.TestActivity"
             android:label="RecyclerViewTestActivity" />

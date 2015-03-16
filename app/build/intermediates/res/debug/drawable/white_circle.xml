@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:shape="ring"
+	android:useLevel="false"
+	android:innerRadius="0dp"
+	android:thickness="16dp"
+	>
+	<solid
+		android:color="#FFFFFFFF"
+	/>
+	<stroke
+		android:color="#FFFFFFFF"
+		/>
+</shape>
+<!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/drawable/white_circle.xml -->

@@ -5,6 +5,6 @@ import android.view.*;
 public interface UsesRightDrawer
 {
 	
-	public View getRightDrawerLayout(LayoutInflater inflater);
+	public View getRightDrawerLayout(LayoutInflater inflater, ViewGroup container);
 	
 }

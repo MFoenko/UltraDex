@@ -11,8 +11,6 @@ import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
 import java.text.*;
-import java.util.*;
-import com.mikhail.pokedex.fragments.RecyclerFragment.*;
 
 public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> implements UsesRightDrawer{
 
@@ -51,8 +49,23 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	}
 
 	@Override
-	public View getRightDrawerLayout(LayoutInflater inflater){
-		return new View(inflater.getContext());
+	public View getRightDrawerLayout(LayoutInflater inflater, ViewGroup container){
+		View filters = inflater.inflate(R.layout.pokemon_list_filter,container, false);
+        ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
+        for(int i=0;i<PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++){
+            TypeView typeView = new TypeView(container.getContext());
+            typeView.setType(i);
+            typesContainer.addView(typeView);
+        }
+
+        ViewGroup statsContainer = (ViewGroup)filters.findViewById(R.id.stat_filters);
+        for(int i=0;i<PokedexDatabase.STAT_LABELS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]].length;i++){
+
+        }
+
+
+
+        return filters;
 	}
 
 
