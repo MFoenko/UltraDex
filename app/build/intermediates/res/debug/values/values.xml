@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -127,11 +127,11 @@
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/values/dimensions.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/dimensions.xml -->
     <eat-comment/>
     <dimen name="drawer_item_height">48dp</dimen>
     <dimen name="drawer_width">300dp</dimen>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_bar_spinner" type="id"/>
@@ -159,19 +159,19 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">Ultradex</string>
     <string name="left_drawer_closed">Left Drawer Closed</string>
     <string name="left_drawer_open">Left Drawer Open</string>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 		<item name="android:textSize">14sp</item>
 		<!--<item name="android:textColor">#FF222222</item>-->
 		
     </style>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance">
         <item name="android:textColor">?android:textColorPrimary</item>
@@ -925,7 +925,7 @@
         <item name="android:scaleType">center</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="HeaderText" parent="@android:style/TextAppearance.Large">
 		<item name="android:textSize">22sp</item>
@@ -939,7 +939,7 @@
 		<item name="android:textSize">18sp</item>
 		<item name="android:gravity">center</item>
 	</style>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
@@ -1107,7 +1107,7 @@
     <style name="RtlOverlay.Widget.AppCompat.SearchView.MagIcon" parent="android:Widget">
         <item name="android:layout_marginLeft">@dimen/abc_dropdownitem_text_padding_left</item>
     </style>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="SmallText" parent="@android:style/TextAppearance.Small">
 		<item name="android:textSize">14sp</item>
@@ -1118,7 +1118,7 @@
 		<item name="android:gravity">center_vertical</item>
 		<!--<item name="android:textStyle">bold</item>-->
 	</style>
-    <!-- From: file:/C:/Users/Mikhail/Desktop/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat" parent="Base.TextAppearance.AppCompat"/>
     <style name="TextAppearance.AppCompat.Body1" parent="Base.TextAppearance.AppCompat.Body1"/>

@@ -27,4 +27,4 @@
                 android:id="@+id/seek_bar_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-</LinearLayout>
+</LinearLayout><!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/range_filter.xml -->

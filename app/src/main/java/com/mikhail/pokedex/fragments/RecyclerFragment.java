@@ -10,12 +10,12 @@ import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.PokedexClasses.VarComparable;
 import java.util.*;
 
-public abstract class RecyclerFragment<I, T extends VarComparable, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
+public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
 
 
 	protected RecyclerView mRecyclerView;
 	protected ListItemAdapter<T, VH> mAdapter;
-	protected Filter<T, ? extends RecyclerView.ViewHolder> mFilter;
+	protected Filter<? extends VarComparable<T>, ? extends RecyclerView.ViewHolder> mFilter;
 	protected T[] mData;
 
 
@@ -72,7 +72,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable, VH extends Re
 
 
 	public abstract ListItemAdapter<T, VH> getNewAdapter();
-	public abstract Filter<T, VH> getNewFilter();
+	public abstract Filter<? extends VarComparable<T>, VH> getNewFilter();
 
 
 	@Override
@@ -185,7 +185,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable, VH extends Re
 			return isMatchSearch(item);
 		}
 
-		public abstract boolean isMatchSearch(T item)
+		public abstract boolean isMatchSearch(T item);
 
 		private void adapterSwap(int i, int j){
 			ArrayList<T> list = adapter.listItems;

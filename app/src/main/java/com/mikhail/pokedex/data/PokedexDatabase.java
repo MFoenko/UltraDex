@@ -80,6 +80,10 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		{0xFF0000, 0xFFA500, 0xFFFF00, 0x1E90FF, 0xFFC0CB },
 		{0xFF0000, 0xFFA500, 0xFFFF00, 0x1E90FF, 0x008000, 0xFFC0CB },
 	};
+    public static final int[][] STAT_MINS = {
+            {0,0,0,0,0},
+            {0,0,0,0,0,0}
+    };
 	public static final int[][] STAT_MAXES = {
 		{250, 150, 200, 150, 150},
 		{250, 200, 250, 200, 250, 200}

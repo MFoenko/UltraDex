@@ -153,7 +153,48 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 		init();
 	}
 
-	/**
+    /**
+     * Creates a new RangeSeekBar.
+     *
+     * @param absoluteMinValue
+     *            The minimum value of the selectable range.
+     * @param absoluteMaxValue
+     *            The maximum value of the selectable range.
+     * @param context
+        @throws IllegalArgumentException
+     *             Will be thrown if min/max value type is not one of Long,
+     *             Double, Integer, Float, Short, Byte or BigDecimal.
+     */
+    public RangeSeekBar(T absoluteMinValue, T absoluteMaxValue,
+                        Context context, int singleColor) throws IllegalArgumentException {
+        super(context);
+        this.absoluteMinValue = absoluteMinValue;
+        this.absoluteMaxValue = absoluteMaxValue;
+        absoluteMinValuePrim = absoluteMinValue.doubleValue();
+        absoluteMaxValuePrim = absoluteMaxValue.doubleValue();
+        numberType = NumberType.fromNumber(absoluteMinValue);
+        IS_MULTI_COLORED = false;
+        SINGLE_COLOR = singleColor < 0 ? singleColor : Color.argb(0xFF, 0x33,
+                0xB5, 0xE5);
+        LEFT_COLOR = 0;
+        MIDDLE_COLOR = 0;
+        RIGHT_COLOR = 0;
+        thumbWidth = 2*thumbRadius;
+        thumbHalfWidth = 0.5f * thumbWidth;
+        thumbHalfHeight = thumbRadius;
+        lineHeight = 0.3f * thumbHalfHeight;
+        padding = thumbHalfWidth;
+
+        // make RangeSeekBar focusable. This solves focus handling issues in
+        // case EditText widgets are being used along with the RangeSeekBar
+        // within ScollViews.
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+        init();
+    }
+
+
+    /**
 	 * Creates a new RangeSeekBar.
 	 * 
 	 * @param absoluteMinValue

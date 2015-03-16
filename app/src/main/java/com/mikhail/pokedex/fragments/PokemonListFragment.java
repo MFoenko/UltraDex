@@ -59,7 +59,19 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
         }
 
         ViewGroup statsContainer = (ViewGroup)filters.findViewById(R.id.stat_filters);
-        for(int i=0;i<PokedexDatabase.STAT_LABELS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]].length;i++){
+        int statVersion = PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN];
+        for(int i=0;i<PokedexDatabase.STAT_LABELS[statVersion].length;i++){
+            View rangeView = inflater.inflate(R.layout.range_filter, statsContainer, false);
+            ((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_LABELS[statVersion][i]);
+            ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
+            RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
+                    PokedexDatabase.STAT_MINS[statVersion][i],
+                    PokedexDatabase.STAT_MAXES[statVersion][i],
+                    container.getContext(),
+                    PokedexDatabase.STAT_COLORS[statVersion][i]
+            );
+            seekBarContainer.addView(bar);
+            statsContainer.addView(rangeView);
 
         }
 
