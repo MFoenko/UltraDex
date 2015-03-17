@@ -79,18 +79,19 @@ public class SplashActivity extends Activity{
 	@Override
 	protected void onStart(){
 		super.onStart();
-		
-		new AlertDialog.Builder(this).setTitle("File Install Failed").setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+		if(mediaZipNotExists) {
+            new AlertDialog.Builder(this).setTitle("File Install Failed").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface p1, int p2){
-					mediaDone = true;
-					moveOn();
-				}
+                @Override
+                public void onClick(DialogInterface p1, int p2) {
+                    mediaDone = true;
+                    mediaZipNotExists = false;
+                    moveOn();
+                }
 
-			
-		}).create();
-		
+
+            }).create().show();
+        }
 	}
 
 	
