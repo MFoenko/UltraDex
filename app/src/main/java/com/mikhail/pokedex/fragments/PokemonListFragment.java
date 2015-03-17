@@ -58,7 +58,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 					@Override
 					public void onCheckedChanged(CompoundButton p1, boolean p2){
-						int type = p1.getTag();
+						int type = (Integer)p1.getTag();
 						Log.e("AAA", ""+mFilter);
 						((PokemonFilter)mFilter).types[type] = p2;
 						mFilter.filter();
@@ -91,7 +91,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 					@Override
 					public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue){
 						((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
-						int i = bar.getTag();
+						int i = (Integer)bar.getTag();
 						((PokemonFilter)mFilter).stats[0][i] = minValue;
 						((PokemonFilter)mFilter).stats[1][i] = maxValue;
 						mFilter.filter();
@@ -144,7 +144,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 
 
-	protected static class PokemonListAdapter extends ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder>{
+	protected static class PokemonListAdapter extends RecyclerFragment.ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder>{
 
 		DecimalFormat df = new DecimalFormat("000");
 

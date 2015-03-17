@@ -4,7 +4,6 @@ import android.content.*;
 import android.support.v7.widget.*;
 import android.util.*;
 import android.view.*;
-import android.view.View.*;
 import android.widget.*;
 import android.widget.CompoundButton.*;
 import com.mikhail.pokedex.*;
@@ -15,7 +14,7 @@ import com.mikhail.pokedex.misc.*;
 
 import android.view.View.OnClickListener;
 
-public abstract class MoveListFragment<T> extends RecyclerFragment<T, Move, MoveListFragment.MoveListAdapter.MoveViewHolder> implements UsesRightDrawer{
+public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, MoveListFragment.MoveListAdapter.MoveViewHolder> implements UsesRightDrawer{
 
 	@Override
 	public RecyclerFragment.ListItemAdapter<PokedexClasses.Move, MoveListFragment.MoveListAdapter.MoveViewHolder> getNewAdapter(){
@@ -39,7 +38,7 @@ public abstract class MoveListFragment<T> extends RecyclerFragment<T, Move, Move
 			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 					@Override
 					public void onCheckedChanged(CompoundButton p1, boolean p2){
-						int type = p1.getTag();
+						int type = (Integer)p1.getTag();
 						Log.e("AAA", "" + mFilter);
 						((MoveFilter)mFilter).types[type] = p2;
 						mFilter.filter();
@@ -73,7 +72,7 @@ public abstract class MoveListFragment<T> extends RecyclerFragment<T, Move, Move
 					@Override
 					public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue){
 						((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
-						int i = bar.getTag();
+						int i = (Integer)bar.getTag();
 						((MoveFilter)mFilter).stats[0][i] = minValue;
 						((MoveFilter)mFilter).stats[1][i] = maxValue;
 						mFilter.filter();
@@ -92,7 +91,7 @@ public abstract class MoveListFragment<T> extends RecyclerFragment<T, Move, Move
 
 
 
-	protected static class MoveListAdapter extends ListItemAdapter<Move, MoveListAdapter.MoveViewHolder>{
+	protected static class MoveListAdapter extends RecyclerFragment.ListItemAdapter<Move, MoveListAdapter.MoveViewHolder>{
 
 
 		@Override

@@ -16,7 +16,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 	protected RecyclerView mRecyclerView;
 	protected ListItemAdapter<T, VH> mAdapter;
-	protected Filter<? extends VarComparable<T>, ? extends RecyclerView.ViewHolder> mFilter;
+	protected Filter mFilter;
 	protected T[] mData;
 
 
@@ -88,12 +88,12 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 
 
-	protected abstract static class ListItemAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>{
+	protected abstract static class ListItemAdapter<LT, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>{
 
 
-		ArrayList<T> listItems;
+		ArrayList<LT> listItems;
 
-		public ListItemAdapter(ArrayList<T> listItems){
+		public ListItemAdapter(ArrayList<LT> listItems){
 			this.listItems = listItems;
 		}
 
@@ -101,7 +101,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 			this.listItems = null;
 		}
 
-		public void setData(ArrayList<T> listItems){
+		public void setData(ArrayList<LT> listItems){
 			this.listItems = listItems;
 			notifyDataSetChanged();
 		}

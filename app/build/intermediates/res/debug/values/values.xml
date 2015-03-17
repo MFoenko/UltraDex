@@ -131,6 +131,7 @@
     <eat-comment/>
     <dimen name="drawer_item_height">48dp</dimen>
     <dimen name="drawer_width">300dp</dimen>
+    <dimen name="type_filter_width">150dp</dimen>
     <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>

@@ -92,7 +92,7 @@ public class MoveInfoActivity extends PagerInfoActivity<Move>{
 	private static class MoveInfoPagerAdapter extends InfoFragmentPagerAdapter<Move>{
 
 	//public static final Class<? extends InfoPagerFragment<Move>>[] FRAGMENTS = {MovePokemonListFragment.class, MoveTypingFragment.class};
-	public final InfoPagerFragment<Move>[] FRAGMENTS = {new MovePokemonListFragment(), new MoveTypingFragment()};
+	public final InfoPagerFragment<Move>[] FRAGMENTS = new InfoPagerFragment[]{new MovePokemonListFragment(), new MoveTypingFragment()};
 		public MoveInfoPagerAdapter(FragmentManager fm){
 			super(fm);
 		}

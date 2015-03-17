@@ -67,7 +67,7 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 		}
 	}
 
-	@Override
+
 	public void onPageSelected(int p1){
 
 		for (int i=0;i < fragments.length;i++){

@@ -47,7 +47,7 @@ public abstract class TypingFragment<T> extends InfoPagerFragment<T>{
 
 	public TypeItem[] generateTypeEffeciency(){
 
-		ArrayList<TypeItem>[] effectivesLists = {new ArrayList<TypeItem>(), new ArrayList<TypeItem>(), new ArrayList<TypeItem>(), new ArrayList<TypeItem>()};
+		ArrayList<TypeItem>[] effectivesLists = new ArrayList[]{new ArrayList<TypeItem>(), new ArrayList<TypeItem>(), new ArrayList<TypeItem>(), new ArrayList<TypeItem>()};
 
 		final int numTypes = PokedexDatabase.TYPE_EFFICIENCY[0].length;
 
@@ -247,7 +247,7 @@ public abstract class TypingFragment<T> extends InfoPagerFragment<T>{
 			this.type = type;
 		}
 
-		@Override
+
 		public String getTitle(){
 			return TITLE;
 		}
