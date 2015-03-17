@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			getSupportActionBar().setTitle(DRAWER_ITEMS[p3].getDrawerItemName());
 			mLeftDrawer.setItemChecked(p3, true);
 			if (DRAWER_ITEMS[p3] instanceof UsesRightDrawer){
-
+				mRightDrawer.removeAllViews();
 				mRightDrawer.addView(((UsesRightDrawer)DRAWER_ITEMS[p3]).getRightDrawerLayout(getLayoutInflater(), mRightDrawer));
 			}
 			mDrawerLayout.setDrawerLockMode(

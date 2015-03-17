@@ -19,7 +19,7 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 						new Runnable(){
 							@Override
 							public void run(){
-								Log.i("AAA", this + " data set " + isDisplayed);
+								//Log.i("AAA", this + " data set " + isDisplayed);
 								if(!isDisplayed)
 									isDisplayed = displayData();
 							}
@@ -32,7 +32,7 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState){
 		super.onViewCreated(view, savedInstanceState);
-		Log.i("AAA", this + " created " + isDisplayed);
+		//Log.i("AAA", this + " created " + isDisplayed);
 		if (!isDisplayed){
 			isDisplayed = displayData();
 		}
@@ -42,7 +42,7 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 		this.isPrimary = isPrimary;
 	}
 	
-	
+	/*
 
 	@Override
 	public void onStart(){
@@ -55,18 +55,15 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 		
 	}
 
-	
+	*/
 	@Override
 	public void onResume(){
 		super.onResume();
 
-		Log.i("AAA", this + " resumed " + isDisplayed);
-		if (!isDisplayed){
 			isDisplayed = displayData();
-		}
 		
 	}
-
+/*
 	@Override
 	public void onPause(){
 		super.onPause();
@@ -83,7 +80,7 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	}
 
 	
-	
+	*/
 	public abstract void setData(I data);
 	public abstract boolean displayData();
 	public abstract String getTitle();

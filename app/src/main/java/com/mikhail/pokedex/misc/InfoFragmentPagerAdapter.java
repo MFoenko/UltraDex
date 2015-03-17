@@ -68,11 +68,6 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 	}
 
 	@Override
-	public void onPageScrolled(int p1, float p2, int p3){
-		// TODO: Implement this method
-	}
-
-	@Override
 	public void onPageSelected(int p1){
 
 		for (int i=0;i < fragments.length;i++){
@@ -80,13 +75,5 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 		}
 
 	}
-
-	@Override
-	public void onPageScrollStateChanged(int p1){
-		// TODO: Implement this method
-	}
-
-
-
 
 }

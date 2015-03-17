@@ -2,15 +2,20 @@ package com.mikhail.pokedex.fragments;
 import android.content.*;
 import android.os.*;
 import android.support.v7.widget.*;
+import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
+import android.widget.CompoundButton.*;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.activities.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
 import java.text.*;
+import java.util.*;
+
+import android.view.View.OnClickListener;
 
 public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> implements UsesRightDrawer{
 
@@ -25,22 +30,16 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	}
 
 
-	
-	
+
+
 	@Override
 	public boolean displayData(){
-		if(!super.displayData()){
+		if (!super.displayData()){
 			return false;
 		}
 		task = new LoadIconsTask(getActivity());
 		task.execute(mData);
 		return true;
-	}
-
-	@Override
-	public void onPause(){
-		// TODO: Implement this method
-		super.onPause();
 	}
 
 	@Override
@@ -50,30 +49,90 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 	@Override
 	public View getRightDrawerLayout(LayoutInflater inflater, ViewGroup container){
-		View filters = inflater.inflate(R.layout.pokemon_list_filter,container, false);
+		View filters = inflater.inflate(R.layout.pokemon_list_filter, container, false);
         ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
-        for(int i=0;i<PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++){
-            TypeView typeView = new TypeView(container.getContext());
+        for (int i=0;i < PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++){
+            View typeFilter = inflater.inflate(R.layout.type_filter, typesContainer, false);
+			CheckBox checkBox = (CheckBox)typeFilter.findViewById(R.id.check_box);
+			checkBox.setTag(i);
+			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+					@Override
+					public void onCheckedChanged(CompoundButton p1, boolean p2){
+						int type = p1.getTag();
+						Log.e("AAA", ""+mFilter);
+						((PokemonFilter)mFilter).types[type] = p2;
+						mFilter.filter();
+					}
+				});
+
+			TypeView typeView = (TypeView)typeFilter.findViewById(R.id.type);
             typeView.setType(i);
-            typesContainer.addView(typeView);
+            typesContainer.addView(typeFilter);
         }
 
         ViewGroup statsContainer = (ViewGroup)filters.findViewById(R.id.stat_filters);
         int statVersion = PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN];
-        for(int i=0;i<PokedexDatabase.STAT_LABELS[statVersion].length;i++){
+        for (int i=0;i < PokedexDatabase.STAT_LABELS[statVersion].length;i++){
             View rangeView = inflater.inflate(R.layout.range_filter, statsContainer, false);
-            ((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_LABELS[statVersion][i]);
-            ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
+            ((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_LABELS[statVersion][i] + ":");
+
+			ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
             RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
-                    PokedexDatabase.STAT_MINS[statVersion][i],
-                    PokedexDatabase.STAT_MAXES[statVersion][i],
-                    container.getContext(),
-                    PokedexDatabase.STAT_COLORS[statVersion][i]
+				PokedexDatabase.STAT_MINS[statVersion][i],
+				PokedexDatabase.STAT_MAXES[statVersion][i],
+				container.getContext(),
+				0xFF000000 + PokedexDatabase.STAT_COLORS[statVersion][i]
             );
-            seekBarContainer.addView(bar);
+			((TextView)rangeView.findViewById(R.id.values)).setText(bar.getSelectedMinValue() + " - " + bar.getSelectedMaxValue());
+
+			bar.setTag(i);
+			bar.setNotifyWhileDragging(true);
+			bar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>(){
+					@Override
+					public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue){
+						((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
+						int i = bar.getTag();
+						((PokemonFilter)mFilter).stats[0][i] = minValue;
+						((PokemonFilter)mFilter).stats[1][i] = maxValue;
+						mFilter.filter();
+					}
+				});
+			seekBarContainer.addView(bar);
             statsContainer.addView(rangeView);
 
         }
+
+
+
+
+
+
+		View rangeView = inflater.inflate(R.layout.range_filter, statsContainer, false);
+		((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_TOTAL_LABEL + ":");
+
+		ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
+		RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
+			PokedexDatabase.STAT_TOTAL_MIN,
+			PokedexDatabase.STAT_TOTAL_MAX,
+			container.getContext(),
+			0xFF000000 + PokedexDatabase.STAT_TOTAL_COLOR
+		);
+		((TextView)rangeView.findViewById(R.id.values)).setText(bar.getSelectedMinValue() + " - " + bar.getSelectedMaxValue());
+
+		bar.setNotifyWhileDragging(true);
+		bar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>(){
+				@Override
+				public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue){
+					((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
+					((PokemonFilter)mFilter).total[0] = minValue;
+					((PokemonFilter)mFilter).total[1] = maxValue;
+					mFilter.filter();
+				}
+			});
+		seekBarContainer.addView(bar);
+		statsContainer.addView(rangeView);
+
+
 
 
 
@@ -81,10 +140,10 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	}
 
 
-	
-	
-	
-	
+
+
+
+
 	protected static class PokemonListAdapter extends ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder>{
 
 		DecimalFormat df = new DecimalFormat("000");
@@ -111,12 +170,12 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 		public int[] getIdArray(){
 			int[] idArray = new int[listItems.size()];
 			int len = idArray.length;
-			for(int i=0;i<len;i++){
+			for (int i=0;i < len;i++){
 				idArray[i] = listItems.get(i).id;
 			}
 			return idArray;
 		}
-		
+
 		public class PokemonViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
 
 			public final ImageView icon;
@@ -140,28 +199,94 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 				p1.getContext().startActivity(intent);
 			}
 		}
-		
+
 	}
 	private static class PokemonFilter extends Filter<Pokemon, PokemonListAdapter.PokemonViewHolder>{
+
+		public boolean[] types = new boolean[PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length];
+		private int len = PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]].length;
+		public int[][] stats = {Arrays.copyOf(PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len), Arrays.copyOf(PokedexDatabase.STAT_MAXES[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len)};
+		public int[] total = {PokedexDatabase.STAT_TOTAL_MIN, PokedexDatabase.STAT_TOTAL_MAX};
+		public final static int MIN = 0;
+		public final static int MAX = 1;
+
 
 		public PokemonFilter(ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder> adapter){
 			super(adapter);
 		}
-		
+
 		@Override
-		public boolean isMatchSearch(PokedexClasses.Pokemon item){
-			
-			return item.getName().toLowerCase().indexOf(search.toString().toLowerCase())>-1 || String.valueOf(item.getId()).indexOf(search.toString())>-1; 
-				
+		public boolean isMatchFilter(PokedexClasses.Pokemon item){
+			return isMatchSearch(item) && isMatchType(item) && isMatchStat(item);
 		}
 
-		
-		
-		
+		public boolean isMatchStat(Pokemon item){
+			for (int s=0;s < len;s++){
+				int stat = item.stats[s];
+				if (stat > stats[MAX][s] || stat < stats[MIN][s]){
+					return false;
+				}
+			}
+			int sumStat = sumItems(item.stats);
+			if (sumStat > total[MAX] || sumStat < total[MIN])
+				return false;
+				
+			return true;
+		}
+
+
+		@Override
+		public boolean isMatchSearch(PokedexClasses.Pokemon item){
+			return item.getName().toLowerCase().indexOf(search.toString().toLowerCase()) > -1 || String.valueOf(item.getId()).indexOf(search.toString()) > -1; 
+		}
+
+		public boolean isMatchType(Pokemon item){
+			int sum = sumItems(types);
+			if (sum == 0) return true;
+
+			if (sum == 2){
+				if (item.types.length != 2){
+					return false;
+				}
+				for (int t:item.types){
+					if (!types[t]){
+						return false;
+					}
+				}
+				return true;
+			}else{
+				for (int t:item.types){
+					if (types[t]){
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+
+
+
+		private static int sumItems(int[] arr){
+			int total=0;
+			for (int i:arr){
+				total += i;
+			}
+			return total;
+		}
+
+
+		private static int sumItems(boolean[] arr){
+			int sum = 0;
+			for (boolean b:arr){
+				sum += (b ?1: 0);
+			}
+			return sum;
+		}
+
 	}
-	
-	
-	
+
+
+
 	private class LoadIconsTask extends AsyncTask<Pokemon ,Integer, Void>{
 
 		Context con;
@@ -169,23 +294,23 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 		public LoadIconsTask(Context con){
 			this.con = con;
 		}
-		
+
 		@Override
 		protected Void doInBackground(Pokemon[] p1){
-			
+
 			int len = p1.length;
-			for(int i=0;i<len;i++){
+			for (int i=0;i < len;i++){
 				Pokemon p = p1[i];
 				p.loadBitmap(con);
 				publishProgress(i);
-				if(isCancelled()){
+				if (isCancelled()){
 					break;
 				}
-				
+
 			}
-			
+
 			return null;
-			
+
 		}
 
 		@Override
@@ -194,6 +319,6 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			mAdapter.notifyItemChanged(values[0]);
 		}
 	}
-	
-	
+
+
 }

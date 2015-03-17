@@ -12,14 +12,11 @@ import java.util.*;
 public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 
 	private static final String TITLE = "Stats";
-	private int[] mStats = {0,0,0,0,0,0}; 
+	private int[] mStats = null; 
 	private int mTotal= 0;
 
 	private StatBarView[] mStatBarViews;
 	private StatBarView mTotalStatBarView;
-	private static final int STAT_TOTAL_COLOR = 0x44DDDDDD;
-	private static final String STAT_TOTAL_LABEL = "Total";
-	private static final int STAT_TOTAL_MAX = 800;
 	
 
 
@@ -46,9 +43,9 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 			layout.addView(mStatBarViews[s]);
 		}
 		mTotalStatBarView = new StatBarView(layout.getContext());
-		mTotalStatBarView.setLabel(STAT_TOTAL_LABEL + ": ");
-		mTotalStatBarView.setMax(STAT_TOTAL_MAX);
-		mTotalStatBarView.setColor(STAT_TOTAL_COLOR - 0xBB000000);
+		mTotalStatBarView.setLabel(PokedexDatabase.STAT_TOTAL_LABEL + ": ");
+		mTotalStatBarView.setMax(PokedexDatabase.STAT_TOTAL_MAX);
+		mTotalStatBarView.setColor(PokedexDatabase.STAT_TOTAL_COLOR - 0xBB000000);
 		mTotalStatBarView.setTextSize(mTotalStatBarView.getContext().getResources().getDisplayMetrics().scaledDensity * TEXT_SIZE_SP);
 		mTotalStatBarView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 		layout.addView(mTotalStatBarView);
@@ -75,6 +72,7 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 			mStatBarViews[s].setStat(mStats[s]);
 		}
 		mTotalStatBarView.setStat(mTotal);
+		Log.i("AAA", "success");
 		return true;
 	}
 

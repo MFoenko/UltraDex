@@ -4,10 +4,11 @@ package com.mikhail.pokedex.fragments;
 import android.os.*;
 import android.support.v7.widget.*;
 import android.text.*;
+import android.util.*;
 import android.view.*;
 import android.widget.*;
 import com.mikhail.pokedex.*;
-import com.mikhail.pokedex.data.PokedexClasses.VarComparable;
+import com.mikhail.pokedex.data.PokedexClasses.*;
 import java.util.*;
 
 public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
@@ -31,8 +32,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 		mFilter = getNewFilter();
 		return layout;
 	}
-
-
+	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 		super.onCreateOptionsMenu(menu, inflater);
@@ -82,6 +82,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 		}
 		mAdapter.setData(new ArrayList<T>(Arrays.asList(mData)));
 		mFilter.setOriginalList(mData);
+		mFilter.filter();
 		return true;
 	}
 
@@ -146,6 +147,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 		public void filter(){
 			listItems = adapter.listItems;
+			if(listItems == null) return;
 			/*for (int i=0;i < listItems.size();i++){
 			 if (!isMatchFilter(listItems.get(i))){
 			 listItems.remove(i);

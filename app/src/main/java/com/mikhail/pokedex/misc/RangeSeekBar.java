@@ -53,8 +53,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 	public static final int BACKGROUND_COLOR = Color.GRAY;
 	private OnRangeSeekBarChangeListener<T> listener;
 	
-	public float thumbRadius = 20;
-	public float pressedIncrease = 5;
+	public float thumbRadius = 12;
+	public float pressedIncrease = 4;
 
 	/**
 	 * Default color of a {@link RangeSeekBar}, #FF33B5E5. This is also known as
@@ -179,6 +179,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         LEFT_COLOR = 0;
         MIDDLE_COLOR = 0;
         RIGHT_COLOR = 0;
+		float density = context.getResources().getDisplayMetrics().density;
+		thumbRadius *= density;
+		pressedIncrease *= density;
         thumbWidth = 2*thumbRadius;
         thumbHalfWidth = 0.5f * thumbWidth;
         thumbHalfHeight = thumbRadius;
@@ -500,6 +503,12 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 		return true;
 	}
 
+	public void refreshValues(){
+		if(listener == null) return;
+		
+		listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue());
+	}
+	
 	private final void onSecondaryPointerUp(MotionEvent ev) {
 		final int pointerIndex = (ev.getAction() & ACTION_POINTER_INDEX_MASK) >> ACTION_POINTER_INDEX_SHIFT;
 
@@ -560,7 +569,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 		if (MeasureSpec.UNSPECIFIED != MeasureSpec.getMode(widthMeasureSpec)) {
 			width = MeasureSpec.getSize(widthMeasureSpec);
 		}
-		int height = (int)thumbRadius*2;
+		int height = (int)(thumbRadius+pressedIncrease)*2;
 		if (MeasureSpec.UNSPECIFIED != MeasureSpec.getMode(heightMeasureSpec)) {
 			height = Math.min(height, MeasureSpec.getSize(heightMeasureSpec));
 		}
@@ -668,7 +677,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 	 *            The canvas to draw upon.
 	 */
 	private void drawThumb(float screenCoord, boolean pressed, Canvas canvas) {
-		canvas.drawCircle(screenCoord-thumbHalfWidth, (float) ((0.5f * getHeight()) - thumbHalfHeight), thumbRadius +( pressed ? pressedIncrease : 0) , paint);
+		canvas.drawCircle(screenCoord, thumbRadius+pressedIncrease, thumbRadius +( pressed ? pressedIncrease : 0) , paint);
 		/*canvas.drawBitmap(pressed ? thumbPressedImage : thumbImage, screenCoord
 				- thumbHalfWidth,
 				(float) ((0.5f * getHeight()) - thumbHalfHeight), paint);*/

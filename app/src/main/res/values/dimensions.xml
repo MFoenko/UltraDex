@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="drawer_width">300dp</dimen>
+	<dimen name="type_filter_width">150dp</dimen>
     <dimen name="drawer_item_height">48dp</dimen>
 </resources>

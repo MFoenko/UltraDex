@@ -88,7 +88,7 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 
 	private static class PokemonInfoViewPagerAdapter extends InfoFragmentPagerAdapter<Move>{
 
-		public static final Class<? extends InfoPagerFragment<Pokemon>>[] pages = {PokemonMoveListFragment.class, PokemonStatsFragment.class, PokemonTypingFragment.class};
+		public static final InfoPagerFragment<Pokemon>[] pages = {new PokemonMoveListFragment(), new PokemonStatsFragment(), new PokemonTypingFragment()};
 
 		public PokemonInfoViewPagerAdapter(FragmentManager fm){
 			super(fm);
@@ -96,17 +96,12 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 
 		@Override
 		public int getNumFrags(){
-			return pages.length;
+			return 3;
 		}
 
 		@Override
 		public InfoPagerFragment getFragment(int position){
-			try{
-				return pages[position].newInstance();
-			}catch (InstantiationException e){}catch (IllegalAccessException e){
-				e.printStackTrace();
-			}
-			return null;
+				return pages[position];
 		}
 
 	}

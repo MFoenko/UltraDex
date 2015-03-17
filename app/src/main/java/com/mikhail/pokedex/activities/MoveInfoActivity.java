@@ -23,7 +23,7 @@ public class MoveInfoActivity extends PagerInfoActivity<Move>{
 	TextView mPowerTV;
 	TextView mAccuracyTV;
 	TextView mPPTV;
-	TextView mProrityTV;
+	TextView mPriorityTV;
 
 	@Override
 	public View getContentView(LayoutInflater inflater, ViewGroup container){
@@ -37,7 +37,7 @@ public class MoveInfoActivity extends PagerInfoActivity<Move>{
 		mPowerTV = (TextView)content.findViewById(R.id.power);
 		mAccuracyTV = (TextView)content.findViewById(R.id.accuracy);
 		mPPTV = (TextView)content.findViewById(R.id.pp);
-		mProrityTV = (TextView)content.findViewById(R.id.priority);
+		mPriorityTV = (TextView)content.findViewById(R.id.priority);
 
 		mDescriptionTV.setMovementMethod(LinkMovementMethod.getInstance());
 		return content;
@@ -86,30 +86,31 @@ public class MoveInfoActivity extends PagerInfoActivity<Move>{
 		mAccuracyTV.setText(data.accuracy == 0 ?"---": String.valueOf(data.accuracy));
 		mPPTV.setText(data.pp == 0 ?"---": String.valueOf(data.pp));
 		mPowerTV.setText(data.power == 0 ?"---": String.valueOf(data.power));
-		mProrityTV.setText(data.priority > 0 ?"+" + data.priority: String.valueOf(data.priority));
+		mPriorityTV.setText(data.priority > 0 ?"+" + data.priority: String.valueOf(data.priority));
 	}
 
 	private static class MoveInfoPagerAdapter extends InfoFragmentPagerAdapter<Move>{
 
-	public static final Class<? extends InfoPagerFragment<Move>>[] FRAGMENTS = {MovePokemonListFragment.class, MoveTypingFragment.class};
-
+	//public static final Class<? extends InfoPagerFragment<Move>>[] FRAGMENTS = {MovePokemonListFragment.class, MoveTypingFragment.class};
+	public final InfoPagerFragment<Move>[] FRAGMENTS = {new MovePokemonListFragment(), new MoveTypingFragment()};
 		public MoveInfoPagerAdapter(FragmentManager fm){
 			super(fm);
 		}
 
 		@Override
 		public int getNumFrags(){
-			return FRAGMENTS.length;
+			return 2;
 		}
 
 		@Override
 		public InfoPagerFragment<Move> getFragment(int position){
-			try{
+			/*try{
 				return FRAGMENTS[position].newInstance();
 			}catch (InstantiationException e){}catch (IllegalAccessException e){
 				e.printStackTrace();				
 			}
-			return null;
+			return null;*/
+			return FRAGMENTS[position];
 		}
 		
 

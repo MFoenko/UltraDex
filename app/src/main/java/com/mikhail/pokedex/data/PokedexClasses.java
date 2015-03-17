@@ -63,7 +63,7 @@ public abstract class PokedexClasses{
 
 		@Override
 		public int compareTo(Pokemon other, int compareOn){
-			return id-other.id;
+			return dispId-other.dispId;
 		}
 
 		
@@ -158,6 +158,10 @@ public abstract class PokedexClasses{
 		public final int priority;
 		public final int type;
 		public final int damageClass;
+		
+		public final int learnMethod;
+		public final int level;
+		
 
 		public Move(Builder builder){
 			this.id = builder.id;
@@ -169,7 +173,8 @@ public abstract class PokedexClasses{
 			this.priority = builder.priority;
 			this.type = builder.type;
 			this.damageClass = builder.damageClass;
-			
+			this.learnMethod = builder.learnMethod;
+			this.level = builder.level;
 			
 		}
 
@@ -192,6 +197,10 @@ public abstract class PokedexClasses{
 			public int priority;
 			public int type;
 			public int damageClass;
+			
+			public int learnMethod = -1;
+			public int level = -1;
+			
 
 			
 			public Builder id(int id){
@@ -231,9 +240,21 @@ public abstract class PokedexClasses{
 				return this;
 			}
 
+			public Builder learnMethod(int lMethod){
+				learnMethod = lMethod;
+				return this;
+			}
+			
+			public Builder level(int lvl){
+				level = lvl;
+				return this;
+			}
+			
 			public Move build(){
 				return new Move(this);
 			}
+			
+		
 
 		}
 		
