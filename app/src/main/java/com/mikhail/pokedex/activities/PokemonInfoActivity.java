@@ -22,7 +22,7 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 	TypeView mType1TV;
 	TypeView mType2TV;
 
-	public static final int DEFAULT_PAGE = 1;
+	public static final int DEFAULT_PAGE = 2;
 
 
 	@Override
@@ -53,6 +53,8 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 
 	@Override
 	public Pokemon getData(int id){
+		Log.i("AAA", mPokedexDatabase.getEvolutions(id).toString());
+		
 		return mPokedexDatabase.getPokemon(id);
 	}
 
@@ -88,7 +90,7 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 
 	private static class PokemonInfoViewPagerAdapter extends InfoFragmentPagerAdapter<Move>{
 
-		public static final InfoPagerFragment<Pokemon>[] pages = new InfoPagerFragment[]{new PokemonMoveListFragment(), new PokemonStatsFragment(), new PokemonTypingFragment()};
+		public static final InfoPagerFragment<Pokemon>[] pages = new InfoPagerFragment[]{new PokemonTypingFragment(), new PokemonStatsFragment(), new PokemonInfoFragment() ,new PokemonMoveListFragment()};
 
 		public PokemonInfoViewPagerAdapter(FragmentManager fm){
 			super(fm);
@@ -96,7 +98,7 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 
 		@Override
 		public int getNumFrags(){
-			return 3;
+			return 4;
 		}
 
 		@Override

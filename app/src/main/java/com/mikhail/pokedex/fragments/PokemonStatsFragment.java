@@ -72,7 +72,7 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 			mStatBarViews[s].setStat(mStats[s]);
 		}
 		mTotalStatBarView.setStat(mTotal);
-		Log.i("AAA", "success");
+		//Log.i("AAA", "success");
 		return true;
 	}
 

@@ -43,6 +43,14 @@ public abstract class PokedexClasses{
 			this.hasUniqueIcon = builder.hasUniqueIcon;
 
 		}
+		
+		public int getStatTotal(){
+			int total = 0;
+			for(int s:stats){
+				total += s;
+			}
+			return total;
+		}
 
 		public Bitmap loadBitmap(Context context){
 			if (icon == null){
@@ -61,9 +69,100 @@ public abstract class PokedexClasses{
 			return formattedId + (suffix != null ?"-" + suffix: "") + ".gif";
 		}
 
+
+		public static final int SORT_BY_DISP_ID_ASC = 1;
+		public static final int SORT_BY_DISP_ID_DES = -1;
+		public static final int SORT_BY_NAME_ASC = 2;
+		public static final int SORT_BY_NAME_DES = -2;
+		public static final int SORT_BY_TYPE_ASC = 3;
+		public static final int SORT_BY_TYPE_DES = -3;
+		public static final int SORT_BY_HP_ASC = 10;
+		public static final int SORT_BY_HP_DES = -10;
+		public static final int SORT_BY_ATTACK_ASC = 11;
+		public static final int SORT_BY_ATTACK_DES = -11;
+		public static final int SORT_BY_DEFENSE_ASC = 12;
+		public static final int SORT_BY_DEFENSE_DES = -12;
+		public static final int SORT_BY_SPECIAL_ATTACK_ASC = 13;
+		public static final int SORT_BY_SPECIAL_ATTACK_DES = -13;
+		public static final int SORT_BY_SPECIAL_DEFENSE_ASC = 14;
+		public static final int SORT_BY_SPECIAL_DEFENSE_DES = -14;
+		public static final int SORT_BY_SPEED_ASC = 15;
+		public static final int SORT_BY_SPEED_DES = -15;
+		public static final int SORT_BY_STAT_TOTAL_ASC = 16;
+		public static final int SORT_BY_STAT_TOTAL_DES = -16;
+		
+		
+		
 		@Override
 		public int compareTo(Pokemon other, int compareOn){
-			return dispId-other.dispId;
+			
+			switch(compareOn){
+				case SORT_BY_DISP_ID_ASC:
+					return dispId-other.dispId + (dispId==other.dispId ? id-other.id:0);
+				case SORT_BY_DISP_ID_DES:
+					return other.dispId-dispId + (other.dispId == dispId ? other.id-id:0);
+				case SORT_BY_NAME_ASC:
+					return name.compareTo(other.name);
+				case SORT_BY_NAME_DES:
+					return other.name.compareTo(name);
+				case SORT_BY_TYPE_ASC:
+					if(types[0] == other.types[0]){
+						if(types.length == 2){
+							if(other.types.length == 2){
+								return types[1] - other.types[1];
+							}else{
+								return 1;
+							}
+						}else{
+							if(other.types.length == 2){
+								return -1;
+							}else{
+								return 0;
+							}
+						}
+					}else{
+						return types[0] - other.types[0];
+					}
+				case SORT_BY_TYPE_DES:
+					if(types[0] != other.types[0]){
+						if(types.length == 2){
+							if(other.types.length == 2){
+								return other.types[1] - types[1];
+							}else{
+								return -1;
+							}
+						}else{
+							if(other.types.length == 2){
+								return 1;
+							}else{
+								return 0;
+							}
+						}
+					}else{
+						return other.types[0] - types[0];
+					}
+				case SORT_BY_HP_ASC:
+				case SORT_BY_ATTACK_ASC:
+				case SORT_BY_DEFENSE_ASC:
+				case SORT_BY_SPECIAL_ATTACK_ASC:
+				case SORT_BY_SPECIAL_DEFENSE_ASC:
+				case SORT_BY_SPEED_ASC:
+					return stats[compareOn - SORT_BY_HP_ASC] - other.stats[compareOn-SORT_BY_HP_ASC];
+				case SORT_BY_HP_DES:
+				case SORT_BY_ATTACK_DES:
+				case SORT_BY_DEFENSE_DES:
+				case SORT_BY_SPECIAL_ATTACK_DES:
+				case SORT_BY_SPECIAL_DEFENSE_DES:
+				case SORT_BY_SPEED_DES:
+					return other.stats[Math.abs(compareOn) - SORT_BY_HP_ASC] - stats[Math.abs(compareOn)-SORT_BY_HP_ASC];
+				case SORT_BY_STAT_TOTAL_ASC:
+					return getStatTotal() - other.getStatTotal();
+				case SORT_BY_STAT_TOTAL_DES:
+					return other.getStatTotal()-getStatTotal();
+					
+			}
+			
+			return 0;
 		}
 
 		
@@ -146,6 +245,32 @@ public abstract class PokedexClasses{
 
 	}
 
+	public static class Evolution{
+		
+		public Pokemon evolvedPoke;
+		public String evolutionMethod;
+
+		public Evolution(Pokemon evolvedPoke){
+			this.evolvedPoke = evolvedPoke;
+		}
+
+		public Evolution(Pokemon evolvedPoke, String evolutionMethod){
+			this.evolvedPoke = evolvedPoke;
+			this.evolutionMethod = evolutionMethod;
+		}
+
+		public boolean isBaseEvo(){
+			return evolutionMethod == null;
+		}
+		
+		@Override
+		public String toString(){
+			return ">"+evolutionMethod+">"+evolvedPoke.id;
+		}
+		
+		
+	}
+	
 
 	public static class Move implements Linkable, VarComparable<Move>{
 

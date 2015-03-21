@@ -81,8 +81,8 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		{0xFF0000, 0xFFA500, 0xFFFF00, 0x1E90FF, 0x008000, 0xFFC0CB },
 	};
     public static final int[][] STAT_MINS = {
-            {0,0,0,0,0},
-            {0,0,0,0,0,0}
+		{0,0,0,0,0},
+		{0,0,0,0,0,0}
     };
 	public static final int[][] STAT_MAXES = {
 		{250, 150, 200, 150, 150},
@@ -92,7 +92,7 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	public static final String STAT_TOTAL_LABEL = "Total";
 	public static final int STAT_TOTAL_MIN = 0;
 	public static final int STAT_TOTAL_MAX = 800;
-	
+
 
 	public static final int[] GEN_TYPE_VERSIONS = {0,1,1,1,1,2};
 	public static final String[][] TYPE_NAMES = {
@@ -183,6 +183,13 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	public static final int GEN = VERSION_GROUP_GENERATION[VERSION_GROUP];
 
 
+	public static int getTypeVersion(){
+		return GEN_TYPE_VERSIONS[GEN];
+	}
+
+
+
+
 	private static Pokemon[] preloadedPokemon;
 
 
@@ -192,8 +199,8 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	private static final String SINGLE_POKEMON_QUERY = BASE_POKEMON_QUERY + " AND p._id = ? ORDER BY RANDOM();";
 	private static final String MOVE_POKEMON_QUERY = "SELECT DISTINCT " + BASE_POKEMON_QUERY_W_O_SELECT + " AND p._id IN (SELECT pokemon_id FROM pokemon_moves WHERE version_group_id <= ? AND move_id = ?) ;";
 
-	
-	
+
+
 	public Pokemon getPokemon(int id){
 		return getPokemon(id, VERSION, LANG);
 	}
@@ -219,7 +226,7 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		c.close();
 		return builder.build();
 	}
-	
+
 	public Pokemon[] getPokemonArrayFromCursor(Cursor c){
 		int length;
 		Pokemon[] pokemon = new Pokemon[length = c.getCount()];
@@ -240,7 +247,7 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		c.close();
 		return pokemon;
 	}
-	
+
 	public Pokemon[] getAllPokemon(){
 		return getAllPokemon(VERSION, LANG);
 	}
@@ -254,7 +261,7 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		int vgr = VERSION_VERSION_GROUP[ver] + 1;
 
 		Cursor c = this.dex.rawQuery(ALL_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(vgr)});
-		
+
 		return preloadedPokemon = getPokemonArrayFromCursor(c);
 	}
 
@@ -281,9 +288,53 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	}
 
 
+	private static final String EVO_QUERY = "SELECT s.id, s.evolves_from_species_id, evolution_trigger_id, trigger_item_id, minimum_level, gender_id, location_id, held_item_id, time_of_day, known_move_id, known_move_type_id, minimum_happiness, minimum_beauty, minimum_affection, relative_physical_stats, party_species_id, party_type_id, trade_species_id, needs_overworld_rain, turn_upside_down FROM pokemon_species AS s  LEFT OUTER JOIN pokemon_evolution AS e ON  s.id = e.evolved_species_id WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id =?);";
+
+	public ArrayList<ArrayList<Evolution>> getEvolutions(int id){
+		Cursor c = dex.rawQuery(EVO_QUERY, new String[]{String.valueOf(id)});
+		ArrayList<ArrayList<Evolution>> tree = new ArrayList<ArrayList<Evolution>>();
+		if (c.moveToFirst()){
+			tree.add(new ArrayList<Evolution>());
+			tree.get(0).add(getEvolution(c));
+		}
+		ArrayList<Evolution> branch = tree.get(0);
+		while (c.moveToNext()){
+			Evolution evo = getEvolution(c);
+			int prevolutionId = c.getInt(1);
+			if (prevolutionId != branch.get(branch.size() - 1).evolvedPoke.id){
+				ArrayList<Evolution> newBranch = new ArrayList<Evolution>();
+				for (Evolution e	:branch){
+					newBranch.add(e);
+					if (e.evolvedPoke.id == prevolutionId){
+						break;
+					}
+				}
+				tree.add(newBranch);
+				branch = newBranch;
+			}
+			branch.add(evo);
+		}
+		return tree;
+
+	}
+
+	private static final String [] EVOLUTION_METHODS = new String[]{null, "Level Up", "Trade", "Use", "Shed"};
+
+	private Evolution getEvolution(Cursor c){
+		String method = EVOLUTION_METHODS[c.getInt(2)];
+		if(method != null){
+			StringBuilder evolutionReqs = new StringBuilder(method);
+			evolutionReqs.append("\nAt level ").append(c.getInt(4));
+
+			return new Evolution(getPokemon(c.getInt(0)), evolutionReqs.toString());
+			
+		}
+		
+
+		return new Evolution(getPokemon(c.getInt(0)));
 
 
-
+	}
 
 
 
@@ -310,10 +361,10 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	public static final String ALL_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.generation_id <= ? AND m.id < 10000 ORDER BY mn.name;";
 	public static final String SINGLE_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.id = ?;";
 	public static final String POKEMON_MOVE_QUERY = BASE_MOVE_SELECT + ", pm.pokemon_move_method_id-1, pm.level" + BASE_MOVE_FROM + " JOIN pokemon_moves AS pm ON (pm.move_id=m.id)" + BASE_MOVE_WHERE + " AND pm.version_group_id = ? AND pm.pokemon_id = ? ;";
-	
+
 	public static final String[] MOVE_METHOD_LABELS = {"Level", "Egg", "Tutor", "TM/HM", "Stadium Surfing Pikachu", "Light Ball Egg", "Colosseum Purification", "XD Shadow", "XD Purification", "Form Change"};
-	
-	
+
+
 
 
 	public Move getMove(int id){
@@ -386,35 +437,35 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		c.close();
 		return move;
 	}
-	 public Move[] getMovesFromCursor(Cursor c){
-		 int len = c.getCount();
-		 Move[] moves = new Move[len];
-		 Move.Builder builder = new Move.Builder();
-		 for (int i=0;i < len;i++){
-			 c.moveToNext();
-			 builder
-				 .id(c.getInt(0))
-				 .name(c.getString(1))
-				 .type(c.getInt(2))
-				 .damageClass(c.getInt(3))
-				 .power(c.getInt(4))
-				 .accuracy(c.getInt(5))
-				 .pp(c.getInt(6))
-				 .priority(c.getInt(7));
-			 StringBuilder effect = new StringBuilder(c.getString(8));
-			 int effectIndex = effect.indexOf(EFFECT_CHANCE_SYMBOL);
-			 if (effectIndex != -1){
-				 effect.replace(effectIndex, effectIndex + EFFECT_CHANCE_SYMBOL.length(), c.getString(9));
-			 }
-			 builder
-				 .description(parseEffectString(effect));
-			 moves[i] = builder.build();
-		 }
+	public Move[] getMovesFromCursor(Cursor c){
+		int len = c.getCount();
+		Move[] moves = new Move[len];
+		Move.Builder builder = new Move.Builder();
+		for (int i=0;i < len;i++){
+			c.moveToNext();
+			builder
+				.id(c.getInt(0))
+				.name(c.getString(1))
+				.type(c.getInt(2))
+				.damageClass(c.getInt(3))
+				.power(c.getInt(4))
+				.accuracy(c.getInt(5))
+				.pp(c.getInt(6))
+				.priority(c.getInt(7));
+			StringBuilder effect = new StringBuilder(c.getString(8));
+			int effectIndex = effect.indexOf(EFFECT_CHANCE_SYMBOL);
+			if (effectIndex != -1){
+				effect.replace(effectIndex, effectIndex + EFFECT_CHANCE_SYMBOL.length(), c.getString(9));
+			}
+			builder
+				.description(parseEffectString(effect));
+			moves[i] = builder.build();
+		}
 
-		 c.close();
-		 return moves;
-	 }
-	
+		c.close();
+		return moves;
+	}
+
 	public Move[] getAllMoves(){
 		return getAllMoves(VERSION, LANG);
 	}
@@ -427,17 +478,16 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 
 		Cursor c=dex.rawQuery(ALL_MOVE_QUERY, new String[]{String.valueOf(lang), String.valueOf(gen)});
 
-		
+
 		return preloadedMoves = getMovesFromCursor(c);
 	}
-	
+
 	public Move[] getMovesByPokemon(int id){
 		return getMovesByPokemon(id, VERSION, LANG);
 	}
-	
+
 	public Move[] getMovesByPokemon(int id, int ver, int lang){
 		int vergrp = VERSION_VERSION_GROUP[ver];
-		Log.i("AAA", POKEMON_MOVE_QUERY);
 		Cursor c = dex.rawQuery(POKEMON_MOVE_QUERY, new String[]{String.valueOf(lang), String.valueOf(vergrp), String.valueOf(id)});
 		int len = c.getCount();
 		Move[] moves = new Move[len];
@@ -453,8 +503,8 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 				.accuracy(c.getInt(5))
 				.pp(c.getInt(6))
 				.priority(c.getInt(7))
-				.learnMethod(c.getInt(8))
-				.level(c.getInt(9));
+				.learnMethod(c.getInt(10))
+				.level(c.getInt(11));
 			StringBuilder effect = new StringBuilder(c.getString(8));
 			int effectIndex = effect.indexOf(EFFECT_CHANCE_SYMBOL);
 			if (effectIndex != -1){
@@ -467,9 +517,9 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 
 		c.close();
 		return moves;
-		
+
 	}
-	
+
 	public static final String[] LINK_TYPES = {"ability", "item", "move", "pokemon"};
 	public static final String LINK_MOVE =  "move";
 	public static final String LINK_POKEMON =  "pokemon";

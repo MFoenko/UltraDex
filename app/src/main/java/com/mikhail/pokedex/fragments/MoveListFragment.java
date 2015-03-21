@@ -16,6 +16,9 @@ import android.view.View.OnClickListener;
 
 public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, MoveListFragment.MoveListAdapter.MoveViewHolder> implements UsesRightDrawer{
 
+	
+	
+	
 	@Override
 	public RecyclerFragment.ListItemAdapter<PokedexClasses.Move, MoveListFragment.MoveListAdapter.MoveViewHolder> getNewAdapter(){
 		return new MoveListAdapter();
@@ -26,6 +29,19 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 		return new MoveFilter(mAdapter);
 	}
 
+	@Override
+	public Pair<String, Integer>[] getSortOptions(){
+		return new Pair[]{
+
+
+
+		};
+		
+	}
+
+
+	
+	
 	@Override
 	public View getRightDrawerLayout(LayoutInflater inflater, ViewGroup container){
 		View filters = inflater.inflate(R.layout.move_list_filter, container, false);

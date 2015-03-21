@@ -42,32 +42,34 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 		this.isPrimary = isPrimary;
 	}
 	
-	/*
+	
 
 	@Override
 	public void onStart(){
 		super.onStart();
 		
-		Log.i("AAA", this + " started " + isDisplayed);
+		//Log.i("AAA", this + " started " + isDisplayed);
 		if (!isDisplayed){
 			isDisplayed = displayData();
 		}
 		
 	}
 
-	*/
+	
 	@Override
 	public void onResume(){
 		super.onResume();
 
+		if (!isDisplayed){
 			isDisplayed = displayData();
+		}
 		
 	}
-/*
+
 	@Override
 	public void onPause(){
 		super.onPause();
-		Log.i("AAA", this + " paused " + isDisplayed);
+		//Log.i("AAA", this + " paused " + isDisplayed);
 		
 		isDisplayed = false;
 		}
@@ -75,12 +77,12 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	@Override
 	public void onStop(){
 		super.onStop();
-		Log.i("AAA", this + " stopped " + isDisplayed);
+		//Log.i("AAA", this + " stopped " + isDisplayed);
 		isDisplayed = false;
 	}
 
 	
-	*/
+	
 	public abstract void setData(I data);
 	public abstract boolean displayData();
 	public abstract String getTitle();
