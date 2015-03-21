@@ -288,7 +288,7 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	}
 
 
-	private static final String EVO_QUERY = "SELECT s.id, s.evolves_from_species_id, evolution_trigger_id, trigger_item_id, minimum_level, gender_id, location_id, held_item_id, time_of_day, known_move_id, known_move_type_id, minimum_happiness, minimum_beauty, minimum_affection, relative_physical_stats, party_species_id, party_type_id, trade_species_id, needs_overworld_rain, turn_upside_down FROM pokemon_species AS s  LEFT OUTER JOIN pokemon_evolution AS e ON  s.id = e.evolved_species_id WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id =?);";
+	private static final String EVO_QUERY = "SELECT s.id, s.evolves_from_species_id, evolution_trigger_id, trigger_item_id, minimum_level, gender_id, location_id, held_item_id, time_of_day, known_move_id, known_move_type_id, minimum_happiness, minimum_beauty, minimum_affection, relative_physical_stats + 1, party_species_id, party_type_id, trade_species_id, needs_overworld_rain, turn_upside_down FROM pokemon_species AS s  LEFT OUTER JOIN pokemon_evolution AS e ON  s.id = e.evolved_species_id WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id =?);";
 
 	public ArrayList<ArrayList<Evolution>> getEvolutions(int id){
 		Cursor c = dex.rawQuery(EVO_QUERY, new String[]{String.valueOf(id)});
@@ -320,11 +320,50 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 
 	private static final String [] EVOLUTION_METHODS = new String[]{null, "Level Up", "Trade", "Use", "Shed"};
 
-	private Evolution getEvolution(Cursor c){
-		String method = EVOLUTION_METHODS[c.getInt(2)];
+    //TODO: figure out the actual comparisons
+    private static final String [] RELATIVE_PHYSICAL_STATS_COMPARATORS = new String[]{">", "=", "<"};
+
+
+    private Evolution getEvolution(Cursor c){
+
+        String method = EVOLUTION_METHODS[c.getInt(2)];
+
 		if(method != null){
-			StringBuilder evolutionReqs = new StringBuilder(method);
-			evolutionReqs.append("\nAt level ").append(c.getInt(4));
+			StringBuilder evolutionReqs = new StringBuilder(method).append("\n");
+                if(c.getInt(4)!=0)
+                    evolutionReqs.append("At level ").append(c.getInt(4)).append("\n");
+            if(c.getInt(3)!=0)
+                evolutionReqs.append("<item>").append(c.getInt(3)).append("</item>").append("\n");
+            if(c.getInt(5)!=0)
+                evolutionReqs.append(c.getInt(5)==1?"Female":"Male").append("\n");
+            if(c.getInt(6)!=0)
+                evolutionReqs.append("at ").append("<location>").append(c.getInt(6)).append("</location>").append("\n");
+            if(c.getInt(7)!=0)
+                evolutionReqs.append("holding").append("<item>").append(c.getInt(7)).append("</item>").append("\n");
+            if(c.getString(8)!=null)
+                evolutionReqs.append("during the ").append(c.getString(8)).append("\n");
+            if(c.getInt(9)!=0)
+                evolutionReqs.append("knowing ").append("<move>").append(c.getInt(9)).append("</move>").append("\n");
+            if(c.getInt(10)!=0)
+                evolutionReqs.append("knowing a  ").append("<type>").append(c.getInt(10)).append("</type>").append(" type move \n");
+            if(c.getInt(11)!=0)
+                evolutionReqs.append("with ").append(c.getInt(11)).append(" happiness\n");
+            if(c.getInt(12)!=0)
+                evolutionReqs.append("with ").append(c.getInt(12)).append(" beauty\n");
+            if(c.getInt(13)!=0)
+                evolutionReqs.append("with ").append(c.getInt(13)).append(" affection\n");
+            if(c.getString(14)!=null)
+                evolutionReqs.append("with Attack").append(c.getInt(14)).append("Defense\n");
+            if(c.getInt(15) != 0)
+                evolutionReqs.append("with ").append("<pokemon>").append(c.getInt(15)).append("</pokemon>").append(" in the party\n");
+            if(c.getInt(16)!=0)
+                evolutionReqs.append("with a ").append("<type>").append(c.getInt(16)).append("</type>").append(" type in the party \n");
+            if(c.getInt(17) != 0)
+                evolutionReqs.append("for a ").append("<pokemon>").append(c.getInt(17)).append("</pokemon>").append("\n");
+            if(c.getInt(18) == 1)
+                evolutionReqs.append("while raining\n");
+            if(c.getInt(19) == 1)
+                evolutionReqs.append("while 3DS is upside-down");
 
 			return new Evolution(getPokemon(c.getInt(0)), evolutionReqs.toString());
 			

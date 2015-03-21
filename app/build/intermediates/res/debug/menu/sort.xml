@@ -1,0 +1,14 @@
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:menu="http://schemas.android.com/apk/res-auto"
+>
+
+    <item
+        android:id="@+id/sort"
+        android:title="Sort"
+		menu:showAsAction="always"
+		menu:actionLayout="@layout/sort_spinner"
+	/>
+
+</menu>
+<!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/menu/sort.xml -->
