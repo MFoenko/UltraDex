@@ -3,8 +3,9 @@
 
 	<string name="left_drawer_open">Left Drawer Open</string>
 	<string name="left_drawer_closed">Left Drawer Closed</string>
-	
-	
 
-	<string name="evolutions_header">Evolutions</string>
+
+
+    <string name="evolutions_header">Evolutions</string>
+    <string name="forms_header">Forms</string>
 </resources>

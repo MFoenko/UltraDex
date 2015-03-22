@@ -1322,7 +1322,7 @@ containing a value of this type.
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090016;
         public static final int beginning=0x7f090013;
-        public static final int check_box=0x7f090062;
+        public static final int check_box=0x7f090064;
         public static final int checkbox=0x7f090029;
         public static final int collapseActionView=0x7f090017;
         public static final int content_view=0x7f090042;
@@ -1336,21 +1336,23 @@ containing a value of this type.
         public static final int drawer_layout=0x7f090041;
         public static final int dropdown=0x7f09001c;
         public static final int edit_query=0x7f090033;
-        public static final int effectiveness=0x7f090061;
+        public static final int effectiveness=0x7f090063;
         public static final int end=0x7f090014;
         public static final int evolutions_container=0x7f090059;
         public static final int evolutions_header=0x7f090058;
         public static final int expand_activities_button=0x7f090022;
         public static final int expanded_menu=0x7f090028;
-        public static final int extra=0x7f09005b;
+        public static final int extra=0x7f09005d;
+        public static final int forms_container=0x7f09005b;
+        public static final int forms_header=0x7f09005a;
         public static final int genus=0x7f090055;
         public static final int home=0x7f090004;
         public static final int homeAsUp=0x7f09000d;
         public static final int icon=0x7f090026;
-        public static final int id=0x7f09005a;
+        public static final int id=0x7f09005c;
         public static final int ifRoom=0x7f090018;
         public static final int image=0x7f090023;
-        public static final int label=0x7f09005c;
+        public static final int label=0x7f09005e;
         public static final int learn_method=0x7f09004e;
         public static final int left_drawer=0x7f090043;
         public static final int listMode=0x7f090009;
@@ -1370,10 +1372,10 @@ containing a value of this type.
         public static final int radio=0x7f09002b;
         public static final int recycler_view=0x7f090040;
         public static final int right_drawer=0x7f090044;
-        public static final int search=0x7f090063;
+        public static final int search=0x7f090065;
         public static final int search_badge=0x7f090035;
         public static final int search_bar=0x7f090034;
-        public static final int search_box=0x7f09005f;
+        public static final int search_box=0x7f090061;
         public static final int search_button=0x7f090036;
         public static final int search_close_btn=0x7f09003b;
         public static final int search_edit_frame=0x7f090037;
@@ -1382,13 +1384,13 @@ containing a value of this type.
         public static final int search_plate=0x7f090039;
         public static final int search_src_text=0x7f09003a;
         public static final int search_voice_btn=0x7f09003e;
-        public static final int seek_bar_container=0x7f09005e;
+        public static final int seek_bar_container=0x7f090060;
         public static final int shortcut=0x7f09002a;
         public static final int showCustom=0x7f09000f;
         public static final int showHome=0x7f090010;
         public static final int showTitle=0x7f090011;
-        public static final int sort=0x7f090064;
-        public static final int splashProgressBar=0x7f090060;
+        public static final int sort=0x7f090066;
+        public static final int splashProgressBar=0x7f090062;
         public static final int split_action_bar=0x7f090007;
         public static final int stat_filters=0x7f09004d;
         public static final int submit_area=0x7f09003c;
@@ -1403,7 +1405,7 @@ containing a value of this type.
         public static final int type_filters=0x7f09004c;
         public static final int up=0x7f090008;
         public static final int useLogo=0x7f090012;
-        public static final int values=0x7f09005d;
+        public static final int values=0x7f09005f;
         public static final int withText=0x7f09001a;
         public static final int wrap_content=0x7f09001d;
     }
@@ -1481,8 +1483,9 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f0b000f;
         public static final int app_name=0x7f0b0010;
         public static final int evolutions_header=0x7f0b0011;
-        public static final int left_drawer_closed=0x7f0b0012;
-        public static final int left_drawer_open=0x7f0b0013;
+        public static final int forms_header=0x7f0b0012;
+        public static final int left_drawer_closed=0x7f0b0013;
+        public static final int left_drawer_open=0x7f0b0014;
     }
     public static final class style {
         /** <item name="android:textColor">#FF222222</item>

@@ -164,6 +164,7 @@
     <eat-comment/>
     <string name="app_name">Ultradex</string>
     <string name="evolutions_header">Evolutions</string>
+    <string name="forms_header">Forms</string>
     <string name="left_drawer_closed">Left Drawer Closed</string>
     <string name="left_drawer_open">Left Drawer Open</string>
     <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/styles.xml -->

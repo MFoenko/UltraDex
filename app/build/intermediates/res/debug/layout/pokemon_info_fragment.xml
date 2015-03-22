@@ -1,23 +1,41 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-	<TextView
-		android:id="@+id/evolutions_header"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/evolutions_header"
-		style="@style/HeaderText"
-		/>
+    android:layout_height="match_parent">
     <LinearLayout
-		android:id="@+id/evolutions_container"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"/>
-	
-		
-   	
-	
-	
-</LinearLayout>
-<!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/pokemon_info_fragment.xml -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/evolutions_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/evolutions_header"
+            android:gravity="center"
+            style="@style/HeaderText"
+            />
+        <LinearLayout
+            android:id="@+id/evolutions_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/forms_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/forms_header"
+            android:gravity="center"
+            style="@style/HeaderText"
+            />
+        <LinearLayout
+            android:id="@+id/forms_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            />
+    </LinearLayout>
+</ScrollView><!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/pokemon_info_fragment.xml -->

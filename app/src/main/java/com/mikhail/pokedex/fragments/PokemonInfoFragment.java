@@ -14,6 +14,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 	public static final String TITLE = "Info";
 	private Pokemon mPoke;
 	private ArrayList<ArrayList<Evolution>> mEvolutions;
+    private Pokemon[] mForms;
 
 	private View mLayout;
 
@@ -31,21 +32,27 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 	@Override
 	public void setData(Pokemon data){
 		mPoke = data;
-		mEvolutions = PokedexDatabase.getInstance(getActivity()).getEvolutions(data.id);
+        PokedexDatabase pokedexDatabase = PokedexDatabase.getInstance(getActivity());
+		mEvolutions = pokedexDatabase.getEvolutions(data.id);
 		for (ArrayList<Evolution> branch:mEvolutions){
 			for (Evolution evo:branch){
 				evo.evolvedPoke.loadBitmap(getActivity());
 			}
 		}
+        mForms = pokedexDatabase.getForms(mPoke.id);
+        for(Pokemon p: mForms){
+            p.loadBitmap(getActivity());
+        }
 	}
 
 	@Override
 	public boolean displayData(){
-		if (mPoke == null || mLayout == null)
+		if (mPoke == null || mEvolutions == null || mLayout == null|| mForms == null)
 			return false;
 
 		LinearLayout treeLL = (LinearLayout)mLayout.findViewById(R.id.evolutions_container);
-		for (ArrayList<Evolution> branch:mEvolutions){
+		treeLL.removeAllViews();
+        for (ArrayList<Evolution> branch:mEvolutions){
 
 			LinearLayout branchLL = new LinearLayout(treeLL.getContext());
 			branchLL.setOrientation(LinearLayout.HORIZONTAL);
@@ -73,12 +80,31 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 
 		}
 
+        LinearLayout formsLL = (LinearLayout)mLayout.findViewById(R.id.forms_container);
+
+        for(Pokemon form:mForms){
+
+            ImageView iconIV = new ImageView(formsLL.getContext());
+            float density = getResources().getDisplayMetrics().density;
+            LayoutParams iconParams = new LayoutParams((int)(64*density), (int)(64*density),1);
+            iconIV.setLayoutParams(iconParams);
+            iconIV.setImageBitmap(form.icon);
+            formsLL.addView(iconIV);
+
+        }
 
 		return true;
 
 	}
 
-	@Override
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPoke = null;
+        mEvolutions = null;
+    }
+
+    @Override
 	public String getTitle(){
 		return TITLE;
 	}

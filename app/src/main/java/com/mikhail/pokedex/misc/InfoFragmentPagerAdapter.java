@@ -71,7 +71,9 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 	public void onPageSelected(int p1){
 
 		for (int i=0;i < fragments.length;i++){
-			fragments[i].setPagePrimary(i==p1);
+            if(fragments[i] != null) {
+                fragments[i].setPagePrimary(i == p1);
+            }
 		}
 
 	}
