@@ -1,6 +1,7 @@
 package com.mikhail.pokedex.fragments;
 
 import android.os.*;
+import android.util.*;
 import android.view.*;
 import android.widget.*;
 import android.widget.LinearLayout.*;
@@ -40,15 +41,27 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 			}
 		}
         mForms = pokedexDatabase.getForms(mPoke.id);
-        for(Pokemon p: mForms){
+        for (Pokemon p: mForms){
             p.loadBitmap(getActivity());
         }
 	}
 
 	@Override
 	public boolean displayData(){
-		if (mPoke == null || mEvolutions == null || mLayout == null|| mForms == null)
+		if (mPoke == null || mEvolutions == null || mLayout == null || mForms == null || isDetached())
 			return false;
+
+
+		float density;
+		try{
+
+			density = getResources().getDisplayMetrics().density;
+		}catch (IllegalStateException e){
+			return false;
+		}
+
+		int iconSize =(int)(64*density);
+
 
 		LinearLayout treeLL = (LinearLayout)mLayout.findViewById(R.id.evolutions_container);
 		treeLL.removeAllViews();
@@ -69,24 +82,24 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 					branchLL.addView(methodTV);
 				}
 				ImageView iconIV = new ImageView(branchLL.getContext());
-				float density = getResources().getDisplayMetrics().density;
-				LayoutParams iconParams = new LayoutParams((int)(64*density), (int)(64*density));
+				LayoutParams iconParams = new LayoutParams(iconSize,iconSize);
 				iconIV.setLayoutParams(iconParams);
 				iconIV.setImageBitmap(evo.evolvedPoke.icon);
 				branchLL.addView(iconIV);
 			}
-			
+
 			treeLL.addView(branchLL);
+
+
 
 		}
 
         LinearLayout formsLL = (LinearLayout)mLayout.findViewById(R.id.forms_container);
 
-        for(Pokemon form:mForms){
+        for (Pokemon form:mForms){
 
             ImageView iconIV = new ImageView(formsLL.getContext());
-            float density = getResources().getDisplayMetrics().density;
-            LayoutParams iconParams = new LayoutParams((int)(64*density), (int)(64*density),1);
+            LayoutParams iconParams = new LayoutParams(iconSize, iconSize, 1);
             iconIV.setLayoutParams(iconParams);
             iconIV.setImageBitmap(form.icon);
             formsLL.addView(iconIV);
@@ -94,25 +107,19 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
         }
 
 		return true;
-
 	}
 
     @Override
-    public void onStop() {
+    public void onStop(){
         super.onStop();
         mPoke = null;
         mEvolutions = null;
+		mForms = null;
     }
 
     @Override
 	public String getTitle(){
 		return TITLE;
 	}
-
-
-
-
-
-
 
 }

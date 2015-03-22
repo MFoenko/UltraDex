@@ -207,7 +207,7 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 
 	public Pokemon getPokemon(int id, int ver, int lang){
 
-        if(preloadedPokemon != null){
+        if (preloadedPokemon != null){
             return getPreloadedPokemon(id);
         }
 
@@ -233,21 +233,20 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	}
 
     public static Pokemon getPreloadedPokemon(int id){
-        return getPreloadedPokemon(id, preloadedPokemon.length/2, 0 , preloadedPokemon.length);
+        return getPreloadedPokemon(id, preloadedPokemon.length / 2, 0 , preloadedPokemon.length);
     }
     public static Pokemon getPreloadedPokemon(int id, int pos, int low, int high){
 
 
-        if(pos <0 || pos > preloadedPokemon.length || high < low){
+        if (pos < 0 || pos > preloadedPokemon.length || high < low){
             return null;
         }
         int foundId= preloadedPokemon[pos].id;
 
-        Log.i("AAA", "id = " + id + " pos = "+pos+ " foundId = "+foundId+" high = "+high +" low = "+low);
-        if(foundId < id){
-           return getPreloadedPokemon(id, pos + (high-pos)/2, pos , high );
+        if (foundId < id){
+			return getPreloadedPokemon(id, pos + (high - pos) / 2, pos , high);
         }else if (foundId > id){
-            return getPreloadedPokemon(id, (pos-low)/2, low, pos);
+            return getPreloadedPokemon(id, (pos - low) / 2, low, pos);
         }
 
         return preloadedPokemon[pos];
@@ -262,7 +261,6 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	public Pokemon[] getPokemonArrayFromCursor(Cursor c){
 		int length;
 		Pokemon[] pokemon = new Pokemon[length = c.getCount()];
-        Log.i("AAA", ""+length);
 		Pokemon.Builder builder = new Pokemon.Builder();
 		for (int i=0;i < length;i++){
 			c.moveToNext();
@@ -328,19 +326,22 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 	public ArrayList<ArrayList<Evolution>> getEvolutions(int id){
 		Cursor c = dex.rawQuery(EVO_QUERY, new String[]{String.valueOf(id)});
 		ArrayList<ArrayList<Evolution>> tree = new ArrayList<ArrayList<Evolution>>();
-		if (c.moveToFirst()) {
+
+
+
+		if (c.moveToFirst()){
             tree.add(new ArrayList<Evolution>());
             tree.get(0).add(getEvolution(c));
 
             ArrayList<Evolution> branch = tree.get(0);
-            while (c.moveToNext()) {
+            while (c.moveToNext()){
                 Evolution evo = getEvolution(c);
                 int prevolutionId = c.getInt(1);
-                if (prevolutionId != branch.get(branch.size() - 1).evolvedPoke.id) {
+                if (prevolutionId != branch.get(branch.size() - 1).evolvedPoke.id){
                     ArrayList<Evolution> newBranch = new ArrayList<Evolution>();
-                    for (Evolution e : branch) {
+                    for (Evolution e : branch){
                         newBranch.add(e);
-                        if (e.evolvedPoke.id == prevolutionId) {
+                        if (e.evolvedPoke.id == prevolutionId){
                             break;
                         }
                     }
@@ -363,47 +364,47 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 
         String method = EVOLUTION_METHODS[c.getInt(2)];
 
-		if(method != null){
+		if (method != null){
 			StringBuilder evolutionReqs = new StringBuilder(method).append("\n");
-                if(c.getInt(4)!=0)
-                    evolutionReqs.append("At level ").append(c.getInt(4)).append("\n");
-            if(c.getInt(3)!=0)
+			if (c.getInt(4) != 0)
+				evolutionReqs.append("At level ").append(c.getInt(4)).append("\n");
+            if (c.getInt(3) != 0)
                 evolutionReqs.append("<item>").append(c.getInt(3)).append("</item>").append("\n");
-            if(c.getInt(5)!=0)
+            if (c.getInt(5) != 0)
                 evolutionReqs.append(c.getInt(5) == 1 ? "Female" : "Male").append("\n");
-            if(c.getInt(6)!=0)
+            if (c.getInt(6) != 0)
                 evolutionReqs.append("at ").append("<location>").append(c.getInt(6)).append("</location>").append("\n");
-            if(c.getInt(7)!=0)
+            if (c.getInt(7) != 0)
                 evolutionReqs.append("holding").append("<item>").append(c.getInt(7)).append("</item>").append("\n");
-            if(c.getString(8)!=null)
+            if (c.getString(8) != null)
                 evolutionReqs.append("during the ").append(c.getString(8)).append("\n");
-            if(c.getInt(9)!=0)
+            if (c.getInt(9) != 0)
                 evolutionReqs.append("knowing ").append("<move>").append(c.getInt(9)).append("</move>").append("\n");
-            if(c.getInt(10)!=0)
+            if (c.getInt(10) != 0)
                 evolutionReqs.append("knowing a  ").append("<type>").append(c.getInt(10)).append("</type>").append(" type move \n");
-            if(c.getInt(11)!=0)
+            if (c.getInt(11) != 0)
                 evolutionReqs.append("with ").append(c.getInt(11)).append(" happiness\n");
-            if(c.getInt(12)!=0)
+            if (c.getInt(12) != 0)
                 evolutionReqs.append("with ").append(c.getInt(12)).append(" beauty\n");
-            if(c.getInt(13)!=0)
+            if (c.getInt(13) != 0)
                 evolutionReqs.append("with ").append(c.getInt(13)).append(" affection\n");
-            if(c.getString(14)!=null)
+            if (c.getString(14) != null)
                 evolutionReqs.append("with Attack").append(RELATIVE_PHYSICAL_STATS_COMPARATORS[c.getInt(14)]).append("Defense\n");
-            if(c.getInt(15) != 0)
+            if (c.getInt(15) != 0)
                 evolutionReqs.append("with ").append("<pokemon>").append(c.getInt(15)).append("</pokemon>").append(" in the party\n");
-            if(c.getInt(16)!=0)
+            if (c.getInt(16) != 0)
                 evolutionReqs.append("with a ").append("<type>").append(c.getInt(16)).append("</type>").append(" type in the party \n");
-            if(c.getInt(17) != 0)
+            if (c.getInt(17) != 0)
                 evolutionReqs.append("for a ").append("<pokemon>").append(c.getInt(17)).append("</pokemon>").append("\n");
-            if(c.getInt(18) == 1)
+            if (c.getInt(18) == 1)
                 evolutionReqs.append("while raining\n");
-            if(c.getInt(19) == 1)
+            if (c.getInt(19) == 1)
                 evolutionReqs.append("while 3DS is upside-down");
 
 			return new Evolution(getPokemon(c.getInt(0)), evolutionReqs.toString());
-			
+
 		}
-		
+
 
 		return new Evolution(getPokemon(c.getInt(0)));
 
@@ -420,10 +421,19 @@ public class PokedexDatabase extends SQLiteOpenHelper{
         int vgr = VERSION_VERSION_GROUP[ver];
         final int generation = VERSION_GROUP_GENERATION[vgr];
 
-        Log.i("AAA", id + " " + vgr + " oijo " + generation + " "+VERSION_GROUP_GENERATION[vgr]);
-        Log.i("AAA",FORMS_QUERY);
-        Cursor c = this.dex.rawQuery(FORMS_QUERY, new String[]{String.valueOf(generation), String.valueOf(generation), String.valueOf(generation), String.valueOf(lang),String.valueOf(vgr), String.valueOf(id), String.valueOf(id)});
-        return getPokemonArrayFromCursor(c);
+		if (preloadedPokemon != null){
+			Cursor c = this.dex.rawQuery("SELECT p._id FROM pokemon AS p JOIN pokemon_forms AS f ON (f.pokemon_id = p._id) WHERE f.introduced_in_version_group_id-1 <= ? AND p.species_id = ? and p._id != ?;", new String[]{String.valueOf(vgr), String.valueOf(id), String.valueOf(id)});
+			int len;
+			Pokemon[] forms = new Pokemon[len = c.getCount()];
+			for(int i=0;i<len;i++){
+				c.moveToNext();
+				forms[i] = getPokemon(c.getInt(0));
+			}
+			return forms;
+		}else{
+			Cursor c = this.dex.rawQuery(FORMS_QUERY, new String[]{String.valueOf(generation), String.valueOf(generation), String.valueOf(generation), String.valueOf(lang),String.valueOf(vgr), String.valueOf(id), String.valueOf(id)});
+			return getPokemonArrayFromCursor(c);
+		}
 
     }
 

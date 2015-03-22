@@ -265,6 +265,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			}
 			return idArray;
 		}
+		
 
 		public class PokemonViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
 
@@ -287,6 +288,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 				intent.putExtra(PokemonInfoActivity.EXTRA_ID_ARRAY, getIdArray());
 				intent.putExtra(PokemonInfoActivity.EXTRA_ID_INDEX, this.getPosition());
 				p1.getContext().startActivity(intent);
+				Log.i("AAA", "Loading "+id.getText());
 			}
 		}
 

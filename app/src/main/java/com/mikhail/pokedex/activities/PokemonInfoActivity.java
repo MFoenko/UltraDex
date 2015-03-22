@@ -53,7 +53,6 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 
 	@Override
 	public Pokemon getData(int id){
-		Log.i("AAA", mPokedexDatabase.getEvolutions(id).toString());
 		
 		return mPokedexDatabase.getPokemon(id);
 	}
@@ -85,6 +84,7 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 			mType2TV.setVisibility(View.INVISIBLE);
 		}
 
+		
 	}
 
 
