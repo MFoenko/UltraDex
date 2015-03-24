@@ -1,29 +1,68 @@
 package com.mikhail.pokedex.fragments;
 
+import android.content.*;
 import android.os.*;
 import android.util.*;
 import android.view.*;
+import android.view.View.*;
 import android.widget.*;
 import android.widget.LinearLayout.*;
 import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.activities.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import java.util.*;
+
+import android.view.View.OnClickListener;
 
 public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 
 	public static final String TITLE = "Info";
 	private Pokemon mPoke;
 	private ArrayList<ArrayList<Evolution>> mEvolutions;
+	private int[] mEvolutionsIds;
     private Pokemon[] mForms;
 
 	private View mLayout;
+
+	LinearLayout treeLL;
+	LinearLayout formsLL;
+	
+	OnClickListener mEvolutionIconClickListener = new OnClickListener(){
+		@Override
+		public void onClick(View p1){
+			int pos=(Integer)p1.getTag();
+			Intent intent = new Intent(p1.getContext(), PokemonInfoActivity.class);
+			intent.putExtra(PokemonInfoActivity.EXTRA_ID_ARRAY, mEvolutionsIds);
+			intent.putExtra(PokemonInfoActivity.EXTRA_ID_INDEX, pos);
+			p1.getContext().startActivity(intent);
+		}
+	};
+	
+	
+	
+	TextView metricHeightTV;
+	TextView imperialHeightTV;
+	TextView metricWeightTV;
+	TextView imperialWeightTV;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		return mLayout = inflater.inflate(R.layout.pokemon_info_fragment, container, false);
+		mLayout = inflater.inflate(R.layout.pokemon_info_fragment, container, false);
+
+		treeLL = (LinearLayout)mLayout.findViewById(R.id.evolutions_container);
+		formsLL = (LinearLayout)mLayout.findViewById(R.id.forms_container);
+		
+		metricHeightTV = (TextView)mLayout.findViewById(R.id.height_m);
+		imperialHeightTV = (TextView)mLayout.findViewById(R.id.height_ft);
+		metricWeightTV = (TextView)mLayout.findViewById(R.id.weight_kg);
+		imperialWeightTV = (TextView)mLayout.findViewById(R.id.weight_lb);
+		
+		
+		return mLayout;
 
 	}
 
@@ -35,11 +74,30 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 		mPoke = data;
         PokedexDatabase pokedexDatabase = PokedexDatabase.getInstance(getActivity());
 		mEvolutions = pokedexDatabase.getEvolutions(data.id);
-		for (ArrayList<Evolution> branch:mEvolutions){
+		/*for (ArrayList<Evolution> branch:mEvolutions){
 			for (Evolution evo:branch){
 				evo.evolvedPoke.loadBitmap(getActivity());
 			}
+		}*/
+		int c=0;
+		for(int i=0;i<mEvolutions.size();i++){
+			for(int j=0;j<mEvolutions.get(i).size();j++){
+				c++;
+			}
 		}
+		mEvolutionsIds = new int[c];
+		c=0;
+		
+		for(int i=0;i<mEvolutions.size();i++){
+			for(int j=0;j<mEvolutions.get(i).size();j++){
+				Evolution evo = mEvolutions.get(i).get(j);
+				 mEvolutionsIds[c++] = evo.evolvedPoke.id;
+				 evo.evolvedPoke.loadBitmap(getActivity());
+			}
+		}
+		
+		
+		
         mForms = pokedexDatabase.getForms(mPoke.id);
         for (Pokemon p: mForms){
             p.loadBitmap(getActivity());
@@ -63,7 +121,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 		int iconSize =(int)(64*density);
 
 
-		LinearLayout treeLL = (LinearLayout)mLayout.findViewById(R.id.evolutions_container);
+		int c =0;
 		treeLL.removeAllViews();
         for (ArrayList<Evolution> branch:mEvolutions){
 
@@ -85,6 +143,9 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 				LayoutParams iconParams = new LayoutParams(iconSize,iconSize);
 				iconIV.setLayoutParams(iconParams);
 				iconIV.setImageBitmap(evo.evolvedPoke.icon);
+				iconIV.setTag(c++);
+				iconIV.setClickable(true);
+				iconIV.setOnClickListener(mEvolutionIconClickListener);
 				branchLL.addView(iconIV);
 			}
 
@@ -94,7 +155,6 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 
 		}
 
-        LinearLayout formsLL = (LinearLayout)mLayout.findViewById(R.id.forms_container);
 
         for (Pokemon form:mForms){
 
@@ -105,6 +165,13 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
             formsLL.addView(iconIV);
 
         }
+		
+		
+		metricHeightTV.setText(mPoke.height + "m");
+		int heightIn = (int)(mPoke.height*100/2.54);
+		imperialHeightTV.setText((heightIn/12)+"'"+(heightIn%12)+"\"");
+		metricWeightTV.setText(mPoke.weight+"kg");
+		imperialWeightTV.setText(mPoke.weight*2.204+"lbs");
 
 		return true;
 	}
@@ -122,4 +189,6 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 		return TITLE;
 	}
 
+	
+	
 }

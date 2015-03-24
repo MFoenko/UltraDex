@@ -23,6 +23,10 @@ public abstract class PokedexClasses{
 		public final String genus;
         public final int[] stats;
         public final int[] types;
+		public final float height;
+		public final float weight;
+		public final int femalesPer8Males;
+		public final int baseExperience;
 		public final String suffix;
 		public final int order;
 		public final boolean isDefault;
@@ -37,10 +41,15 @@ public abstract class PokedexClasses{
 			this.genus = builder.genus;
 			this.stats = builder.stats;
 			this.types = builder.types;
+			this.height = builder.height;
+			this.weight = builder.weight;
+			this.femalesPer8Males = builder.femalesPer8Males;
+			this.baseExperience = builder.baseExperience;			
 			this.suffix = builder.suffix;
 			this.order = builder.order;
 			this.isDefault = true;
 			this.hasUniqueIcon = builder.hasUniqueIcon;
+			
 
 		}
 		
@@ -179,6 +188,11 @@ public abstract class PokedexClasses{
 			public int[] types;
 			public String suffix;
 			public int order;
+			public float height;
+			public float weight;
+			public int femalesPer8Males;
+			public int baseExperience;
+			
 			public boolean isDefault;
 			public boolean hasUniqueIcon;
 
@@ -222,6 +236,24 @@ public abstract class PokedexClasses{
 				return this;
 			}
 
+			public Builder height(float h){
+				this.height = h;
+				return this;
+			}
+			public Builder weight(float w){
+				this.weight = w;
+				return this;
+			}
+			public Builder genderRate(int rate){
+				this.femalesPer8Males = rate;
+				return this;
+			}
+			public Builder baseExp(int baseXP){
+				this.baseExperience = baseXP;
+				return this;
+			}
+			
+			
 			public Pokemon build(){
 				return new Pokemon(this);
 			}

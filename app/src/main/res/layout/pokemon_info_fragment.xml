@@ -29,13 +29,90 @@
             android:text="@string/forms_header"
             android:gravity="center"
             style="@style/HeaderText"
-            />
+		/>
         <LinearLayout
             android:id="@+id/forms_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            />
+		/>
+
+        <LinearLayout
+            android:id="@+id/sizes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+		>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="center"
+			>
+				<TextView
+					android:layout_height="wrap_content"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					style="@style/SubHeaderText"
+					android:text="Height"
+				/>
+				<TextView
+					android:layout_height="wrap_content"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					style="@style/SubHeaderText"
+					android:text="Weight"
+				/>
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="center"
+			>
+
+				<TextView
+					android:id="@+id/height_m"
+					android:layout_height="wrap_content"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					style="@style/SmallText"
+				/>
+
+				<TextView
+					android:id="@+id/height_ft"
+					android:layout_height="wrap_content"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					style="@style/SmallText"
+				/>
+
+				<TextView
+					android:id="@+id/weight_kg"
+					android:layout_height="wrap_content"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					style="@style/SmallText"
+				/>
+
+				<TextView
+					android:id="@+id/weight_lb"
+					android:layout_height="wrap_content"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					style="@style/SmallText"
+				/>
+				
+			</LinearLayout>
+		</LinearLayout>
     </LinearLayout>
 </ScrollView>

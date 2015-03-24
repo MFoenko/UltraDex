@@ -88,7 +88,7 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 	}
 
 
-	private static class PokemonInfoViewPagerAdapter extends InfoFragmentPagerAdapter<Move>{
+	private class PokemonInfoViewPagerAdapter extends InfoFragmentPagerAdapter<Move>{
 
 		public static final InfoPagerFragment<Pokemon>[] pages = new InfoPagerFragment[]{new PokemonTypingFragment(), new PokemonStatsFragment(), new PokemonInfoFragment() ,new PokemonMoveListFragment()};
 
