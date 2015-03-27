@@ -15,7 +15,7 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 	private int[] mStats = null; 
 	private int mTotal= 0;
 
-	private static final int COLOR_SHIFT = -0x99000000;
+	private static final int COLOR_SHIFT = -0x88000000;
 	
 	private StatBarView[] mStatBarViews;
 	private StatBarView mTotalStatBarView;

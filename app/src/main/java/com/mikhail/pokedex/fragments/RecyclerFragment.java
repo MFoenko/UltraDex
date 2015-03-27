@@ -11,11 +11,13 @@ import android.widget.AdapterView.*;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import java.util.*;
+import com.mikhail.pokedex.misc.*;
 
 public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
 
 
 	protected RecyclerView mRecyclerView;
+	protected ScrollBarView mScrollerView;
 	protected ListItemAdapter<T, VH> mAdapter;
 	protected Filter mFilter;
 	protected SortAdapter mSortAdapter;
@@ -31,6 +33,10 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 		mRecyclerView = (RecyclerView)layout.findViewById(R.id.recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
 		mRecyclerView.setAdapter(mAdapter = getNewAdapter());
+		
+		mScrollerView = (ScrollBarView)layout.findViewById(R.id.scrollBar);
+		mScrollerView.setRecyclerView(mRecyclerView);
+		
 		mFilter = getNewFilter();
 		return layout;
 	}

@@ -13,11 +13,19 @@ import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
 
 import android.view.View.OnClickListener;
+import android.os.*;
+import android.app.*;
 
 public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, MoveListFragment.MoveListAdapter.MoveViewHolder> implements UsesRightDrawer{
 
-	
-	
+	View filters;
+
+	@Override
+	public void onAttach(Activity activity){
+		super.onAttach(activity);
+	}
+
+
 	
 	@Override
 	public RecyclerFragment.ListItemAdapter<PokedexClasses.Move, MoveListFragment.MoveListAdapter.MoveViewHolder> getNewAdapter(){
@@ -36,69 +44,70 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 
 
 		};
-		
+
 	}
 
 
-	
-	
+
+
 	@Override
 	public View getRightDrawerLayout(LayoutInflater inflater, ViewGroup container){
-		View filters = inflater.inflate(R.layout.move_list_filter, container, false);
 
-		ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
-        for (int i=0;i < PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++){
-            View typeFilter = inflater.inflate(R.layout.type_filter, typesContainer, false);
-			CheckBox checkBox = (CheckBox)typeFilter.findViewById(R.id.check_box);
-			checkBox.setTag(i);
-			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-					@Override
-					public void onCheckedChanged(CompoundButton p1, boolean p2){
-						int type = (Integer)p1.getTag();
-						Log.e("AAA", "" + mFilter);
-						((MoveFilter)mFilter).types[type] = p2;
-						mFilter.filter();
-					}
-				});
+		if (filters == null){
+			filters = inflater.inflate(R.layout.move_list_filter, container, false);
 
-			TypeView typeView = (TypeView)typeFilter.findViewById(R.id.type);
-            typeView.setType(i);
-            typesContainer.addView(typeFilter);
+			ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
+			for (int i=0;i < PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++){
+				View typeFilter = inflater.inflate(R.layout.type_filter, typesContainer, false);
+				CheckBox checkBox = (CheckBox)typeFilter.findViewById(R.id.check_box);
+				checkBox.setTag(i);
+				checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+						@Override
+						public void onCheckedChanged(CompoundButton p1, boolean p2){
+							int type = (Integer)p1.getTag();
+							((MoveFilter)mFilter).types[type] = p2;
+							mFilter.filter();
+						}
+					});
 
-        }
+				TypeView typeView = (TypeView)typeFilter.findViewById(R.id.type);
+				typeView.setType(i);
+				typesContainer.addView(typeFilter);
 
-		ViewGroup statsContainer = (ViewGroup)filters.findViewById(R.id.stat_filters);
-		int len = MoveFilter.STAT_LABELS.length;
-		for (int i=0;i < len;i++){
-			View rangeView = inflater.inflate(R.layout.range_filter, statsContainer, false);
-			((TextView)rangeView.findViewById(R.id.label)).setText(MoveFilter.STAT_LABELS[i] + ":");
+			}
 
-			ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
-			RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
-				MoveFilter.STAT_MINS[i],
-				MoveFilter.STAT_MAXES[i],
-				container.getContext(),
-				0xFF000000 + PokedexDatabase.STAT_TOTAL_COLOR
-			);
-			((TextView)rangeView.findViewById(R.id.values)).setText(bar.getSelectedMinValue() + " - " + bar.getSelectedMaxValue());
+			ViewGroup statsContainer = (ViewGroup)filters.findViewById(R.id.stat_filters);
+			int len = MoveFilter.STAT_LABELS.length;
+			for (int i=0;i < len;i++){
+				View rangeView = inflater.inflate(R.layout.range_filter, statsContainer, false);
+				((TextView)rangeView.findViewById(R.id.label)).setText(MoveFilter.STAT_LABELS[i] + ":");
 
-			bar.setNotifyWhileDragging(true);
-			bar.setTag(i);
-			bar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>(){
-					@Override
-					public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue){
-						((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
-						int i = (Integer)bar.getTag();
-						((MoveFilter)mFilter).stats[0][i] = minValue;
-						((MoveFilter)mFilter).stats[1][i] = maxValue;
-						mFilter.filter();
-					}
-				});
-			seekBarContainer.addView(bar);
-			statsContainer.addView(rangeView);
+				ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
+				RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
+					MoveFilter.STAT_MINS[i],
+					MoveFilter.STAT_MAXES[i],
+					container.getContext(),
+					0xFF000000 + PokedexDatabase.STAT_TOTAL_COLOR
+				);
+				((TextView)rangeView.findViewById(R.id.values)).setText(bar.getSelectedMinValue() + " - " + bar.getSelectedMaxValue());
+
+				bar.setNotifyWhileDragging(true);
+				bar.setTag(i);
+				bar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>(){
+						@Override
+						public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue){
+							((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
+							int i = (Integer)bar.getTag();
+							((MoveFilter)mFilter).stats[0][i] = minValue;
+							((MoveFilter)mFilter).stats[1][i] = maxValue;
+							mFilter.filter();
+						}
+					});
+				seekBarContainer.addView(bar);
+				statsContainer.addView(rangeView);
+			}
+
 		}
-
-
 		return filters;
 	}
 

@@ -43,6 +43,7 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		mAdapter.onPageSelected(p1);
 		invalidateOptionsMenu();
 		if(mAdapter.getFragment(p1) instanceof UsesRightDrawer){
+			mRightDrawer.removeAllViews();
 			mRightDrawer.addView(((UsesRightDrawer)mAdapter.getFragment(p1)).getRightDrawerLayout(getLayoutInflater(), mRightDrawer ));
 		}
 		mDrawerLayout.setDrawerLockMode(

@@ -88,7 +88,7 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		{250, 150, 200, 150, 150},
 		{250, 200, 250, 200, 250, 200}
 	};
-	public static final int STAT_TOTAL_COLOR = 0xDDDDDD;
+	public static final int STAT_TOTAL_COLOR = 0xAAAAAA;
 	public static final String STAT_TOTAL_LABEL = "Total";
 	public static final int STAT_TOTAL_MIN = 0;
 	public static final int STAT_TOTAL_MAX = 800;

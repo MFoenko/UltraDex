@@ -174,6 +174,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 					LayoutParams methodParams = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
 					methodTV.setLayoutParams(methodParams);
 					methodTV.setText(evo.evolutionMethod);
+					methodTV.setGravity(Gravity.CENTER_VERTICAL);
 					branchLL.addView(methodTV);
 				}
 				ImageView iconIV = new ImageView(branchLL.getContext());
