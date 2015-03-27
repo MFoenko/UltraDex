@@ -10,7 +10,9 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	private boolean isDisplayed = false;
 	protected boolean isPrimary = true;
 
+	
 	public void loadData(final I data){
+		isDisplayed = false;
 		new Thread(new Runnable(){
 				@Override
 				public void run(){

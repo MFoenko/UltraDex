@@ -18,6 +18,7 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pager_info_activity);
+		mContentView = findViewById(R.id.content);
 		mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 		mRightDrawer = (ViewGroup)findViewById(R.id.right_drawer);
 		mViewPager = (ViewPager)findViewById(R.id.details);
@@ -27,6 +28,8 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		mViewPager.setOffscreenPageLimit(2);
 		ViewGroup contentContainer = (ViewGroup)findViewById(R.id.top_content); 
 		contentContainer.addView(getContentView(getLayoutInflater(), contentContainer));
+		
+		setSwipeListener(findViewById(R.id.pager_title_strip));
 	}
 
 	@Override

@@ -172,6 +172,12 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 
 	public static final String[] DAMAGE_CLASS_NAMES = {"Physical", "Special", "Status"};
 
+	public static final String[] EGG_GROUP_NAMES = {"Monster", "Water 1", "Bug", "Flying", "Field", "Fairy", "Grass", "Human-Like", "Water 3", "Mineral", "Amorphous", "Water 2", "Ditto", "Dragon", "Undiscovered"};
+	
+	public static final String[] GENDER_NAMES = {"Female","Male","Genderless"};
+	public static final int[] GENDER_COLORS = {0xFFB6C1, 0xADD8E6, 0xDDDDDD};
+	
+	
 	public static final int[] VERSION_VERSION_GROUP = {0,0,1,2,2,3,4,4,5,6,6,7,7,8,9,9,10,10,11,12,13,13,14,14, 15, 15};
 	public static final int[] VERSION_GROUP_GENERATION = {0,0,1,1,2,2,2,3,3,3,4,2,2,4,5,5,5,5};
 
@@ -187,13 +193,16 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 		return GEN_TYPE_VERSIONS[GEN];
 	}
 
+	public static int getStatVersion(){
+		return GEN_STAT_VERSIONS[GEN];
+	}
 
 
 
 	private static Pokemon[] preloadedPokemon;
 
 
-	private static final String BASE_POKEMON_QUERY_W_O_SELECT = "p._id, p.species_id, CASE f.form_order WHEN 1 THEN sn.name ELSE fn.pokemon_name END, f.form_identifier, (SELECT GROUP_CONCAT(t.type_id-1,',') FROM pokemon_types AS t WHERE t.pokemon_id=p._id AND generation_id-1 <= ? GROUP BY pokemon_id,generation_id ORDER BY slot, generation_id DESC LIMIT 1), (SELECT GROUP_CONCAT(s.base_stat,',') FROM pokemon_stats AS s WHERE s.pokemon_id = p._id AND stat_id != (5*(?=='1')) AND generation_id-1 <= ? GROUP BY s.generation_id ORDER BY stat_id, generation_id DESC LIMIT 1), sn.genus, p.height/10.0, p.weight/10.0, s.gender_rate, p.base_experience FROM pokemon AS p JOIN pokemon_species AS s ON (p.species_id = s.id) JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ?";
+	private static final String BASE_POKEMON_QUERY_W_O_SELECT = "p._id, p.species_id, CASE f.form_order WHEN 1 THEN sn.name ELSE fn.pokemon_name END, f.form_identifier, (SELECT GROUP_CONCAT(t.type_id-1,',') FROM pokemon_types AS t WHERE t.pokemon_id=p._id AND generation_id-1 <= ? GROUP BY pokemon_id,generation_id ORDER BY slot, generation_id DESC LIMIT 1), (SELECT GROUP_CONCAT(s.base_stat,',') FROM pokemon_stats AS s WHERE s.pokemon_id = p._id AND stat_id != (5*(?=='1')) AND generation_id-1 <= ? GROUP BY s.generation_id ORDER BY stat_id, generation_id DESC LIMIT 1), sn.genus, p.height/10.0, p.weight/10.0, s.gender_rate, p.base_experience, s.base_happiness, s.capture_rate, s.hatch_counter, (SELECT group_concat(effort) FROM pokemon_stats AS stats WHERE stats.pokemon_id = p._id GROUP BY stats.generation_id ORDER BY stat_id LIMIT 1), (SELECT egg_group_id-1 FROM pokemon_egg_groups WHERE species_id = s.id) FROM pokemon AS p JOIN pokemon_species AS s ON (p.species_id = s.id) JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ?";
 	private static final String BASE_POKEMON_QUERY = "SELECT " + BASE_POKEMON_QUERY_W_O_SELECT;
 	private static final String ALL_POKEMON_QUERY = BASE_POKEMON_QUERY + "AND f.introduced_in_version_group_id+1 <= ? AND f.is_default = 1 ORDER BY p._id;";
 	private static final String SINGLE_POKEMON_QUERY = BASE_POKEMON_QUERY + " AND p._id = ? ORDER BY RANDOM();";
@@ -280,6 +289,11 @@ public class PokedexDatabase extends SQLiteOpenHelper{
 				.weight(c.getFloat(8))
 				.genderRate(c.getInt(9))
 				.baseExp(c.getInt(10))
+				.baseHappiness(c.getInt(11))
+				.catchRate(c.getInt(12))
+				.stepsToHatch(c.getInt(13))
+				.evYield(stringArrToIntArr(c.getString(14).split(",")))
+				.eggGroups(stringArrToIntArr(c.getString(15).split(",")))
 				;
 			pokemon[i] = builder.build();
 		}

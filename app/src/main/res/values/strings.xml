@@ -8,4 +8,5 @@
 
     <string name="evolutions_header">Evolutions</string>
     <string name="forms_header">Forms</string>
+    <string name="gender_header">Genders</string>
 </resources>

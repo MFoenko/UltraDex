@@ -15,6 +15,8 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 	private int[] mStats = null; 
 	private int mTotal= 0;
 
+	private static final int COLOR_SHIFT = -0x99000000;
+	
 	private StatBarView[] mStatBarViews;
 	private StatBarView mTotalStatBarView;
 	
@@ -37,7 +39,7 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 			mStatBarViews[s] = new StatBarView(layout.getContext());
 			mStatBarViews[s].setLabel(PokedexDatabase.STAT_LABELS[statVersion][s] + ": ");
 			mStatBarViews[s].setMax(PokedexDatabase.STAT_MAXES[statVersion][s]);
-			mStatBarViews[s].setColor(PokedexDatabase.STAT_COLORS[statVersion][s] - 0xBB000000);
+			mStatBarViews[s].setColor(PokedexDatabase.STAT_COLORS[statVersion][s] + COLOR_SHIFT);
 			mStatBarViews[s].setTextSize(textSize);
 			mStatBarViews[s].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 			layout.addView(mStatBarViews[s]);
@@ -45,7 +47,7 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 		mTotalStatBarView = new StatBarView(layout.getContext());
 		mTotalStatBarView.setLabel(PokedexDatabase.STAT_TOTAL_LABEL + ": ");
 		mTotalStatBarView.setMax(PokedexDatabase.STAT_TOTAL_MAX);
-		mTotalStatBarView.setColor(PokedexDatabase.STAT_TOTAL_COLOR - 0xBB000000);
+		mTotalStatBarView.setColor(PokedexDatabase.STAT_TOTAL_COLOR + COLOR_SHIFT);
 		mTotalStatBarView.setTextSize(mTotalStatBarView.getContext().getResources().getDisplayMetrics().scaledDensity * TEXT_SIZE_SP);
 		mTotalStatBarView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 		layout.addView(mTotalStatBarView);

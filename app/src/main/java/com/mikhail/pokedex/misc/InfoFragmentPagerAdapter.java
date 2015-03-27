@@ -2,6 +2,7 @@ package com.mikhail.pokedex.misc;
 
 import android.support.v4.app.*;
 import android.support.v4.view.*;
+import android.util.*;
 import android.view.*;
 import com.mikhail.pokedex.fragments.*;
 

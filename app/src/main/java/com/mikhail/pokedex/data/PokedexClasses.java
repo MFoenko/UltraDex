@@ -27,6 +27,12 @@ public abstract class PokedexClasses{
 		public final float weight;
 		public final int femalesPer8Males;
 		public final int baseExperience;
+		public final int baseHappiness;
+		public final int catchRate;
+		public final int stepsToHatch;
+		public final int[] evYield;
+		public final int[] eggGroups;
+		
 		public final String suffix;
 		public final int order;
 		public final boolean isDefault;
@@ -49,6 +55,11 @@ public abstract class PokedexClasses{
 			this.order = builder.order;
 			this.isDefault = true;
 			this.hasUniqueIcon = builder.hasUniqueIcon;
+			this.baseHappiness = builder.baseHappiness;
+			this.catchRate = builder.catchRate;
+			this.stepsToHatch = builder.stepsToHatch;
+			this.evYield = builder.evYield;
+			this.eggGroups = builder.eggGroups;
 			
 
 		}
@@ -192,6 +203,13 @@ public abstract class PokedexClasses{
 			public float weight;
 			public int femalesPer8Males;
 			public int baseExperience;
+			public int baseHappiness;
+			public int catchRate;
+			public int stepsToHatch;
+			public int[] evYield;
+			public int[] eggGroups;
+
+			
 			
 			public boolean isDefault;
 			public boolean hasUniqueIcon;
@@ -252,6 +270,28 @@ public abstract class PokedexClasses{
 				this.baseExperience = baseXP;
 				return this;
 			}
+			public Builder baseHappiness(int baseHappiness){
+				this.baseHappiness = baseHappiness;
+				return this;
+			}
+			public Builder catchRate(int catchRate){
+				this.catchRate = catchRate;
+				return this;
+			}
+			public Builder stepsToHatch(int stepsToHatch){
+				this.stepsToHatch = stepsToHatch;
+				return this;
+			}
+			public Builder evYield(int[] evYield){
+				this.evYield = evYield;
+				return this;
+			}
+			public Builder eggGroups(int[] eggGroups){
+				this.eggGroups = eggGroups;
+				return this;
+			}
+			
+			
 			
 			
 			public Pokemon build(){
