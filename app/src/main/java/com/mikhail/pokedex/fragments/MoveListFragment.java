@@ -40,9 +40,10 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 	@Override
 	public Pair<String, Integer>[] getSortOptions(){
 		return new Pair[]{
-
-
-
+                new Pair<String, Integer>("Name \u25B2", Move.SORT_BY_NAME_ASC),
+                new Pair<String, Integer>("Name \u25BC", Move.SORT_BY_NAME_DES),
+                new Pair<String, Integer>("Type \u25B2", Move.SORT_BY_TYPE_ASC),
+                new Pair<String, Integer>("Type \u25BC", Move.SORT_BY_TYPE_DES)
 		};
 
 	}

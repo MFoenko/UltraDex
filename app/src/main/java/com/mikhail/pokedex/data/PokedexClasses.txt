@@ -359,14 +359,14 @@ public class PokedexClasses {
         public static final int DAMAGE_CLASS_PHYSICAL = 1;
         public static final int DAMAGE_CLASS_SPECIAL = 2;
         public static final int DAMAGE_CLASS_STATUS = 0;
-		public static final int SORT_BY_ID_UP = 1;
-		public static final int SORT_BY_ID_DOWN = -1;
-		public static final int SORT_BY_NAME_UP = 2;
-		public static final int SORT_BY_NAME_DOWN = -2;
-		public static final int SORT_BY_TYPE_UP = 3;
-		public static final int SORT_BY_TYPE_DOWN = -3;
-		public static final int SORT_BY_LEARN_UP = 4;
-		public static final int SORT_BY_LEARN_DOWN = -4;
+		public static final int SORT_BY_ID_ASC = 1;
+		public static final int SORT_BY_ID_DESC = -1;
+		public static final int SORT_BY_NAME_ASC = 2;
+		public static final int SORT_BY_NAME_DESC = -2;
+		public static final int SORT_BY_TYPE_ASC = 3;
+		public static final int SORT_BY_TYPE_DESC = -3;
+		public static final int SORT_BY_LEARN_ASC = 4;
+		public static final int SORT_BY_LEARN_DESC = -4;
 		
 
 

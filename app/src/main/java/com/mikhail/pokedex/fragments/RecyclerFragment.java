@@ -38,9 +38,11 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 		mScrollerView.setRecyclerView(mRecyclerView);
 		
 		mFilter = getNewFilter();
+        mFilter.filter();
+
 		return layout;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 		super.onCreateOptionsMenu(menu, inflater);
@@ -183,8 +185,8 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 		@Override
 		public void onNothingSelected(AdapterView<?> p1){
-			((TextView)((LinearLayout)p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
-			
+			//((TextView)((LinearLayout)p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
+
 		}
 		
 
@@ -194,7 +196,11 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 		public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4){
 			mFilter.sortBy = sortOptions[p3].second;
 			mFilter.filter();
-			((TextView)((LinearLayout)p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
+			/*try {
+                ((TextView) ((LinearLayout) p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }*/
 		}
 
 		
@@ -231,39 +237,16 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 		public void filter(){
 			listItems = adapter.listItems;
 			if(listItems == null) return;
-			/*for (int i=0;i < listItems.size();i++){
-			 if (!isMatchFilter(listItems.get(i))){
-			 listItems.remove(i);
-			 adapter.notifyItemRemoved(i);
-			 i--;
-			 }
-			 }
 
-			 for (T item:mOriginalList){
-			 if (isMatchFilter(item)){
-			 if (listItems.contains(item)){
-			 int l = listItems.size();
-			 for(int j=0;j<=l;j++){
-			 if(j==l){
-			 listItems.add(item);
-			 adapter.notifyItemInserted(j);
-			 }else
-			 if(adapter.listItems.get(j).compareTo(item,sortBy)>0){
-			 listItems.add(j, item);
-			 adapter.notifyItemInserted(j);
-			 }
-			 }
-			 }
-			 }
-			 }
-			 */
 			listItems.clear();
 			for (T item : mOriginalList){
 				if (isMatchFilter(item))
 					listItems.add(item);
 			}
-			sort(adapter.listItems.toArray(new VarComparable[0]), sortBy);
-			adapter.sortBy = sortBy;
+            if(adapter.sortBy != sortBy) {
+                sort(adapter.listItems.toArray(new VarComparable[0]), sortBy);
+                adapter.sortBy = sortBy;
+            }
 			adapter.notifyDataSetChanged();
 		}
 

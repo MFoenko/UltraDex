@@ -358,7 +358,15 @@ public abstract class PokedexClasses{
 		
 		public final int learnMethod;
 		public final int level;
-		
+
+        public static final int SORT_BY_ID_ASC = 1;
+        public static final int SORT_BY_ID_DES = -1;
+        public static final int SORT_BY_NAME_ASC = 2;
+        public static final int SORT_BY_NAME_DES = -2;
+        public static final int SORT_BY_TYPE_ASC = 3;
+        public static final int SORT_BY_TYPE_DES = -3;
+        public static final int SORT_BY_LEARN_ASC = 4;
+        public static final int SORT_BY_LEARN_DES = -4;
 
 		public Move(Builder builder){
 			this.id = builder.id;
@@ -376,10 +384,28 @@ public abstract class PokedexClasses{
 		}
 
 		@Override
-		public int compareTo(Move other, int compareOn){
-			return name.compareTo(other.name);
-		}
-
+        public int compareTo(Move other, int sortBy) {
+            switch (sortBy) {
+                case SORT_BY_ID_ASC:
+                return id - other.id;
+                case SORT_BY_ID_DES:
+                return other.id - id;
+                case SORT_BY_NAME_ASC:
+                return name.compareTo(other.name);
+                case SORT_BY_NAME_DES:
+                return other.name.compareTo(name);
+                case SORT_BY_TYPE_ASC:
+                return  type - other.type;
+                case SORT_BY_TYPE_DES:
+                return other.type - this.type;
+                case SORT_BY_LEARN_ASC:
+                return (learnMethod != other.learnMethod ? learnMethod - other.learnMethod: (level != other.level?level-other.level:name.compareTo(other.name)));
+                case SORT_BY_LEARN_DES:
+                    return (learnMethod != other.learnMethod ? other.learnMethod - learnMethod: (level != other.level?other.level-level:other.name.compareTo(name)));
+                default:
+                    return 0;
+            }
+        }
 		
 		
 
