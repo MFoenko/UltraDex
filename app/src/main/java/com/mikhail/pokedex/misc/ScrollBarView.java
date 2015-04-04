@@ -40,7 +40,6 @@ public class ScrollBarView extends View
 					break;
 				case RecyclerView.SCROLL_STATE_IDLE:
 						queueAnimateOut();
-						Log.i("AAA","out");
 					break;
 			}
 		}
@@ -48,7 +47,10 @@ public class ScrollBarView extends View
 		@Override
 		public void onScrolled(RecyclerView recyclerView, int dx, int dy){
 			int item = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-			int count = recyclerView.getAdapter().getItemCount();
+			LinearLayoutManager manager = (LinearLayoutManager)mRecyclerView.getLayoutManager();
+			int size = manager.findLastVisibleItemPosition()-manager.findFirstCompletelyVisibleItemPosition();
+			
+			int count = recyclerView.getAdapter().getItemCount()-size;
 			setPercentScrolled((float)item/count);
 		}
 		
@@ -110,7 +112,6 @@ public class ScrollBarView extends View
 	
 	public void calculateScrollerRec(){
 		int h = mScroller.height();
-		
 		mScroller.top = mRailPos+mRailTop-h/2;
 		mScroller.bottom = mRailPos+mRailTop+h/2;
 		invalidate();
@@ -127,7 +128,10 @@ public class ScrollBarView extends View
 		calculateScrollerRec();
 		if(mRecyclerView != null){
 			int count = mRecyclerView.getAdapter().getItemCount();
-			mRecyclerView.scrollToPosition((int)(getPercentScrolled()*count));
+			LinearLayoutManager manager = (LinearLayoutManager)mRecyclerView.getLayoutManager();
+			int size = manager.findLastVisibleItemPosition()-manager.findFirstCompletelyVisibleItemPosition();
+			
+			mRecyclerView.scrollToPosition((int)(getPercentScrolled()*count)-size);
 		}
 	}
 
@@ -155,6 +159,12 @@ public class ScrollBarView extends View
 		mRailTop = mScroller.height()/2;
 		mRailBottom = h-mScroller.height()/2;
 		mRailPos = 0;
+		
+		LinearLayoutManager manager = (LinearLayoutManager)mRecyclerView.getLayoutManager();
+		int size = manager.findLastVisibleItemPosition()-manager.findFirstCompletelyVisibleItemPosition();
+		if(size == mRecyclerView.getAdapter().getItemCount()){
+			setVisibility(GONE);
+		}
 		
 		inPos = getX();
 		outAnim.setFloatValues(inPos+2*mScroller.width());
@@ -187,7 +197,6 @@ public class ScrollBarView extends View
 				queueAnimateOut();
 				scrollerDragged = false;
 		}
-		Log.i("AAA", event.actionToString(event.getAction()));
 		return true;
 		
 		//return super.onTouchEvent(event);

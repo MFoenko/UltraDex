@@ -13,13 +13,13 @@
 			android:id="@+id/top_content"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:layout_weight="2"
-		/>
+			android:layout_weight="2"/>
 		<android.support.v4.view.ViewPager
 			android:id="@+id/details"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:layout_weight="4"
+			android:layout_weight="3"
+			style="@style/InfoPager"
 		>
 			<android.support.v4.view.PagerTitleStrip
 				android:id="@+id/pager_title_strip"
@@ -28,13 +28,18 @@
 				style="@style/HeaderText"
 			/>
 		</android.support.v4.view.ViewPager>
+		<fragment
+			class = "com.mikhail.pokedex.fragments.AdmobBannerAd"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+		/>
 	</LinearLayout>
 	<LinearLayout
 		android:id="@+id/right_drawer"
 		android:layout_width="@dimen/drawer_width"
 		android:layout_height="match_parent"
 		android:layout_gravity="end"
-		android:background="#FFFFFF"
+		android:background="@drawable/shadow"
 		/>
     
 </android.support.v4.widget.DrawerLayout>

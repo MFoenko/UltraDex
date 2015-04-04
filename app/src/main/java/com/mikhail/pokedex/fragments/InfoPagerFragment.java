@@ -10,6 +10,9 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	private boolean isDisplayed = false;
 	protected boolean isPrimary = true;
 
+	public InfoPagerFragment(){
+		//setRetainInstance(true);
+	}
 	
 	public void loadData(final I data){
 		isDisplayed = false;
@@ -50,7 +53,6 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	public void onStart(){
 		super.onStart();
 		
-		//Log.i("AAA", this + " started " + isDisplayed);
 		if (!isDisplayed){
 			isDisplayed = displayData();
 		}
@@ -65,7 +67,6 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 		if (!isDisplayed){
 			isDisplayed = displayData();
 		}
-		
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 		super.onPause();
 		//Log.i("AAA", this + " paused " + isDisplayed);
 		
-		isDisplayed = false;
+		//isDisplayed = false;
 		}
 
 	@Override
@@ -83,6 +84,13 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 		isDisplayed = false;
 	}
 
+	@Override
+	public void onDestroyView(){
+		super.onDestroyView();
+		isDisplayed = false;
+	}
+
+	
 	
 	
 	public abstract void setData(I data);

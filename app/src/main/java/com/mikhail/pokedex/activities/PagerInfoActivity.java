@@ -29,7 +29,7 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		ViewGroup contentContainer = (ViewGroup)findViewById(R.id.top_content); 
 		contentContainer.addView(getContentView(getLayoutInflater(), contentContainer));
 		
-		setSwipeListener(findViewById(R.id.pager_title_strip));
+		setSwipeListener(mContentView);
 	}
 
 	@Override
@@ -44,7 +44,12 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		invalidateOptionsMenu();
 		if(mAdapter.getFragment(p1) instanceof UsesRightDrawer){
 			mRightDrawer.removeAllViews();
-			mRightDrawer.addView(((UsesRightDrawer)mAdapter.getFragment(p1)).getRightDrawerLayout(getLayoutInflater(), mRightDrawer ));
+			View filters = ((UsesRightDrawer)mAdapter.getFragment(p1)).getRightDrawerLayout(getLayoutInflater(), mRightDrawer);
+			if(filters.getParent() != null){
+				((ViewGroup)filters.getParent()).removeAllViews();
+			}
+			mRightDrawer.addView(filters);
+			
 		}
 		mDrawerLayout.setDrawerLockMode(
 		mAdapter.getFragment(p1) instanceof UsesRightDrawer
@@ -67,6 +72,11 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 
 
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//mAdapter.destroy();
+	}
 	
 	
 	

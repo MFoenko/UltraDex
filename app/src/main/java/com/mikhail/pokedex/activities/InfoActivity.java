@@ -1,15 +1,13 @@
 package com.mikhail.pokedex.activities;
 
-import android.content.*;
+import android.*;
+import android.animation.*;
 import android.os.*;
 import android.support.v7.app.*;
 import android.view.*;
-import android.view.GestureDetector.*;
-import android.view.View.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.misc.*;
-import android.animation.*;
-import java.util.concurrent.*;
+import android.support.v4.app.*;
 
 public abstract class InfoActivity<T> extends ActionBarActivity{
 
@@ -19,12 +17,17 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 	protected OnSwipeTouchListener mOnSwipeListener;
 	protected View mContentView;
 	
+	Menu menu;
+	
 	private static final long ANIMATION_TIME = 400;
 
 	public static final String EXTRA_ID_ARRAY = "id_arr";
 	public static final String EXTRA_ID_INDEX = "id_index";
 
-
+	public InfoActivity(){
+		Thread.setDefaultUncaughtExceptionHandler(new CrashDialog(this));
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -34,6 +37,8 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 			mCurrentIndex = extras.getInt(EXTRA_ID_INDEX);
 		}
 
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		mOnSwipeListener = new OnSwipeTouchListener(this){
 			public void onSwipeTop(){
 				new Thread(new Runnable(){
@@ -105,6 +110,31 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 		loadData();
 
 	}
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		menu.clear();
+	}
+
+	/*@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+			case R.id.home:
+				finish();
+				BackStackStat
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	*/
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		this.menu = menu;
+		return super.onCreateOptionsMenu(menu);
+	}
+	
 
 	protected void setSwipeListener(View v){
 		v.setOnTouchListener(mOnSwipeListener);

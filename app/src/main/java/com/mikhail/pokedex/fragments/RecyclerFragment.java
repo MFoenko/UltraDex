@@ -1,6 +1,7 @@
 
 package com.mikhail.pokedex.fragments;
 
+import android.app.*;
 import android.os.*;
 import android.support.v7.widget.*;
 import android.text.*;
@@ -10,10 +11,10 @@ import android.widget.*;
 import android.widget.AdapterView.*;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
-import java.util.*;
 import com.mikhail.pokedex.misc.*;
+import java.util.*;
 
-public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
+public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*, VarComparable<T>*/, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
 
 
 	protected RecyclerView mRecyclerView;
@@ -22,32 +23,45 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 	protected Filter mFilter;
 	protected SortAdapter mSortAdapter;
 	protected T[] mData;
+	private MenuItem[] menuItems = new MenuItem[2];
+
+	Menu menu;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		super.onCreateView(inflater, container, savedInstanceState);
-		setHasOptionsMenu(true);
 		View layout = inflater.inflate(R.layout.item_list, container, false);
-		
+
 		mRecyclerView = (RecyclerView)layout.findViewById(R.id.recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
 		mRecyclerView.setAdapter(mAdapter = getNewAdapter());
-		
+
 		mScrollerView = (ScrollBarView)layout.findViewById(R.id.scrollBar);
 		mScrollerView.setRecyclerView(mRecyclerView);
-		
-		mFilter = getNewFilter();
+
+		mFilter = getNewFilter(getActivity());
         mFilter.filter();
 
 		return layout;
 	}
 
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.search, menu);
-			MenuItem search = menu.findItem(R.id.search);
+		this.menu = menu;
+		//if (menuItems[0] == null){
+			//menu.clear();
+			inflater.inflate(R.menu.search, menu);
+			MenuItem search = menuItems[0] = menu.findItem(R.id.search);
 			View searchBar = search.getActionView();
 			EditText searchView = (EditText)searchBar.findViewById(R.id.search_box);
 			searchView.addTextChangedListener(new TextWatcher(){
@@ -68,29 +82,39 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 
 				});
-				
-		inflater.inflate(R.menu.sort, menu);
-		Spinner sortSpinner = (Spinner)menu.findItem(R.id.sort).getActionView();
-		sortSpinner.setAdapter(mSortAdapter = new SortAdapter(getSortOptions(), mFilter));
-		sortSpinner.setOnItemSelectedListener(mSortAdapter);
-		
+//		}
+	//	if (menuItems[1] == null){
+			inflater.inflate(R.menu.sort, menu);
+			menuItems[1] = menu.findItem(R.id.sort);
+			Spinner sortSpinner = (Spinner)menuItems[1].getActionView();
+			sortSpinner.setAdapter(mSortAdapter = new SortAdapter(getSortOptions(), mFilter));
+			sortSpinner.setOnItemSelectedListener(mSortAdapter);
+	//	}
+	}
+
+	@Override
+	public void onDestroyOptionsMenu(){
+		super.onDestroyOptionsMenu();
 		
 	}
+
+	
+	
+
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu){
 		super.onPrepareOptionsMenu(menu);
-			for(int i=0;i<menu.size();i++){
-				menu.getItem(i).setVisible(isPrimary);
-			}
-			
+		for (int i=0;i < menuItems.length;i++){
+			menuItems[i].setVisible(isPrimary);
+		}
 	}
 
 
 
 
 	public abstract ListItemAdapter<T, VH> getNewAdapter();
-	public abstract Filter<? extends VarComparable<T>, VH> getNewFilter();
+	public abstract Filter<? extends VarComparable<T>, VH> getNewFilter(Activity a);
 	public abstract Pair<String,Integer>[] getSortOptions();
 
 
@@ -107,7 +131,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 
 
-	protected abstract static class ListItemAdapter<LT, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>{
+	protected abstract static class ListItemAdapter<LT extends DexObject, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>{
 
 
 		ArrayList<LT> listItems;
@@ -123,6 +147,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 		public void setData(ArrayList<LT> listItems){
 			this.listItems = listItems;
+			sortBy = 0;
 			notifyDataSetChanged();
 		}
 
@@ -135,6 +160,14 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 		}
 
 
+		public int[] getIdArray(){
+			int[] idArray = new int[listItems.size()];
+			int len = idArray.length;
+			for (int i=0;i < len;i++){
+				idArray[i] = listItems.get(i).id;
+			}
+			return idArray;
+		}
 
 
 	}
@@ -149,7 +182,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 			this.sortOptions = sortOptions;
 			this.mFilter = mFilter;
 		}
-		
+
 		@Override
 		public int getCount(){
 			return sortOptions.length;
@@ -157,7 +190,7 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 		@Override
 		public Object getItem(int p1){
-			
+
 			return sortOptions[p1];
 		}
 
@@ -168,13 +201,12 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 		@Override
 		public View getView(int pos, View view, ViewGroup container){
-			if(sortOptions==null)
+			if (sortOptions == null)
 				return null;
 
-			if(view == null){
+			if (view == null){
 				LayoutInflater inflater = LayoutInflater.from(container.getContext());
 				view = inflater.inflate(R.layout.sort_spinner_list_item, container, false);
-
 			}
 
 			TextView labelTV = (TextView)view.findViewById(R.id.label);
@@ -188,46 +220,73 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 			//((TextView)((LinearLayout)p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
 
 		}
-		
 
-		
+
+
 
 		@Override
 		public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4){
 			mFilter.sortBy = sortOptions[p3].second;
 			mFilter.filter();
 			/*try {
-                ((TextView) ((LinearLayout) p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
-            }catch(NullPointerException e){
-                e.printStackTrace();
-            }*/
+			 ((TextView) ((LinearLayout) p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
+			 }catch(NullPointerException e){
+			 e.printStackTrace();
+			 }*/
 		}
 
-		
-		
 
-		
+
+
+
+
 	}
 
-	
-	protected static abstract class Filter<T extends VarComparable<T>, VH extends RecyclerView.ViewHolder>{
+
+	protected static abstract class Filter<T extends VarComparableDexObject<T>, VH extends RecyclerView.ViewHolder>{
 
 		ListItemAdapter<T, VH> adapter;
 		T[] mOriginalList;
 		ArrayList<T> listItems;
+		TimerTask filterTask;
+		protected Activity mActivity;
+		
 
 		int sortBy=0;
 		public String search = "";
 
-		public Filter(ListItemAdapter<T, VH> adapter){
+		public Filter(final ListItemAdapter<T, VH> adapter, final Activity a){
 			this.adapter = adapter;
+			this.mActivity = a;
 			listItems = adapter.listItems;
+			filterTask = new TimerTask(){
+				public void run(){
+					listItems = adapter.listItems;
+					if (listItems == null) return;
+
+					listItems.clear();
+					for (T item : mOriginalList){
+						if (isMatchFilter(item))
+							listItems.add(item);
+					}
+					/*	if(adapter.sortBy != sortBy) {*/
+					sort(adapter.listItems.toArray(new VarComparable[0]), sortBy);
+					adapter.sortBy = sortBy;
+					//	}
+					a.runOnUiThread(new Runnable(){
+							public void run(){
+
+								adapter.notifyDataSetChanged();
+							}
+						});
+				}
+			};
 		}
 
-		public Filter(ListItemAdapter<T, VH> adapter, T[] mOriginalList){
-			this(adapter);
-			setOriginalList(mOriginalList);
-		}
+		/*public Filter(ListItemAdapter<T, VH> adapter, T[] mOriginalList){
+		 this(adapter);
+		 setOriginalList(mOriginalList);
+		 }*/
 
 		public void setOriginalList(T[] mOriginalList){
 			this.mOriginalList = mOriginalList;
@@ -235,19 +294,8 @@ public abstract class RecyclerFragment<I, T extends VarComparable<T>, VH extends
 
 
 		public void filter(){
-			listItems = adapter.listItems;
-			if(listItems == null) return;
-
-			listItems.clear();
-			for (T item : mOriginalList){
-				if (isMatchFilter(item))
-					listItems.add(item);
-			}
-            if(adapter.sortBy != sortBy) {
-                sort(adapter.listItems.toArray(new VarComparable[0]), sortBy);
-                adapter.sortBy = sortBy;
-            }
-			adapter.notifyDataSetChanged();
+			filterTask.cancel();
+			filterTask.run();
 		}
 
 		public boolean isMatchFilter(T item){

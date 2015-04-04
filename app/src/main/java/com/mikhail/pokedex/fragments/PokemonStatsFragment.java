@@ -8,6 +8,7 @@ import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
 import java.util.*;
+import android.animation.*;
 
 public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 
@@ -20,7 +21,9 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 	private StatBarView[] mStatBarViews;
 	private StatBarView mTotalStatBarView;
 	
-
+	private static final int ANIMATION_DURATION_PER_STAT = 10;
+	private static final int ANIMATION_DURATION_MIN = 600;
+	
 
 
 
@@ -71,9 +74,19 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 		}
 		int len = mStatBarViews.length;
 		for (int s=0;s < len;s++){
-			mStatBarViews[s].setStat(mStats[s]);
+			ValueAnimator animator = ValueAnimator.ofInt(0, mStats[s])
+			.setDuration(ANIMATION_DURATION_PER_STAT*mStats[s] + ANIMATION_DURATION_MIN);
+			animator.addUpdateListener(new StatBarUpdateAnimator(mStatBarViews[s]));
+			animator.start();
+			//ObjectAnimator.ofFloat(mStatBarViews[s], "mStat", 0, mStats[s]).setDuration(ANIMATION_DURATION).start();
+			
 		}
-		mTotalStatBarView.setStat(mTotal);
+		ValueAnimator animator = ValueAnimator.ofInt(0, mTotal)
+			.setDuration(ANIMATION_DURATION_PER_STAT/5*mTotal + ANIMATION_DURATION_MIN);
+		animator.addUpdateListener(new StatBarUpdateAnimator(mTotalStatBarView));
+		animator.start();
+		
+		//mTotalStatBarView.setStat(mTotal);
 		//Log.i("AAA", "success");
 		return true;
 	}
@@ -83,7 +96,20 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 		return TITLE;
 	}
 
+	private static class StatBarUpdateAnimator implements ValueAnimator.AnimatorUpdateListener{
 
+		StatBarView mStatBar;
+
+		public StatBarUpdateAnimator(StatBarView mStatBar){
+			this.mStatBar = mStatBar;
+		}
+		
+		@Override
+		public void onAnimationUpdate(ValueAnimator p1){
+			mStatBar.setStat(p1.getAnimatedValue());
+		}
+
+	}
 
 
 }

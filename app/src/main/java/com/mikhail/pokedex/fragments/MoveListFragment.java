@@ -1,9 +1,11 @@
 package com.mikhail.pokedex.fragments;
 
+import android.app.*;
 import android.content.*;
 import android.support.v7.widget.*;
 import android.util.*;
 import android.view.*;
+import android.view.View.*;
 import android.widget.*;
 import android.widget.CompoundButton.*;
 import com.mikhail.pokedex.*;
@@ -13,19 +15,10 @@ import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
 
 import android.view.View.OnClickListener;
-import android.os.*;
-import android.app.*;
 
 public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, MoveListFragment.MoveListAdapter.MoveViewHolder> implements UsesRightDrawer{
 
 	View filters;
-
-	@Override
-	public void onAttach(Activity activity){
-		super.onAttach(activity);
-	}
-
-
 	
 	@Override
 	public RecyclerFragment.ListItemAdapter<PokedexClasses.Move, MoveListFragment.MoveListAdapter.MoveViewHolder> getNewAdapter(){
@@ -33,8 +26,8 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 	}
 
 	@Override
-	public RecyclerFragment.Filter<PokedexClasses.Move, MoveListFragment.MoveListAdapter.MoveViewHolder> getNewFilter(){
-		return new MoveFilter(mAdapter);
+	public RecyclerFragment.Filter<PokedexClasses.Move, MoveListFragment.MoveListAdapter.MoveViewHolder> getNewFilter(Activity a){
+		return new MoveFilter(mAdapter, a);
 	}
 
 	@Override
@@ -109,6 +102,7 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 			}
 
 		}
+
 		return filters;
 	}
 
@@ -125,7 +119,7 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 			LayoutInflater inflater = LayoutInflater.from(p1.getContext());
 			View moveView = inflater.inflate(R.layout.move_list_item, p1, false);
 			MoveViewHolder holder = new MoveViewHolder(moveView);
-			moveView.setOnClickListener(holder);
+			//moveView.setOnClickListener(holder);
 			return holder;
 		}
 
@@ -144,17 +138,6 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 			}
 		}
 
-		public int[] getIdArray(){
-
-
-			int[] idArray = new int[listItems.size()];
-			int len = idArray.length;
-			for (int i=0;i < len;i++){
-				idArray[i] = listItems.get(i).id;
-			}
-			return idArray;
-		}
-
 		public class MoveViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
 
 			public final TextView learnTV;
@@ -169,6 +152,7 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 				nameTV = (TextView)v.findViewById(R.id.name);
 				typeTV = (TypeView)v.findViewById(R.id.type);
 				classIV = (ImageView)v.findViewById(R.id.damage_class);
+				v.setOnClickListener(this);
 			}
 
 
@@ -205,8 +189,8 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 
 		public int[][] stats = {STAT_MINS, STAT_MAXES};
 
-		public MoveFilter(ListItemAdapter<Move, MoveListAdapter.MoveViewHolder> adapter){
-			super(adapter);
+		public MoveFilter(ListItemAdapter<Move, MoveListAdapter.MoveViewHolder> adapter, Activity a){
+			super(adapter, a);
 		}
 
 		@Override

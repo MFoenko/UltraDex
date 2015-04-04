@@ -14,6 +14,7 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 	public abstract int getNumFrags();
 	public abstract InfoPagerFragment<T> getFragment(int position);
 
+	
 
 	public InfoFragmentPagerAdapter(FragmentManager fm){
 		fragmentManager = fm;
@@ -21,6 +22,12 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 
 	}
 
+	public void resetFragments(){
+		fragments = new InfoPagerFragment[getNumFrags()];
+		notifyDataSetChanged();
+	}
+	
+	
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object){
 		assert(0 <= position && position < fragments.length);
@@ -28,6 +35,13 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 		trans.remove(fragments[position]);
 		trans.commit();
 		fragments[position] = null;
+	}
+	
+	public void destroy(){
+		int len = getCount();
+		for(int i=0;i<len;i++){
+			destroyItem(null, i, null);
+		}
 	}
 
 	@Override

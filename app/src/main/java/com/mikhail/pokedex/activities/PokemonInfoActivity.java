@@ -12,32 +12,54 @@ import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.fragments.*;
 import com.mikhail.pokedex.misc.*;
+import android.graphics.*;
 
 public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 
+	View mContent;
+	View mAbilities;
+	
 	TextView mNameTV;
 	TextView mGenusTV;
 
 	WebView mModelWV;
 	TypeView mType1TV;
 	TypeView mType2TV;
+	
+	PokemonAbilityListFragment abilitiesListFragment;
 
 	public static final int DEFAULT_PAGE = 2;
-
+	public static final int OPACITY = 0x77000000;
 
 	@Override
 	public View getContentView(LayoutInflater inflater, ViewGroup container){
 
-		View content = inflater.inflate(R.layout.pokemon_info_activity, container, false);
-		mModelWV = (WebView)content.findViewById(R.id.model);
-		mNameTV = (TextView)content.findViewById(R.id.name);
-		mGenusTV = (TextView)content.findViewById(R.id.genus);
-		mType1TV = (TypeView)content.findViewById(R.id.type_1);
-		mType2TV = (TypeView)content.findViewById(R.id.type_2);
-		return content;
+		mContent = inflater.inflate(R.layout.pokemon_info_activity, container, false);
+		mModelWV = (WebView)mContent.findViewById(R.id.model);
+		mNameTV = (TextView)mContent.findViewById(R.id.name);
+		mGenusTV = (TextView)mContent.findViewById(R.id.genus);
+		mType1TV = (TypeView)mContent.findViewById(R.id.type_1);
+		mType2TV = (TypeView)mContent.findViewById(R.id.type_2);
+		
+		abilitiesListFragment = new PokemonAbilityListFragment();
+		getSupportFragmentManager().beginTransaction().replace(R.id.abilities, abilitiesListFragment).commit();
+		mAbilities = mContent.findViewById(R.id.abilities);
+		mAbilities.setBackgroundColor(Color.TRANSPARENT);
+		mModelWV.setBackgroundColor(Color.TRANSPARENT);
+		
+		return mContent;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		menu.clear();
+		return super.onCreateOptionsMenu(menu);
 	}
 
 
+	
+
+	
 
 
 
@@ -63,15 +85,18 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 		super.displayData(currentItem);
 		String gifUrl = "file://" + getExternalFilesDir(null) + "/" + PokedexClasses.MODELS_DIR + currentItem.getModelFileName();
 
-		int color = 0;
+		/*int color = 0;
 		TypedValue a = new TypedValue();
 		getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
 		if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT){
 			// windowBackground is a color
 			color = a.data;
-		}
-		color -= 0xff000000;
-		mModelWV.loadDataWithBaseURL("", "<body style='background-color:#" + Integer.toHexString(color) + ";text-align:center'><img src='" + gifUrl + "'/></body>", "text/html", "UTF-8", null);
+		}*/
+		int color = OPACITY+PokedexDatabase.TYPE_COLORS[PokedexDatabase.getTypeVersion()][currentItem.types[0]];
+		
+		mDrawerLayout.setBackgroundColor(color);
+		
+		mModelWV.loadDataWithBaseURL("", "<body style='text-align:center'><img src='" + gifUrl + "'/></body>", "text/html", "UTF-8", null);
 		mModelWV.setHorizontalScrollBarEnabled(false);
 		mModelWV.setVerticalScrollBarEnabled(false);
 		mNameTV.setText(currentItem.name);
@@ -84,6 +109,8 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 			mType2TV.setVisibility(View.INVISIBLE);
 		}
 
+		abilitiesListFragment.setData(currentItem);
+		abilitiesListFragment.displayData();
 		
 	}
 
@@ -106,6 +133,8 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon>{
 				return pages[position];
 		}
 
+		
+		
 	}
 
 

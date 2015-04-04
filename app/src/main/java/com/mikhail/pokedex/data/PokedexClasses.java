@@ -12,14 +12,34 @@ public abstract class PokedexClasses{
 	public static final String ICON_DIR = "Icons/";
 	public static final String MODELS_DIR = "Models/";
 
-	
-
-	public static class Pokemon implements Linkable, VarComparable<Pokemon>{
-
-		
+	public static abstract class DexObject{
 		public final int id;
-		public final int dispId;
 		public final String name;
+
+		public DexObject(int id, String name){
+			this.id = id;
+			this.name = name;
+		}
+
+		@Override
+		public String toString(){
+			return getClass().getName() + " " + id + " " + name;
+		}
+
+
+
+	}
+
+	public static abstract class VarComparableDexObject<T> extends DexObject implements VarComparable<T>{
+		public VarComparableDexObject(int id, String name){
+			super(id, name);
+		}
+	}
+
+	public static class Pokemon extends VarComparableDexObject<Pokemon> implements Linkable{
+
+
+		public final int dispId;
 		public final String genus;
         public final int[] stats;
         public final int[] types;
@@ -29,10 +49,10 @@ public abstract class PokedexClasses{
 		public final int baseExperience;
 		public final int baseHappiness;
 		public final int catchRate;
-		public final int stepsToHatch;
+		public final int hatchCycles;
 		public final int[] evYield;
 		public final int[] eggGroups;
-		
+
 		public final String suffix;
 		public final int order;
 		public final boolean isDefault;
@@ -41,9 +61,8 @@ public abstract class PokedexClasses{
 		public Bitmap icon;
 
 		public Pokemon(Pokemon.Builder builder){
-			this.id = builder.id;
+			super(builder.id, builder.name);
 			this.dispId = builder.dispId;
-			this.name = builder.name;
 			this.genus = builder.genus;
 			this.stats = builder.stats;
 			this.types = builder.types;
@@ -57,16 +76,16 @@ public abstract class PokedexClasses{
 			this.hasUniqueIcon = builder.hasUniqueIcon;
 			this.baseHappiness = builder.baseHappiness;
 			this.catchRate = builder.catchRate;
-			this.stepsToHatch = builder.stepsToHatch;
+			this.hatchCycles = builder.stepsToHatch;
 			this.evYield = builder.evYield;
 			this.eggGroups = builder.eggGroups;
-			
+
 
 		}
-		
+
 		public int getStatTotal(){
 			int total = 0;
-			for(int s:stats){
+			for (int s:stats){
 				total += s;
 			}
 			return total;
@@ -89,6 +108,9 @@ public abstract class PokedexClasses{
 			return formattedId + (suffix != null ?"-" + suffix: "") + ".gif";
 		}
 
+		public String getCryFileNameNoExtension(){
+			return dispId + (suffix != null ?"-" + suffix: "");
+		}
 
 		public static final int SORT_BY_DISP_ID_ASC = 1;
 		public static final int SORT_BY_DISP_ID_DES = -1;
@@ -110,31 +132,31 @@ public abstract class PokedexClasses{
 		public static final int SORT_BY_SPEED_DES = -15;
 		public static final int SORT_BY_STAT_TOTAL_ASC = 16;
 		public static final int SORT_BY_STAT_TOTAL_DES = -16;
-		
-		
-		
+
+
+
 		@Override
 		public int compareTo(Pokemon other, int compareOn){
-			
-			switch(compareOn){
+
+			switch (compareOn){
 				case SORT_BY_DISP_ID_ASC:
-					return dispId-other.dispId + (dispId==other.dispId ? id-other.id:0);
+					return dispId - other.dispId + (dispId == other.dispId ? id - other.id: 0);
 				case SORT_BY_DISP_ID_DES:
-					return other.dispId-dispId + (other.dispId == dispId ? other.id-id:0);
+					return other.dispId - dispId + (other.dispId == dispId ? other.id - id: 0);
 				case SORT_BY_NAME_ASC:
 					return name.compareTo(other.name);
 				case SORT_BY_NAME_DES:
 					return other.name.compareTo(name);
 				case SORT_BY_TYPE_ASC:
-					if(types[0] == other.types[0]){
-						if(types.length == 2){
-							if(other.types.length == 2){
+					if (types[0] == other.types[0]){
+						if (types.length == 2){
+							if (other.types.length == 2){
 								return types[1] - other.types[1];
 							}else{
 								return 1;
 							}
 						}else{
-							if(other.types.length == 2){
+							if (other.types.length == 2){
 								return -1;
 							}else{
 								return 0;
@@ -144,15 +166,15 @@ public abstract class PokedexClasses{
 						return types[0] - other.types[0];
 					}
 				case SORT_BY_TYPE_DES:
-					if(types[0] != other.types[0]){
-						if(types.length == 2){
-							if(other.types.length == 2){
+					if (types[0] != other.types[0]){
+						if (types.length == 2){
+							if (other.types.length == 2){
 								return other.types[1] - types[1];
 							}else{
 								return -1;
 							}
 						}else{
-							if(other.types.length == 2){
+							if (other.types.length == 2){
 								return 1;
 							}else{
 								return 0;
@@ -167,26 +189,26 @@ public abstract class PokedexClasses{
 				case SORT_BY_SPECIAL_ATTACK_ASC:
 				case SORT_BY_SPECIAL_DEFENSE_ASC:
 				case SORT_BY_SPEED_ASC:
-					return stats[compareOn - SORT_BY_HP_ASC] - other.stats[compareOn-SORT_BY_HP_ASC];
+					return stats[compareOn - SORT_BY_HP_ASC] - other.stats[compareOn - SORT_BY_HP_ASC];
 				case SORT_BY_HP_DES:
 				case SORT_BY_ATTACK_DES:
 				case SORT_BY_DEFENSE_DES:
 				case SORT_BY_SPECIAL_ATTACK_DES:
 				case SORT_BY_SPECIAL_DEFENSE_DES:
 				case SORT_BY_SPEED_DES:
-					return other.stats[Math.abs(compareOn) - SORT_BY_HP_ASC] - stats[Math.abs(compareOn)-SORT_BY_HP_ASC];
+					return other.stats[Math.abs(compareOn) - SORT_BY_HP_ASC] - stats[Math.abs(compareOn) - SORT_BY_HP_ASC];
 				case SORT_BY_STAT_TOTAL_ASC:
 					return getStatTotal() - other.getStatTotal();
 				case SORT_BY_STAT_TOTAL_DES:
-					return other.getStatTotal()-getStatTotal();
-					
+					return other.getStatTotal() - getStatTotal();
+
 			}
-			
+
 			return 0;
 		}
 
-		
-		
+
+
 
 		public static class Builder{
 
@@ -209,8 +231,8 @@ public abstract class PokedexClasses{
 			public int[] evYield;
 			public int[] eggGroups;
 
-			
-			
+
+
 			public boolean isDefault;
 			public boolean hasUniqueIcon;
 
@@ -290,10 +312,10 @@ public abstract class PokedexClasses{
 				this.eggGroups = eggGroups;
 				return this;
 			}
-			
-			
-			
-			
+
+
+
+
 			public Pokemon build(){
 				return new Pokemon(this);
 			}
@@ -318,7 +340,7 @@ public abstract class PokedexClasses{
 	}
 
 	public static class Evolution{
-		
+
 		public Pokemon evolvedPoke;
 		public String evolutionMethod;
 
@@ -334,20 +356,18 @@ public abstract class PokedexClasses{
 		public boolean isBaseEvo(){
 			return evolutionMethod == null;
 		}
-		
+
 		@Override
 		public String toString(){
-			return ">"+evolutionMethod+">"+evolvedPoke.id;
+			return ">" + evolutionMethod + ">" + evolvedPoke.id;
 		}
-		
-		
+
+
 	}
-	
 
-	public static class Move implements Linkable, VarComparable<Move>{
 
-		public final int id;
-		public final String name;
+	public static class Move extends VarComparableDexObject<Move> implements Linkable{
+
 		public final String description;
 		public final int power;
 		public final int accuracy;
@@ -355,7 +375,7 @@ public abstract class PokedexClasses{
 		public final int priority;
 		public final int type;
 		public final int damageClass;
-		
+
 		public final int learnMethod;
 		public final int level;
 
@@ -369,8 +389,7 @@ public abstract class PokedexClasses{
         public static final int SORT_BY_LEARN_DES = -4;
 
 		public Move(Builder builder){
-			this.id = builder.id;
-			this.name = builder.name;
+			super(builder.id, builder.name);
 			this.description = builder.description;
 			this.power = builder.power;
 			this.accuracy = builder.accuracy;
@@ -380,34 +399,34 @@ public abstract class PokedexClasses{
 			this.damageClass = builder.damageClass;
 			this.learnMethod = builder.learnMethod;
 			this.level = builder.level;
-			
+
 		}
 
 		@Override
-        public int compareTo(Move other, int sortBy) {
-            switch (sortBy) {
+        public int compareTo(Move other, int sortBy){
+            switch (sortBy){
                 case SORT_BY_ID_ASC:
-                return id - other.id;
+					return id - other.id;
                 case SORT_BY_ID_DES:
-                return other.id - id;
+					return other.id - id;
                 case SORT_BY_NAME_ASC:
-                return name.compareTo(other.name);
+					return name.compareTo(other.name);
                 case SORT_BY_NAME_DES:
-                return other.name.compareTo(name);
+					return other.name.compareTo(name);
                 case SORT_BY_TYPE_ASC:
-                return  type - other.type;
+					return  type - other.type;
                 case SORT_BY_TYPE_DES:
-                return other.type - this.type;
+					return other.type - this.type;
                 case SORT_BY_LEARN_ASC:
-                return (learnMethod != other.learnMethod ? learnMethod - other.learnMethod: (level != other.level?level-other.level:name.compareTo(other.name)));
+					return (learnMethod != other.learnMethod ? learnMethod - other.learnMethod: (level != other.level ?level - other.level: name.compareTo(other.name)));
                 case SORT_BY_LEARN_DES:
-                    return (learnMethod != other.learnMethod ? other.learnMethod - learnMethod: (level != other.level?other.level-level:other.name.compareTo(name)));
+                    return (learnMethod != other.learnMethod ? other.learnMethod - learnMethod: (level != other.level ?other.level - level: other.name.compareTo(name)));
                 default:
                     return 0;
             }
         }
-		
-		
+
+
 
 		public static class Builder{
 
@@ -420,12 +439,12 @@ public abstract class PokedexClasses{
 			public int priority;
 			public int type;
 			public int damageClass;
-			
+
 			public int learnMethod = -1;
 			public int level = -1;
-			
 
-			
+
+
 			public Builder id(int id){
 				this.id = id;
 				return this;
@@ -467,20 +486,20 @@ public abstract class PokedexClasses{
 				learnMethod = lMethod;
 				return this;
 			}
-			
+
 			public Builder level(int lvl){
 				level = lvl;
 				return this;
 			}
-			
+
 			public Move build(){
 				return new Move(this);
 			}
-			
-		
+
+
 
 		}
-		
+
 		@Override
 		public int getId(){
 			return id;
@@ -498,16 +517,69 @@ public abstract class PokedexClasses{
 
 	}
 
+
+	public static class Ability extends VarComparableDexObject<Ability> implements Linkable{
+
+		public final String effect;
+
+		public Ability(int id, String name, String effect){
+			super(id, name);
+			this.effect = effect;
+		}
+
+		public static final int SORT_BY_ID_ASC = 1;
+        public static final int SORT_BY_ID_DES = -1;
+        public static final int SORT_BY_NAME_ASC = 2;
+        public static final int SORT_BY_NAME_DES = -2;
+
+
+
+		@Override
+        public int compareTo(Ability other, int sortBy){
+            switch (sortBy){
+                case SORT_BY_ID_ASC:
+					return id - other.id;
+                case SORT_BY_ID_DES:
+					return other.id - id;
+                case SORT_BY_NAME_ASC:
+					return name.compareTo(other.name);
+                case SORT_BY_NAME_DES:
+					return other.name.compareTo(name);
+			}
+			return 0;
+		}
+
+		@Override
+		public int getId(){
+			// TODO: Implement this method
+			return id;
+		}
+
+		@Override
+		public String getName(){
+			return name;
+		}
+
+		@Override
+		public Class<? extends InfoActivity> getInfoActivityClass(){
+			return AbilityInfoActivity.class;
+		}
+
+	}
+
+
+
+
 	public interface Linkable{
-		
+
 		public int getId();
 		public String getName();
 		public Class<? extends InfoActivity> getInfoActivityClass();
-		
+
 	}	
-	
+
 	public interface VarComparable<T>{
 		public int compareTo(T other, int compareOn);
 	}
-	
+
 }

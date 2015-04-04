@@ -24,7 +24,7 @@ public class StatBarView extends View{
 	Point mCenterTextOrigin;
 	boolean usingLabel = false;
 
-	int mStat;
+	public int mStat;
 	int mMaxStat;
 	String mLabel = "";
 	String mLeftText = "";
@@ -112,7 +112,7 @@ public class StatBarView extends View{
 	@Override
 	protected void onDraw(Canvas canvas){
 		super.onDraw(canvas);
-		mBarPaint.setShadowLayer(4, mBarBounds.right, mBarBounds.bottom / 2, 20);
+		//mBarPaint.setShadowLayer(4, mBarBounds.right, mBarBounds.bottom / 2, 20);
 		reCalcBarBounds();
 		canvas.drawRect(mRemBounds, mRemPaint);
 		canvas.drawRect(mBarBounds, mBarPaint);

@@ -1,8 +1,8 @@
 package com.mikhail.pokedex.fragments;
 
 import android.content.*;
+import android.media.*;
 import android.os.*;
-import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -11,19 +11,24 @@ import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.activities.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
+import com.mikhail.pokedex.misc.*;
+import java.io.*;
+import java.text.*;
 import java.util.*;
 
 import android.view.View.OnClickListener;
-import com.mikhail.pokedex.misc.*;
-import java.text.*;
 
-public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
+public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 
 	public static final String TITLE = "Info";
 	private Pokemon mPoke;
 	private ArrayList<ArrayList<Evolution>> mEvolutions;
 	private int[] mEvolutionsIds;
     private Pokemon[] mForms;
+	int[] mFormIds;
+
+	SoundPool mSoundPool = new SoundPool.Builder().setMaxStreams(1).build();
+	
 
 	private View mLayout;
 
@@ -31,18 +36,30 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 	LinearLayout formsLL;
 	TextView evolutionsHeader;
 	TextView formsHeader;
-	
+
 	DecimalFormat mDF = new DecimalFormat("########.#");
 
 	public static final int GENDER_BAR_TEXT_SIZE_SP = 14;
+	public static final int ARROW_OPACITY = 0x40;
 	StatBarView mGenderBar;
 
 	OnClickListener mEvolutionIconClickListener = new OnClickListener(){
 		@Override
-		public void onClick(View p1){
+		public void onClick(View p1) {
 			int pos=(Integer)p1.getTag();
 			Intent intent = new Intent(p1.getContext(), PokemonInfoActivity.class);
 			intent.putExtra(PokemonInfoActivity.EXTRA_ID_ARRAY, mEvolutionsIds);
+			intent.putExtra(PokemonInfoActivity.EXTRA_ID_INDEX, pos);
+			p1.getContext().startActivity(intent);
+		}
+	};
+
+	OnClickListener mFormIconClickListener = new OnClickListener(){
+		@Override
+		public void onClick(View p1) {
+			int pos=(Integer)p1.getTag();
+			Intent intent = new Intent(p1.getContext(), PokemonInfoActivity.class);
+			intent.putExtra(PokemonInfoActivity.EXTRA_ID_ARRAY, mFormIds);
 			intent.putExtra(PokemonInfoActivity.EXTRA_ID_INDEX, pos);
 			p1.getContext().startActivity(intent);
 		}
@@ -54,18 +71,18 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 	TextView imperialHeightTV;
 	TextView metricWeightTV;
 	TextView imperialWeightTV;
-	
+
 	TextView expTV;
 	TextView evTV;
 	TextView catchTV;
 	TextView happinessTV;
 	TextView eggGroupTV;
 	TextView stepsTV;
-	
+
 
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		mLayout = inflater.inflate(R.layout.pokemon_info_fragment, container, false);
@@ -82,15 +99,15 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 		imperialWeightTV = (TextView)mLayout.findViewById(R.id.weight_lb);
 
 		mGenderBar = (StatBarView)mLayout.findViewById(R.id.gender);
-		
+
 		expTV = (TextView)mLayout.findViewById(R.id.exp);
 		evTV = (TextView)mLayout.findViewById(R.id.evs);
 		catchTV = (TextView)mLayout.findViewById(R.id.catch_rate);
 		happinessTV = (TextView)mLayout.findViewById(R.id.happiness);
 		eggGroupTV = (TextView)mLayout.findViewById(R.id.egg);
 		stepsTV = (TextView)mLayout.findViewById(R.id.steps);
-		
 
+		
 		return mLayout;
 
 	}
@@ -99,51 +116,97 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 
 
 	@Override
-	public void setData(Pokemon data){
+	public void setData(Pokemon data) {
 		mPoke = data;
         PokedexDatabase pokedexDatabase = PokedexDatabase.getInstance(getActivity());
 		mEvolutions = pokedexDatabase.getEvolutions(data.id);
-		/*for (ArrayList<Evolution> branch:mEvolutions){
-		 for (Evolution evo:branch){
-		 evo.evolvedPoke.loadBitmap(getActivity());
-		 }
-		 }*/
+		
 		int c=0;
-		for (int i=0;i < mEvolutions.size();i++){
-			for (int j=0;j < mEvolutions.get(i).size();j++){
+		for (int i=0;i < mEvolutions.size();i++) {
+			for (int j=0;j < mEvolutions.get(i).size();j++) {
 				c++;
 			}
 		}
+
 		mEvolutionsIds = new int[c];
 		c = 0;
 
-		for (int i=0;i < mEvolutions.size();i++){
-			for (int j=0;j < mEvolutions.get(i).size();j++){
+		for (int i=0;i < mEvolutions.size();i++) {
+			for (int j=0;j < mEvolutions.get(i).size();j++) {
 				Evolution evo = mEvolutions.get(i).get(j);
 				mEvolutionsIds[c++] = evo.evolvedPoke.id;
-				evo.evolvedPoke.loadBitmap(getActivity());
 			}
 		}
 
 
 
         mForms = pokedexDatabase.getForms(mPoke.id);
-        for (Pokemon p: mForms){
-            p.loadBitmap(getActivity());
-        }
+        
+		mFormIds = new int[mForms.length];
+		for (int i=0;i < mForms.length;i++) {
+			mFormIds[i] = mForms[i].id;
+		}
+
+		File sound = new File(pokedexDatabase.mContext.getExternalFilesDir(""), data.getCryFileNameNoExtension()+".ogg");
+		if(!sound.exists()){
+			sound = new File(pokedexDatabase.mContext.getExternalFilesDir(""), data.getCryFileNameNoExtension()+".ogg");
+		}
+
+
+		mSoundPool.load(sound.getAbsolutePath(), 1);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.play_cry, menu);
+		menu.findItem(R.id.play_cry).setVisible(true);
+		
 	}
 
 	@Override
-	public boolean displayData(){
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.play_cry:
+				mSoundPool.play(0, 1.0f, 1.0f, 1, -1, 1.0f);
+				return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+
+
+	@Override
+	public boolean displayData() {
 		if (mPoke == null || mEvolutions == null || mLayout == null || mForms == null || isDetached())
 			return false;
 
+		new Thread(new Runnable(){
 
+				@Override
+				public void run() {
+					for (ArrayList<Evolution> branch:mEvolutions) {
+						for (Evolution evo:branch) {
+							evo.evolvedPoke.loadBitmap(getActivity());
+						}
+					}
+					for (Pokemon p: mForms) {
+						p.loadBitmap(getActivity());
+					}
+					
+					
+				}
+				
+			
+		}).start();
+			
+			
 		float density;
-		try{
+		try {
 
 			density = getResources().getDisplayMetrics().density;
-		}catch (IllegalStateException e){
+		} catch (IllegalStateException e) {
 			return false;
 		}
 
@@ -152,38 +215,48 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 
 		int c =0;
 		treeLL.removeAllViews();
-		if (mEvolutions.size() == 0){
+		if (mEvolutions.size() == 0) {
 			treeLL.setVisibility(View.GONE);
 			evolutionsHeader.setVisibility(View.GONE);
-		}else{
+		} else {
 			treeLL.setVisibility(View.VISIBLE);
 			evolutionsHeader.setVisibility(View.VISIBLE);
 		}
 
-        for (ArrayList<Evolution> branch:mEvolutions){
+
+		int padding = (int)(2 * density);
+        for (ArrayList<Evolution> branch:mEvolutions) {
 
 			LinearLayout branchLL = new LinearLayout(treeLL.getContext());
 			branchLL.setOrientation(LinearLayout.HORIZONTAL);
 			LayoutParams branchParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			branchLL.setLayoutParams(branchParams);
+			branchLL.setGravity(Gravity.CENTER);
 
-			for (Evolution evo:branch){
+			for (Evolution evo:branch) {
 
-				if (!evo.isBaseEvo()){
+				if (!evo.isBaseEvo()) {
 					TextView methodTV = new TextView(branchLL.getContext());
-					LayoutParams methodParams = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
+					LayoutParams methodParams = new LayoutParams(0, LayoutParams.MATCH_PARENT, 1);
 					methodTV.setLayoutParams(methodParams);
 					methodTV.setText(evo.evolutionMethod);
+					methodTV.setPadding(padding, padding, padding, padding);
+					methodTV.setBackgroundResource(R.drawable.arrow);
+					methodTV.getBackground().setAlpha(ARROW_OPACITY);
 					methodTV.setGravity(Gravity.CENTER_VERTICAL);
 					branchLL.addView(methodTV);
 				}
 				ImageView iconIV = new ImageView(branchLL.getContext());
 				LayoutParams iconParams = new LayoutParams(iconSize, iconSize);
+				iconParams.setMargins(padding, padding, padding, padding);
+
 				iconIV.setLayoutParams(iconParams);
 				iconIV.setImageBitmap(evo.evolvedPoke.icon);
-				if (evo.evolvedPoke.id == mPoke.id){
+
+				if (evo.evolvedPoke.id == mPoke.id) {
 					iconIV.setBackgroundResource(R.drawable.blue_rounded_background);
 				}
+
 				iconIV.setTag(c++);
 				iconIV.setClickable(true);
 				iconIV.setOnClickListener(mEvolutionIconClickListener);
@@ -197,19 +270,24 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 		}
 
 		formsLL.removeAllViews();
-		if (mForms.length == 0){
+		if (mForms.length == 0) {
 			formsLL.setVisibility(View.GONE);
 			formsHeader.setVisibility(View.GONE);
-		}else{
+		} else {
 			formsLL.setVisibility(View.VISIBLE);
 			formsHeader.setVisibility(View.VISIBLE);
 		}
-        for (Pokemon form:mForms){
+        for (int i=0;i < mForms.length;i++) {
+
+			Pokemon form = mForms[i];
 
             ImageView iconIV = new ImageView(formsLL.getContext());
             LayoutParams iconParams = new LayoutParams(iconSize, iconSize, 1);
             iconIV.setLayoutParams(iconParams);
             iconIV.setImageBitmap(form.icon);
+			iconIV.setTag(i);
+			iconIV.setClickable(true);
+			iconIV.setOnClickListener(mFormIconClickListener);
             formsLL.addView(iconIV);
 
         }
@@ -222,13 +300,13 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 		imperialWeightTV.setText(mDF.format(mPoke.weight * 2.204) + "lbs");
 
 		mGenderBar.resetText();
-		if (mPoke.femalesPer8Males == -1){
+		if (mPoke.femalesPer8Males == -1) {
 			mGenderBar.setColor(0xFF000000 + PokedexDatabase.GENDER_COLORS[2]);
 			mGenderBar.setMax(8);
 			mGenderBar.setStat(8);
 			mGenderBar.setCenterText(PokedexDatabase.GENDER_NAMES[2]);
 			mGenderBar.setTextSize(getResources().getDisplayMetrics().scaledDensity * GENDER_BAR_TEXT_SIZE_SP);
-		}else{
+		} else {
 			mGenderBar.setColor(0xFF000000 + PokedexDatabase.GENDER_COLORS[0], 0xFF000000 + PokedexDatabase.GENDER_COLORS[1]);
 			mGenderBar.setMax(8);
 			mGenderBar.setStat(mPoke.femalesPer8Males);
@@ -237,35 +315,35 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
 			mGenderBar.setRightText(100 - femalePercent + "%");
 			mGenderBar.setTextSize(getResources().getDisplayMetrics().scaledDensity * GENDER_BAR_TEXT_SIZE_SP);
 		}		
-		
+
 		expTV.setText(String.valueOf(mPoke.baseExperience));
 		happinessTV.setText(String.valueOf(mPoke.baseHappiness));
 		catchTV.setText(String.valueOf(mPoke.catchRate));
-		stepsTV.setText(String.valueOf(mPoke.stepsToHatch));
+		stepsTV.setText(255 * (1 + mPoke.hatchCycles) + "-" + (255 * (1 + mPoke.hatchCycles) + 254));
 		StringBuilder builder = new StringBuilder();
-		for(int eGroup:mPoke.eggGroups){
+		for (int eGroup:mPoke.eggGroups) {
 			builder.append(PokedexDatabase.EGG_GROUP_NAMES[eGroup])
-			.append(" ");
+				.append(" ");
 		}
 		eggGroupTV.setText(builder.toString());
 		builder.delete(0, builder.length());
-		for(int i=0;i<mPoke.evYield.length;i++){
-			if(mPoke.evYield[i] != 0){
+		for (int i=0;i < mPoke.evYield.length;i++) {
+			if (mPoke.evYield[i] != 0) {
 				builder.append(mPoke.evYield[i])
-				.append(" ");
+					.append(" ");
 				builder.append(PokedexDatabase.STAT_LABELS[PokedexDatabase.getStatVersion()][i]);
 				builder.append(", ");
 			}
 		}
-		evTV.setText(builder.delete(builder.length()-2,builder.length()).toString());
-		
+		evTV.setText(builder.delete(builder.length() - 2, builder.length()).toString());
+
 		return true;
-		
-		
+
+
 	}
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         mPoke = null;
         mEvolutions = null;
@@ -273,7 +351,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon>{
     }
 
     @Override
-	public String getTitle(){
+	public String getTitle() {
 		return TITLE;
 	}
 
