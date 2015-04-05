@@ -121,13 +121,13 @@ public class SplashActivity extends Activity {
 		public SplashActivity act;
 		public static final String INIT_LOADING_MESSAGE = "Upgrading Ultradex";
 		
-		public static final String[] LOADING_MESSAGES = new String[]{
+		public final String[] LOADING_MESSAGES = new String[]{
 			"Fishing for Feebas",
 			"Battling Whitney",
 			"Hatching Eggs",
 			"Saving Lots of Data",
 			"Waiting for Mirage Island",
-			"Making Pokebloks",
+			"Making Pokeblocks",
 			"Cooking Poffins",
 			"Watering Berries",
 			"Connecting to Nintendo WFC"
@@ -338,7 +338,8 @@ public class SplashActivity extends Activity {
 			try {
 				dex.getAllPokemon();
 				dex.getAllMoves();
-				dex.getAllAbilities();
+                dex.getAllAbilities();
+                dex.getAllItems();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

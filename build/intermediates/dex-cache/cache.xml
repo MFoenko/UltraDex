@@ -16,6 +16,20 @@
         <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-9b15c7836112ca24221e577ad909c6166dc90a7f.jar" />
     </item>
     <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-47215079c9d180046e85ae2cc7877eef39086b18.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-e11a66669b24665478ff94539b3a949ba63ec27e.jar" />
+    </item>
+    <item
         jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -28,13 +42,6 @@
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
         <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-5915c2c2d778eec476729e83d623d2cfcb9ab9d7.jar" />
-    </item>
-    <item
-        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
-        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-47215079c9d180046e85ae2cc7877eef39086b18.jar" />
     </item>
 
 </items>

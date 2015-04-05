@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		new MainPokemonListFragment(),
 		new MainMoveListFragment(),
 		new MainAbilityListFragment(),
+        new MainItemListFragment(),
 		new DrawerHeader("App"),
 		new DrawerItem(){
 
@@ -66,7 +67,8 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	};
 	public static final int POKEDEX_FRAGMENT = 1;
 	public static final int MOVEDEX_FRAGMENT = 2;
-	public static final int ABILITYDEX_FRAGMENT = 3;
+    public static final int ABILITYDEX_FRAGMENT = 3;
+    public static final int ITEMDEX_FRAGMENT = 4;
 
 	public static final int DEFAULT_INDEX = POKEDEX_FRAGMENT;
 
@@ -108,10 +110,13 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	@Override
 	protected void onStart() {
 		super.onStart();
-		((MainPokemonListFragment)DRAWER_ITEMS[POKEDEX_FRAGMENT]).loadData(PokedexDatabase.getInstance(this).getAllPokemon());
-		((MainMoveListFragment)DRAWER_ITEMS[MOVEDEX_FRAGMENT]).loadData(PokedexDatabase.getInstance(this).getAllMoves());
-		((MainAbilityListFragment)DRAWER_ITEMS[ABILITYDEX_FRAGMENT]).loadData(PokedexDatabase.getInstance(this).getAllAbilities());
 
+        PokedexDatabase pokedexDatabase = PokedexDatabase.getInstance(this);
+
+		((MainPokemonListFragment)DRAWER_ITEMS[POKEDEX_FRAGMENT]).loadData(pokedexDatabase.getAllPokemon());
+		((MainMoveListFragment)DRAWER_ITEMS[MOVEDEX_FRAGMENT]).loadData(pokedexDatabase.getAllMoves());
+		((MainAbilityListFragment)DRAWER_ITEMS[ABILITYDEX_FRAGMENT]).loadData(pokedexDatabase.getAllAbilities());
+        ((MainItemListFragment)DRAWER_ITEMS[ITEMDEX_FRAGMENT]).loadData(pokedexDatabase.getAllItems());
 
 	}
 

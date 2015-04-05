@@ -106,7 +106,7 @@ public class PokemonStatsFragment extends InfoPagerFragment<Pokemon>{
 		
 		@Override
 		public void onAnimationUpdate(ValueAnimator p1){
-			mStatBar.setStat(p1.getAnimatedValue());
+			mStatBar.setStat((Integer)p1.getAnimatedValue());
 		}
 
 	}

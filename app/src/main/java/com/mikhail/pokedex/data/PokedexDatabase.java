@@ -740,8 +740,52 @@ public class PokedexDatabase extends SQLiteOpenHelper {
 
 
 
+    private Item[] preloadedItems;
+
+    public static final String ITEM_QUERY = "SELECT i.id, n.name, p.effect, i.identifier FROM items AS i JOIN item_names AS n ON(i.id = n.item_id) JOIN item_prose AS p ON(i.id = p.item_id AND n.local_language_id  = p.local_language_id) WHERE n.local_language_id = ?";
+    public static final String SINGLE_ITEM_QUERY = ITEM_QUERY + " AND i.id = ?";
+
+    public Item[] getAllItems() {
+        return getAllItems(VERSION, LANG);
+    }
+
+    public Item[] getAllItems(int ver, int lang){
+
+        if(preloadedItems == null) {
+            Cursor c = dex.rawQuery(ITEM_QUERY, new String[]{String.valueOf(lang)});
+            preloadedItems = new Item[c.getCount()];
+            for(int i = 0;i<preloadedItems.length;i++){
+                c.moveToNext();
+                preloadedItems[i] = getItemFromCursor(c);
+            }
+            c.close();
+        }
+        return preloadedItems;
+
+    }
+
+    public Item getItem(int id) {
+        return getItem(id, VERSION, LANG);
+    }
+
+    public Item getItem(int id, int ver, int lang){
+
+        if(preloadedItems != null){
+            return (Item)binarySearch(preloadedItems, id);
+        }
+
+        Cursor c = dex.rawQuery(SINGLE_ITEM_QUERY, new String[]{String.valueOf(lang), String.valueOf(id)});
+        Item i = getItemFromCursor(c);
+        c.close();
+
+        return i;
+    }
 
 
+
+    public Item getItemFromCursor(Cursor c){
+        return new Item(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+    }
 
 
 

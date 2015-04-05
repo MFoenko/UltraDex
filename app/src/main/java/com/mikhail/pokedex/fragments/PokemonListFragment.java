@@ -89,7 +89,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 				View typeFilter = inflater.inflate(R.layout.type_filter, typesContainer, false);
 				CheckBox checkBox = (CheckBox)typeFilter.findViewById(R.id.check_box);
 				checkBox.setTag(i);
-				checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+				checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 						@Override
 						public void onCheckedChanged(CompoundButton p1, boolean p2) {
 							int type = (Integer)p1.getTag();
@@ -417,12 +417,6 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			mAdapter.notifyItemChanged(values[0]);
 
 		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-		}
-
 
 	}
 

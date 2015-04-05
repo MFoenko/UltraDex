@@ -53,7 +53,12 @@
 				android:layout_weight="1"
 			/>
 		</LinearLayout>
-
+		<LinearLayout
+			android:id="@+id/abilities"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			android:background="#FFFFFF"
+		/>
 	</LinearLayout>
 </LinearLayout>
 <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/pokemon_info_activity.xml -->

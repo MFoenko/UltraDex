@@ -10,12 +10,18 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ultradex_launcher_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name="com.mikhail.pokedex.activities.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +29,41 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mikhail.pokedex.activities.MainActivity" />
-        <activity android:name="com.mikhail.pokedex.activities.PokemonInfoActivity" />
-        <activity android:name="com.mikhail.pokedex.activities.MoveInfoActivity" />
+        <activity
+            android:name="com.mikhail.pokedex.activities.MainActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.mikhail.pokedex.activities.PokemonInfoActivity"
+            android:parentActivityName="com.mikhail.pokedex.activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.mikhail.pokedex.activities.MoveInfoActivity"
+            android:parentActivityName="com.mikhail.pokedex.activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.mikhail.pokedex.activities.AbilityInfoActivity"
+            android:parentActivityName="com.mikhail.pokedex.activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.mikhail.pokedex.activities.ItemInfoActivity"
+            android:parentActivityName="com.mikhail.pokedex.activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name="android.support.v7.widget.TestActivity"
             android:label="RecyclerViewTestActivity" />

@@ -3,12 +3,13 @@
 	android:id="@+id/summary"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
 >
 	<FrameLayout
 		android:id="@+id/model_container"
-		android:layout_width="0dp"
-		android:layout_height="match_parent"
-		android:layout_weight="3"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="2"
 	>
 		<WebView
 			android:id="@+id/model"
@@ -19,8 +20,8 @@
 	</FrameLayout>
 	<LinearLayout
 		android:id="@+id/summary_info"
-		android:layout_width="0dp"
-		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
 		android:layout_weight="2"
 		android:orientation="vertical"
 	>
@@ -53,7 +54,11 @@
 				android:layout_weight="1"
 			/>
 		</LinearLayout>
-
+		<LinearLayout
+			android:id="@+id/abilities"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+		/>
 	</LinearLayout>
 </LinearLayout>
 <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout-land/pokemon_info_activity.xml -->

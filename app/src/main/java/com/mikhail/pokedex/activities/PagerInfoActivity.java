@@ -84,6 +84,6 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 	public abstract int getDefaultPage();
 	public abstract InfoFragmentPagerAdapter<T> getNewAdapter();
 	public abstract View getContentView(LayoutInflater inflater, ViewGroup container);
-	
+
 	
 }

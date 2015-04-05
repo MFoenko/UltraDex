@@ -1,16 +1,29 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-	android:gravity="center">
-    
+	android:gravity="center"
+>
+
 	<ImageView
-		android:layout_height="fill_parent"
-		android:layout_width="fill_parent"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
 		android:gravity="center"
-		android:scaleType="centerInside"
+		android:scaleType="fitXY"
 		android:layout_gravity="center"
-		/>
+		android:src="@drawable/splash"
+	/>
+	<TextView 
+		android:id="@+id/loading_message"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:layout_gravity="bottom"
+		android:layout_marginBottom="75dp"
+		android:gravity="center"
+		android:textColor="#FFFFFF"
+		style="@style/SubHeaderText"
+		android:text="Beta 3.0"
+	/>
 	<ProgressBar
 		style="@android:style/Widget.Holo.ProgressBar.Horizontal"
 		android:id="@+id/splashProgressBar"
@@ -19,7 +32,9 @@
 		android:layout_marginBottom="50dp"
 		android:visibility="gone"
 		android:max="100"
-		/>
-	
-</LinearLayout>
+
+		android:layout_gravity="bottom"
+	/>
+
+</FrameLayout>
 <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/splash.xml -->

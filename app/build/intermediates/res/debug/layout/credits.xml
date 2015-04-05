@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:src="@drawable/banner"
+		/>
+	
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/credits_mchail"
+		style="@style/CreditsText"
+	/>
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/credits_silverbawxer"
+		style="@style/CreditsText"
+	/>
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/credits_veekun"
+		style="@style/CreditsText"
+	/>
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/credits_pkparasio"
+		style="@style/CreditsText"
+	/>
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/credits_pkparasio"
+		style="@style/CreditsText"
+	/>
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/credits_nintendo"
+		style="@style/CreditsText"
+	/>
+	
+</LinearLayout>
+<!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/credits.xml -->

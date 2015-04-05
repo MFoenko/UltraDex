@@ -27,7 +27,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
     private Pokemon[] mForms;
 	int[] mFormIds;
 
-	SoundPool mSoundPool = new SoundPool.Builder().setMaxStreams(1).build();
+	SoundPool mSoundPool = new SoundPool(1,AudioManager.STREAM_MUSIC,0);
 	
 
 	private View mLayout;

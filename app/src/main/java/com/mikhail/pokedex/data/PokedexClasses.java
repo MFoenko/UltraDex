@@ -2,15 +2,17 @@ package com.mikhail.pokedex.data;
 
 import android.content.*;
 import android.graphics.*;
-import android.util.*;
+
 import java.text.*;
-import com.mikhail.pokedex.misc.*;
+
 import com.mikhail.pokedex.activities.*;
 
 public abstract class PokedexClasses{
 
-	public static final String ICON_DIR = "Icons/";
-	public static final String MODELS_DIR = "Models/";
+	public static final String POKEMON_ICON_DIR = "Icons/";
+    public static final String ITEM_ICON_DIR = "Items/";
+
+    public static final String MODELS_DIR = "Models/";
 
 	public static abstract class DexObject{
 		public final int id;
@@ -93,7 +95,7 @@ public abstract class PokedexClasses{
 
 		public Bitmap loadBitmap(Context context){
 			if (icon == null){
-				icon = BitmapFactory.decodeFile(context.getExternalFilesDir(null).getAbsolutePath() + "/" + ICON_DIR + getIconFileName());
+				icon = BitmapFactory.decodeFile(context.getExternalFilesDir(null).getAbsolutePath() + "/" + POKEMON_ICON_DIR + getIconFileName());
 			}
 			return icon;
 		}
@@ -567,7 +569,54 @@ public abstract class PokedexClasses{
 
 	}
 
+    public static class Item extends VarComparableDexObject<Item>{
 
+        public final String effect;
+        public final String identifier;
+        public Bitmap icon;
+
+
+        public Item(int id, String name, String effect, String identifier){
+            super(id, name);
+            this.effect = effect;
+            this.identifier = identifier;
+        }
+
+        public Bitmap loadBitmap(Context context){
+            if (icon == null){
+                icon = BitmapFactory.decodeFile(context.getExternalFilesDir(null).getAbsolutePath() + "/" +
+                        ITEM_ICON_DIR + getIconFileName());
+            }
+            return icon;
+        }
+
+        public String getIconFileName(){
+            return identifier+".png";
+        }
+
+
+
+        public static final int SORT_BY_ID_ASC = 1;
+        public static final int SORT_BY_ID_DES = -1;
+        public static final int SORT_BY_NAME_ASC = 2;
+        public static final int SORT_BY_NAME_DES = -2;
+
+
+        @Override
+        public int compareTo(Item other, int sortBy){
+            switch (sortBy){
+                case SORT_BY_ID_ASC:
+                    return id - other.id;
+                case SORT_BY_ID_DES:
+                    return other.id - id;
+                case SORT_BY_NAME_ASC:
+                    return name.compareTo(other.name);
+                case SORT_BY_NAME_DES:
+                    return other.name.compareTo(name);
+            }
+            return 0;
+        }
+    }
 
 
 	public interface Linkable{
