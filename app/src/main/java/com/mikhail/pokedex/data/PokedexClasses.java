@@ -7,38 +7,55 @@ import java.text.*;
 
 import com.mikhail.pokedex.activities.*;
 
-public abstract class PokedexClasses{
+public abstract class PokedexClasses {
 
+	public static final String SHINY_GIF_URL = "http://mchail.byethost4.com/shiny/";
+	
 	public static final String POKEMON_ICON_DIR = "Icons/";
     public static final String ITEM_ICON_DIR = "Items/";
 
     public static final String MODELS_DIR = "Models/";
 
-	public static abstract class DexObject{
+	public static abstract class DexObject implements Linkable {
 		public final int id;
 		public final String name;
 
-		public DexObject(int id, String name){
+		public DexObject(int id, String name) {
 			this.id = id;
 			this.name = name;
 		}
 
 		@Override
-		public String toString(){
+		public String toString() {
 			return getClass().getName() + " " + id + " " + name;
 		}
+
+		@Override
+		public int getId() {
+			return id;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+
+
+
+
 
 
 
 	}
 
-	public static abstract class VarComparableDexObject<T> extends DexObject implements VarComparable<T>{
-		public VarComparableDexObject(int id, String name){
+	public static abstract class VarComparableDexObject<T> extends DexObject implements VarComparable<T> {
+		public VarComparableDexObject(int id, String name) {
 			super(id, name);
 		}
 	}
 
-	public static class Pokemon extends VarComparableDexObject<Pokemon> implements Linkable{
+	public static class Pokemon extends VarComparableDexObject<Pokemon> {
 
 
 		public final int dispId;
@@ -54,6 +71,7 @@ public abstract class PokedexClasses{
 		public final int hatchCycles;
 		public final int[] evYield;
 		public final int[] eggGroups;
+		public final String identifier;
 
 		public final String suffix;
 		public final int order;
@@ -62,7 +80,7 @@ public abstract class PokedexClasses{
 
 		public Bitmap icon;
 
-		public Pokemon(Pokemon.Builder builder){
+		public Pokemon(Pokemon.Builder builder) {
 			super(builder.id, builder.name);
 			this.dispId = builder.dispId;
 			this.genus = builder.genus;
@@ -81,36 +99,40 @@ public abstract class PokedexClasses{
 			this.hatchCycles = builder.stepsToHatch;
 			this.evYield = builder.evYield;
 			this.eggGroups = builder.eggGroups;
-
+			this.identifier = builder.identifier;
 
 		}
 
-		public int getStatTotal(){
+		public int getStatTotal() {
 			int total = 0;
-			for (int s:stats){
+			for (int s:stats) {
 				total += s;
 			}
 			return total;
 		}
 
-		public Bitmap loadBitmap(Context context){
-			if (icon == null){
+		public Bitmap loadBitmap(Context context) {
+			if (icon == null) {
 				icon = BitmapFactory.decodeFile(context.getExternalFilesDir(null).getAbsolutePath() + "/" + POKEMON_ICON_DIR + getIconFileName());
 			}
 			return icon;
 		}
 
-		public String getIconFileName(){
+		public String getIconFileName() {
 			return dispId + (hasUniqueIcon ?"-" + suffix: "") + ".png";
 		}
 
-		public String getModelFileName(){
+		public String getModelFileName() {
 			DecimalFormat df = new DecimalFormat("000");
 			String formattedId = df.format(dispId);
 			return formattedId + (suffix != null ?"-" + suffix: "") + ".gif";
 		}
+		
+		public String getShinyModelFileName(){
+			return identifier+".gif";
+		}
 
-		public String getCryFileNameNoExtension(){
+		public String getCryFileNameNoExtension() {
 			return dispId + (suffix != null ?"-" + suffix: "");
 		}
 
@@ -138,9 +160,9 @@ public abstract class PokedexClasses{
 
 
 		@Override
-		public int compareTo(Pokemon other, int compareOn){
+		public int compareTo(Pokemon other, int compareOn) {
 
-			switch (compareOn){
+			switch (compareOn) {
 				case SORT_BY_DISP_ID_ASC:
 					return dispId - other.dispId + (dispId == other.dispId ? id - other.id: 0);
 				case SORT_BY_DISP_ID_DES:
@@ -150,39 +172,39 @@ public abstract class PokedexClasses{
 				case SORT_BY_NAME_DES:
 					return other.name.compareTo(name);
 				case SORT_BY_TYPE_ASC:
-					if (types[0] == other.types[0]){
-						if (types.length == 2){
-							if (other.types.length == 2){
+					if (types[0] == other.types[0]) {
+						if (types.length == 2) {
+							if (other.types.length == 2) {
 								return types[1] - other.types[1];
-							}else{
+							} else {
 								return 1;
 							}
-						}else{
-							if (other.types.length == 2){
+						} else {
+							if (other.types.length == 2) {
 								return -1;
-							}else{
+							} else {
 								return 0;
 							}
 						}
-					}else{
+					} else {
 						return types[0] - other.types[0];
 					}
 				case SORT_BY_TYPE_DES:
-					if (types[0] != other.types[0]){
-						if (types.length == 2){
-							if (other.types.length == 2){
+					if (types[0] != other.types[0]) {
+						if (types.length == 2) {
+							if (other.types.length == 2) {
 								return other.types[1] - types[1];
-							}else{
+							} else {
 								return -1;
 							}
-						}else{
-							if (other.types.length == 2){
+						} else {
+							if (other.types.length == 2) {
 								return 1;
-							}else{
+							} else {
 								return 0;
 							}
 						}
-					}else{
+					} else {
 						return other.types[0] - types[0];
 					}
 				case SORT_BY_HP_ASC:
@@ -212,7 +234,7 @@ public abstract class PokedexClasses{
 
 
 
-		public static class Builder{
+		public static class Builder {
 
 
 			public int id;
@@ -232,135 +254,127 @@ public abstract class PokedexClasses{
 			public int stepsToHatch;
 			public int[] evYield;
 			public int[] eggGroups;
-
+			public String identifier;
 
 
 			public boolean isDefault;
 			public boolean hasUniqueIcon;
 
-			public Builder id(int id){
+			public Builder id(int id) {
 				this.id = id;
 				return this;
 			}
 
-			public Builder dispId(int id){
+			public Builder dispId(int id) {
 				this.dispId = id;
 				return this;
 			}
 
-			public Builder name(String name){
+			public Builder name(String name) {
 				this.name = name;
 				return this;
 			}
 
-			public Builder genus(String genus){
+			public Builder genus(String genus) {
 				this.genus = genus;
 				return this;
 			}
 
-			public Builder suffix(String suf){
+			public Builder suffix(String suf) {
 				this.suffix = suf;
 				return this;
 			}
 
-			public Builder stats(int[] stats){
+			public Builder stats(int[] stats) {
 				this.stats = stats;
 				return this;
 			}
 
-			public Builder types(int[] types){
+			public Builder types(int[] types) {
 				this.types = types;
 				return this;
 			}
 
-			public Builder hasUniqueIcon(boolean hasIcon){
+			public Builder hasUniqueIcon(boolean hasIcon) {
 				this.hasUniqueIcon = hasIcon;
 				return this;
 			}
 
-			public Builder height(float h){
+			public Builder height(float h) {
 				this.height = h;
 				return this;
 			}
-			public Builder weight(float w){
+			public Builder weight(float w) {
 				this.weight = w;
 				return this;
 			}
-			public Builder genderRate(int rate){
+			public Builder genderRate(int rate) {
 				this.femalesPer8Males = rate;
 				return this;
 			}
-			public Builder baseExp(int baseXP){
+			public Builder baseExp(int baseXP) {
 				this.baseExperience = baseXP;
 				return this;
 			}
-			public Builder baseHappiness(int baseHappiness){
+			public Builder baseHappiness(int baseHappiness) {
 				this.baseHappiness = baseHappiness;
 				return this;
 			}
-			public Builder catchRate(int catchRate){
+			public Builder catchRate(int catchRate) {
 				this.catchRate = catchRate;
 				return this;
 			}
-			public Builder stepsToHatch(int stepsToHatch){
+			public Builder stepsToHatch(int stepsToHatch) {
 				this.stepsToHatch = stepsToHatch;
 				return this;
 			}
-			public Builder evYield(int[] evYield){
+			public Builder evYield(int[] evYield) {
 				this.evYield = evYield;
 				return this;
 			}
-			public Builder eggGroups(int[] eggGroups){
+			public Builder eggGroups(int[] eggGroups) {
 				this.eggGroups = eggGroups;
 				return this;
 			}
 
+			public Builder identifier(String iden) {
+				this.identifier = iden;
+				return this;
+			}
 
-
-
-			public Pokemon build(){
+			public Pokemon build() {
 				return new Pokemon(this);
 			}
 
 		}
 
 		@Override
-		public int getId(){
-			return id;
-		}
-
-		@Override
-		public String getName(){
-			return name;
-		}
-
-		@Override
-		public Class<? extends InfoActivity> getInfoActivityClass(){
+		public Class<? extends InfoActivity> getInfoActivityClass() {
 			return PokemonInfoActivity.class;
 		}
 
 	}
 
-	public static class Evolution{
+	public static class Evolution {
 
 		public Pokemon evolvedPoke;
 		public String evolutionMethod;
 
-		public Evolution(Pokemon evolvedPoke){
+		public Evolution(Pokemon evolvedPoke) {
 			this.evolvedPoke = evolvedPoke;
 		}
 
-		public Evolution(Pokemon evolvedPoke, String evolutionMethod){
+		public Evolution(Pokemon evolvedPoke, String evolutionMethod) {
 			this.evolvedPoke = evolvedPoke;
 			this.evolutionMethod = evolutionMethod;
 		}
 
-		public boolean isBaseEvo(){
+		public boolean isBaseEvo() {
 			return evolutionMethod == null;
 		}
 
 		@Override
-		public String toString(){
+		public String toString() {
 			return ">" + evolutionMethod + ">" + evolvedPoke.id;
 		}
 
@@ -368,7 +382,7 @@ public abstract class PokedexClasses{
 	}
 
 
-	public static class Move extends VarComparableDexObject<Move> implements Linkable{
+	public static class Move extends VarComparableDexObject<Move> {
 
 		public final String description;
 		public final int power;
@@ -381,16 +395,7 @@ public abstract class PokedexClasses{
 		public final int learnMethod;
 		public final int level;
 
-        public static final int SORT_BY_ID_ASC = 1;
-        public static final int SORT_BY_ID_DES = -1;
-        public static final int SORT_BY_NAME_ASC = 2;
-        public static final int SORT_BY_NAME_DES = -2;
-        public static final int SORT_BY_TYPE_ASC = 3;
-        public static final int SORT_BY_TYPE_DES = -3;
-        public static final int SORT_BY_LEARN_ASC = 4;
-        public static final int SORT_BY_LEARN_DES = -4;
-
-		public Move(Builder builder){
+		public Move(Builder builder) {
 			super(builder.id, builder.name);
 			this.description = builder.description;
 			this.power = builder.power;
@@ -404,9 +409,28 @@ public abstract class PokedexClasses{
 
 		}
 
+
+        public static final int SORT_BY_ID_ASC = 1;
+        public static final int SORT_BY_ID_DES = -1;
+        public static final int SORT_BY_NAME_ASC = 2;
+        public static final int SORT_BY_NAME_DES = -2;
+        public static final int SORT_BY_TYPE_ASC = 3;
+        public static final int SORT_BY_TYPE_DES = -3;
+        public static final int SORT_BY_LEARN_ASC = 4;
+        public static final int SORT_BY_LEARN_DES = -4;
+        public static final int SORT_BY_POWER_ASC = 5;
+        public static final int SORT_BY_POWER_DES = -5;
+        public static final int SORT_BY_ACCURACY_ASC = 6;
+        public static final int SORT_BY_ACCURACY_DES = -6;
+        public static final int SORT_BY_PP_ASC = 7;
+        public static final int SORT_BY_PP_DES = -7;
+        public static final int SORT_BY_PRIORITY_ASC = 8;
+        public static final int SORT_BY_PRIORITY_DES = -8;
+		
+		
 		@Override
-        public int compareTo(Move other, int sortBy){
-            switch (sortBy){
+        public int compareTo(Move other, int sortBy) {
+            switch (sortBy) {
                 case SORT_BY_ID_ASC:
 					return id - other.id;
                 case SORT_BY_ID_DES:
@@ -423,14 +447,34 @@ public abstract class PokedexClasses{
 					return (learnMethod != other.learnMethod ? learnMethod - other.learnMethod: (level != other.level ?level - other.level: name.compareTo(other.name)));
                 case SORT_BY_LEARN_DES:
                     return (learnMethod != other.learnMethod ? other.learnMethod - learnMethod: (level != other.level ?other.level - level: other.name.compareTo(name)));
-                default:
+             	case SORT_BY_POWER_ASC:
+					return power-other.power;
+				case SORT_BY_POWER_DES:
+					return other.power-power;
+				case SORT_BY_ACCURACY_ASC:
+					return accuracy-other.accuracy;
+				case SORT_BY_ACCURACY_DES:
+					return other.accuracy-accuracy;
+				case SORT_BY_PP_ASC:
+					return pp-other.pp;
+				case SORT_BY_PP_DES:
+					return other.pp-pp;
+				case SORT_BY_PRIORITY_ASC:
+					return priority-other.priority;
+				case SORT_BY_PRIORITY_DES:
+					return other.priority-priority;
+					
+					
+					
+					
+				default:
                     return 0;
             }
         }
 
 
 
-		public static class Builder{
+		public static class Builder {
 
 			public int id;
 			public String name;
@@ -447,54 +491,54 @@ public abstract class PokedexClasses{
 
 
 
-			public Builder id(int id){
+			public Builder id(int id) {
 				this.id = id;
 				return this;
 			}
-			public Builder name(String name){
+			public Builder name(String name) {
 				this.name = name;
 				return this;
 			}
-			public Builder description(String desc){
+			public Builder description(String desc) {
 				this.description = desc;
 				return this;
 			}
-			public Builder power(int pow){
+			public Builder power(int pow) {
 				this.power = pow;
 				return this;
 			}
-			public Builder accuracy(int acc){
+			public Builder accuracy(int acc) {
 				this.accuracy = acc;
 				return this;
 			}
-			public Builder pp(int pp){
+			public Builder pp(int pp) {
 				this.pp = pp;
 				return this;
 			}
-			public Builder priority(int pri){
+			public Builder priority(int pri) {
 				this.priority = pri;
 				return this;
 			}
-			public Builder type(int type){
+			public Builder type(int type) {
 				this.type = type;
 				return this;
 			}
-			public Builder damageClass(int dClass){
+			public Builder damageClass(int dClass) {
 				this.damageClass = dClass;
 				return this;
 			}
 
-			public Builder learnMethod(int lMethod){
+			public Builder learnMethod(int lMethod) {
 				learnMethod = lMethod;
 				return this;
 			}
 
-			public Builder level(int lvl){
+			public Builder level(int lvl) {
 				level = lvl;
 				return this;
 			}
 
-			public Move build(){
+			public Move build() {
 				return new Move(this);
 			}
 
@@ -503,28 +547,18 @@ public abstract class PokedexClasses{
 		}
 
 		@Override
-		public int getId(){
-			return id;
-		}
-
-		@Override
-		public String getName(){
-			return name;
-		}
-
-		@Override
-		public Class<? extends InfoActivity> getInfoActivityClass(){
+		public Class<? extends InfoActivity> getInfoActivityClass() {
 			return MoveInfoActivity.class;
 		}
 
 	}
 
 
-	public static class Ability extends VarComparableDexObject<Ability> implements Linkable{
+	public static class Ability extends VarComparableDexObject<Ability> {
 
 		public final String effect;
 
-		public Ability(int id, String name, String effect){
+		public Ability(int id, String name, String effect) {
 			super(id, name);
 			this.effect = effect;
 		}
@@ -537,8 +571,8 @@ public abstract class PokedexClasses{
 
 
 		@Override
-        public int compareTo(Ability other, int sortBy){
-            switch (sortBy){
+        public int compareTo(Ability other, int sortBy) {
+            switch (sortBy) {
                 case SORT_BY_ID_ASC:
 					return id - other.id;
                 case SORT_BY_ID_DES:
@@ -551,47 +585,37 @@ public abstract class PokedexClasses{
 			return 0;
 		}
 
-		@Override
-		public int getId(){
-			// TODO: Implement this method
-			return id;
-		}
 
 		@Override
-		public String getName(){
-			return name;
-		}
-
-		@Override
-		public Class<? extends InfoActivity> getInfoActivityClass(){
+		public Class<? extends InfoActivity> getInfoActivityClass() {
 			return AbilityInfoActivity.class;
 		}
 
 	}
 
-    public static class Item extends VarComparableDexObject<Item>{
+    public static class Item extends VarComparableDexObject<Item> {
 
-        public final String effect;
+        public final String description;
         public final String identifier;
         public Bitmap icon;
 
 
-        public Item(int id, String name, String effect, String identifier){
+        public Item(int id, String name, String effect, String identifier) {
             super(id, name);
-            this.effect = effect;
+            this.description = effect;
             this.identifier = identifier;
         }
 
-        public Bitmap loadBitmap(Context context){
-            if (icon == null){
+        public Bitmap loadBitmap(Context context) {
+            if (icon == null) {
                 icon = BitmapFactory.decodeFile(context.getExternalFilesDir(null).getAbsolutePath() + "/" +
-                        ITEM_ICON_DIR + getIconFileName());
+												ITEM_ICON_DIR + getIconFileName());
             }
             return icon;
         }
 
-        public String getIconFileName(){
-            return identifier+".png";
+        public String getIconFileName() {
+            return identifier + ".png";
         }
 
 
@@ -603,8 +627,8 @@ public abstract class PokedexClasses{
 
 
         @Override
-        public int compareTo(Item other, int sortBy){
-            switch (sortBy){
+        public int compareTo(Item other, int sortBy) {
+            switch (sortBy) {
                 case SORT_BY_ID_ASC:
                     return id - other.id;
                 case SORT_BY_ID_DES:
@@ -616,10 +640,18 @@ public abstract class PokedexClasses{
             }
             return 0;
         }
+
+		@Override
+		public Class<? extends InfoActivity> getInfoActivityClass() {
+			return ItemInfoActivity.class;
+		}
+
+
+
     }
 
 
-	public interface Linkable{
+	public interface Linkable {
 
 		public int getId();
 		public String getName();
@@ -627,7 +659,7 @@ public abstract class PokedexClasses{
 
 	}	
 
-	public interface VarComparable<T>{
+	public interface VarComparable<T> {
 		public int compareTo(T other, int compareOn);
 	}
 

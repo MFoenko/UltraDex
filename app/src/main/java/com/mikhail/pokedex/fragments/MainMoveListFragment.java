@@ -1,6 +1,7 @@
 package com.mikhail.pokedex.fragments;
 
 import android.content.*;
+import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
 
@@ -8,7 +9,7 @@ public class MainMoveListFragment extends MoveListFragment<Move[]> implements Dr
 {
 	
 	public static final String DRAWER_ITEM_NAME = "Movedex";
-	public static final int DRAWER_ITEM_ICON = DRAWER_ICON_NONE;
+	public static final int DRAWER_ITEM_ICON = R.drawable.ic_movedex;
 	
 
 	@Override

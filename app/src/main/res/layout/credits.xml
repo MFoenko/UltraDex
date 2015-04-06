@@ -36,12 +36,6 @@
 	<TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/credits_pkparasio"
-		style="@style/CreditsText"
-	/>
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
 		android:text="@string/credits_nintendo"
 		style="@style/CreditsText"
 	/>

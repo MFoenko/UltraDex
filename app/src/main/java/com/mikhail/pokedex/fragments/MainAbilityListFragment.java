@@ -1,14 +1,15 @@
 package com.mikhail.pokedex.fragments;
 
+import android.content.*;
+import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
-import android.content.*;
 
 public class MainAbilityListFragment extends AbilityListFragment<Ability[]> implements DrawerItem
 {
 	
 	public static final String TITLE = "AbilityDex";
-	public static final int DRAWER_ITEM_ICON = DRAWER_ICON_NONE;
+	public static final int DRAWER_ITEM_ICON = R.drawable.ic_abilitydex;
 	
 	@Override
 	public void setData(Ability[] data){

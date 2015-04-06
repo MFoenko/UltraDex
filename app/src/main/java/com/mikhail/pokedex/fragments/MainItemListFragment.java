@@ -1,11 +1,10 @@
-package com.mikhail.pokedex.activities;
+package com.mikhail.pokedex.fragments;
 
-import android.content.Context;
-
-import com.mikhail.pokedex.data.PokedexClasses;
+import android.content.*;
+import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
-import com.mikhail.pokedex.fragments.ItemListFragment;
-import com.mikhail.pokedex.misc.DrawerItem;
+import com.mikhail.pokedex.fragments.*;
+import com.mikhail.pokedex.misc.*;
 
 /**
  * Created by mchail on 4/4/15.
@@ -13,7 +12,7 @@ import com.mikhail.pokedex.misc.DrawerItem;
 public class MainItemListFragment extends ItemListFragment<Item[]> implements DrawerItem {
 
     public static final String TITLE = "Itemdex";
-    public static final int DRAWER_ITEM_ICON = DRAWER_ICON_NONE;
+    public static final int DRAWER_ITEM_ICON = R.drawable.ic_itemdex;
 
     @Override
     public void setData(Item[] data) {

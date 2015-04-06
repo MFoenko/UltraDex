@@ -14,10 +14,12 @@ public class TypeView extends TextView{
 
 	public TypeView(Context context){
 		super(context);
+		setLines(1);
 	}
 
 	public TypeView(Context context, AttributeSet attr){
 		super(context, attr);
+		setLines(1);
 	}
 
 	public void setType(int typeId){

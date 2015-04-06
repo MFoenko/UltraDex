@@ -1,20 +1,14 @@
 package com.mikhail.pokedex.fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.mikhail.pokedex.R;
-import com.mikhail.pokedex.activities.ItemInfoActivity;
-import com.mikhail.pokedex.data.PokedexClasses;
+import android.app.*;
+import android.content.*;
+import android.os.*;
+import android.support.v7.widget.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.activities.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 
 /**
@@ -127,7 +121,9 @@ public abstract class ItemListFragment<I> extends RecyclerFragment<I, Item, Item
 
             int len = p1.length;
             for (int i=0;i < len;i++) {
+				Log.i("AAA", ""+i);
                 Item item = p1[i];
+				Log.i("AAA", ""+item);
                 item.loadBitmap(con);
                 publishProgress(i);
                 if (isCancelled()) {

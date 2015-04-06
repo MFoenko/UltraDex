@@ -3,6 +3,7 @@ package com.mikhail.pokedex.fragments;
 import android.content.*;
 import android.media.*;
 import android.os.*;
+import android.text.method.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -135,6 +136,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 			for (int j=0;j < mEvolutions.get(i).size();j++) {
 				Evolution evo = mEvolutions.get(i).get(j);
 				mEvolutionsIds[c++] = evo.evolvedPoke.id;
+				
 			}
 		}
 
@@ -182,6 +184,9 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 		if (mPoke == null || mEvolutions == null || mLayout == null || mForms == null || isDetached())
 			return false;
 
+			
+		PokedexDatabase pokedexDatabase = PokedexDatabase.getInstance(getActivity());
+		
 		new Thread(new Runnable(){
 
 				@Override
@@ -239,11 +244,17 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 					TextView methodTV = new TextView(branchLL.getContext());
 					LayoutParams methodParams = new LayoutParams(0, LayoutParams.MATCH_PARENT, 1);
 					methodTV.setLayoutParams(methodParams);
-					methodTV.setText(evo.evolutionMethod);
 					methodTV.setPadding(padding, padding, padding, padding);
 					methodTV.setBackgroundResource(R.drawable.arrow);
 					methodTV.getBackground().setAlpha(ARROW_OPACITY);
 					methodTV.setGravity(Gravity.CENTER_VERTICAL);
+					methodTV.setMovementMethod(LinkMovementMethod.getInstance());
+
+					
+					
+					methodTV.setText(pokedexDatabase.parseLinks(evo.evolutionMethod));
+					
+					
 					branchLL.addView(methodTV);
 				}
 				ImageView iconIV = new ImageView(branchLL.getContext());

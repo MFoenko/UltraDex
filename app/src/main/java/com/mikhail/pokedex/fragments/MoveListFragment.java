@@ -33,10 +33,19 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 	@Override
 	public Pair<String, Integer>[] getSortOptions(){
 		return new Pair[]{
-                new Pair<String, Integer>("Name \u25B2", Move.SORT_BY_NAME_ASC),
-                new Pair<String, Integer>("Name \u25BC", Move.SORT_BY_NAME_DES),
-                new Pair<String, Integer>("Type \u25B2", Move.SORT_BY_TYPE_ASC),
-                new Pair<String, Integer>("Type \u25BC", Move.SORT_BY_TYPE_DES)
+			new Pair<String, Integer>("Name \u25B2", Move.SORT_BY_NAME_ASC),
+			new Pair<String, Integer>("Name \u25BC", Move.SORT_BY_NAME_DES),
+			new Pair<String, Integer>("Type \u25B2", Move.SORT_BY_TYPE_ASC),
+			new Pair<String, Integer>("Type \u25BC", Move.SORT_BY_TYPE_DES),
+			new Pair<String, Integer>("Power \u25B2", Move.SORT_BY_POWER_ASC),
+			new Pair<String, Integer>("Power \u25BC", Move.SORT_BY_POWER_DES),
+			new Pair<String, Integer>("Accuracy \u25B2", Move.SORT_BY_ACCURACY_ASC),
+			new Pair<String, Integer>("Accuracy \u25BC", Move.SORT_BY_ACCURACY_DES),
+			new Pair<String, Integer>("PP \u25B2", Move.SORT_BY_PP_ASC),
+			new Pair<String, Integer>("PP \u25BC", Move.SORT_BY_PP_DES),
+			new Pair<String, Integer>("Priority \u25B2", Move.SORT_BY_PRIORITY_ASC),
+			new Pair<String, Integer>("Priority \u25BC", Move.SORT_BY_PRIORITY_DES)
+			
 		};
 
 	}

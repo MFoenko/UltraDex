@@ -325,7 +325,11 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 			}
 
 			int length = inputArr.length;
+			try{
 			quickSort(inputArr, length, sortBy, 0, length - 1);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 
 
 		}

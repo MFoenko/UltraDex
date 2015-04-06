@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 			@Override
 			public int getDrawerItemIconResourceId() {
-				return DRAWER_ICON_NONE;
+				return R.drawable.ic_bug_report;
 			}
 
 			@Override
@@ -95,6 +95,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
         mRightDrawer = (ViewGroup) findViewById(R.id.right_drawer);
         mLeftDrawer.setAdapter(mLeftDrawerAdapter = new DrawerItemAdapter(DRAWER_ITEMS));
         mLeftDrawer.setOnItemClickListener(this);
+		mLeftDrawer.setDividerHeight(0);
 		mDrawerLayout.setDrawerListener(mLeftDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.left_drawer_open, R.string.left_drawer_closed){
 
 										});
@@ -256,6 +257,11 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 					TextView itemName = (TextView)listItemView.findViewById(R.id.name);
 					itemName.setText(item.getDrawerItemName());
+					if(item.getDrawerItemIconResourceId() != DrawerItem.DRAWER_ICON_NONE){
+						ImageView iconIV = (ImageView)listItemView.findViewById(R.id.icon);
+						
+						iconIV.setImageResource(item.getDrawerItemIconResourceId());
+					}
 					return listItemView;
 				
 				case DrawerItem.DRAWER_ITEM_TYPE_HEADER:
