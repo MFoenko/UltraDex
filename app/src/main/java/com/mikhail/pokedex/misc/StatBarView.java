@@ -13,7 +13,8 @@ public class StatBarView extends View{
 
 	Paint mBarPaint;
 	Paint mRemPaint;
-	Paint mTextPaint;
+    Paint mTextPaint;
+    Paint mCenterTextPaint;
 	//Paint mShadowPaint;
 
 	Rect mTotalBounds;
@@ -45,8 +46,10 @@ public class StatBarView extends View{
 		mBarPaint = new Paint();
 		mRemPaint = new Paint();
 
-		mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		//mShadowPaint = new Paint();
+        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mCenterTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mCenterTextPaint.setTextAlign(Paint.Align.CENTER);
+        //mShadowPaint = new Paint();
 		//mShadowPaint.setColorFilter(ColorFilter.
 	}
 
@@ -118,7 +121,7 @@ public class StatBarView extends View{
 		canvas.drawRect(mBarBounds, mBarPaint);
 		canvas.drawText((usingLabel?mLabel+mStat:mLeftText), mLeftTextOrigin.x, mLeftTextOrigin.y, mTextPaint);
 		canvas.drawText(mRightText, mRightTextOrigin.x, mRightTextOrigin.y, mTextPaint);
-		canvas.drawText(mCenterText, mCenterTextOrigin.x, mCenterTextOrigin.y, mTextPaint);
+		canvas.drawText(mCenterText, mCenterTextOrigin.x, mCenterTextOrigin.y, mCenterTextPaint);
 		
 	}
 

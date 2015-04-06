@@ -10,6 +10,7 @@ import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 
 /**
+ *
  * Created by mchail on 4/4/15.
  */
 public class ItemInfoActivity extends InfoActivity<Item> {

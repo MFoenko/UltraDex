@@ -30,6 +30,8 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		new MainMoveListFragment(),
 		new MainAbilityListFragment(),
         new MainItemListFragment(),
+        new DrawerHeader("Tools"),
+        new TypeChartFragment(),
 		new DrawerHeader("App"),
 		new DrawerItem(){
 
