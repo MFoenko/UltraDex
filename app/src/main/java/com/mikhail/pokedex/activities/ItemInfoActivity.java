@@ -41,9 +41,9 @@ public class ItemInfoActivity extends InfoActivity<Item> {
     @Override
     public Item getData(int id) {
         Item i = mPokedexDatabase.getItem(id);
-
+		try{
 		mPallete = Palette.generate(i.loadBitmap(this));
-		
+		}catch(IllegalArgumentException e){}
         return i;
     }
     @Override
@@ -52,9 +52,9 @@ public class ItemInfoActivity extends InfoActivity<Item> {
 		
         mIconIV.setImageBitmap(curentItem.icon);
 		mNameTV.setText(curentItem.name);
-
+		try{
 		getWindow().getDecorView().setBackgroundColor(mPallete.getLightVibrantColor(0xFFFFFF));
-		
+		}catch(NullPointerException e){}
         mDescriptionTV.setText(curentItem.description);
 		new Thread(new Runnable(){
 				@Override

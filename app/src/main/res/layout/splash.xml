@@ -22,7 +22,7 @@
 		android:gravity="center"
 		android:textColor="#FFFFFF"
 		style="@style/SubHeaderText"
-		android:text="Beta 3.0"
+		android:text="Beta 3.2"
 	/>
 	<ProgressBar
 		style="@android:style/Widget.Holo.ProgressBar.Horizontal"
