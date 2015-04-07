@@ -25,48 +25,49 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 
     public static final DrawerItem[] DRAWER_ITEMS = new DrawerItem[]{
-		new DrawerHeader("Dexes"),
-		new MainPokemonListFragment(),
-		new MainMoveListFragment(),
-		new MainAbilityListFragment(),
-        new MainItemListFragment(),
-        new DrawerHeader("Tools"),
-        new TypeChartFragment(),
-		new DrawerHeader("App"),
-		new DrawerItem(){
+            new DrawerHeader("Dexes"),
+            new MainPokemonListFragment(),
+            new MainMoveListFragment(),
+            new MainAbilityListFragment(),
+            new MainItemListFragment(),
+            new DrawerHeader("Tools"),
+            new TypeChartFragment(),
+            new NaturesFragment(),
+            new DrawerHeader("App"),
+            new DrawerItem(){
 
-			@Override
-			public String getDrawerItemName() {
-				return "Bug Report";
-			}
+                @Override
+                public String getDrawerItemName() {
+                    return "Bug Report";
+                }
 
-			@Override
-			public int getDrawerItemIconResourceId() {
-				return R.drawable.ic_bug_report;
-			}
+                @Override
+                public int getDrawerItemIconResourceId() {
+                    return R.drawable.ic_bug_report;
+                }
 
-			@Override
-			public byte getDrawerItemType() {
-				return DRAWER_ITEM_TYPE_CLICKABLE;
-			}
+                @Override
+                public byte getDrawerItemType() {
+                    return DRAWER_ITEM_TYPE_CLICKABLE;
+                }
 
-			@Override
-			public boolean onDrawerItemClick(Context context) {
-				Intent intent = new Intent(Intent.ACTION_SEND);
-				intent.setType("text/html");
-				intent.putExtra(Intent.EXTRA_EMAIL, CrashDialog.DEV_EMAIL);
-				intent.putExtra(Intent.EXTRA_SUBJECT, "Ultadex 3.0b Bug");
-				intent.putExtra(Intent.EXTRA_TEXT, "Describe the bug here");
+                @Override
+                public boolean onDrawerItemClick(Context context) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/html");
+                    intent.putExtra(Intent.EXTRA_EMAIL, CrashDialog.DEV_EMAIL);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Ultadex 3.0b Bug");
+                    intent.putExtra(Intent.EXTRA_TEXT, "Describe the bug here");
 
-				context.startActivity(Intent.createChooser(intent, "Send Email"));
-				return false;
-			}
+                    context.startActivity(Intent.createChooser(intent, "Send Email"));
+                    return false;
+                }
 
 
-		},
-		new CreditsFragment()
-		
-	};
+            },
+            new CreditsFragment()
+
+    };
 	public static final int POKEDEX_FRAGMENT = 1;
 	public static final int MOVEDEX_FRAGMENT = 2;
     public static final int ABILITYDEX_FRAGMENT = 3;

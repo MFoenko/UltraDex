@@ -646,10 +646,27 @@ public abstract class PokedexClasses {
 			return ItemInfoActivity.class;
 		}
 
-
-
     }
 
+    public static final class Nature implements VarComparable<Nature>{
+
+
+        public final String name;
+        public final int statUp;
+        public final int statDown;
+
+
+        public Nature(String name, int statIdUp, int statIdDown) {
+            this.name = name;
+            statUp = statIdUp;
+            statDown = statIdDown;
+        }
+
+        @Override
+        public int compareTo(Nature other, int compareOn) {
+            return 0;
+        }
+    }
 
 	public interface Linkable {
 

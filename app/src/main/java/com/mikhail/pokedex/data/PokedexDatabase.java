@@ -102,6 +102,33 @@ public class PokedexDatabase extends SQLiteOpenHelper {
 	public static final int STAT_TOTAL_MIN = 0;
 	public static final int STAT_TOTAL_MAX = 800;
 
+    public static final Nature[] NATURES = new Nature[]{
+            new Nature("Hardy",1,1),
+            new Nature("Lonely",1,2),
+            new Nature("Brave",1,5),
+            new Nature("Adamant",1,3),
+            new Nature("Naughty",1,4),
+            new Nature("Bold",2,1),
+            new Nature("Docile",2,2),
+            new Nature("Relaxed",2,5),
+            new Nature("Impish",2,3),
+            new Nature("Lax",2,4),
+            new Nature("Timid",5,1),
+            new Nature("Hasty",5,2),
+            new Nature("Serious",3,3),
+            new Nature("Jolly",5,3),
+            new Nature("Naive",5,4),
+            new Nature("Modest",3,1),
+            new Nature("Mild",3,2),
+            new Nature("Quiet",3,5),
+            new Nature("Bashful",4,4),
+            new Nature("Rash",3,4),
+            new Nature("Calm",4,1),
+            new Nature("Gentle",4,2),
+            new Nature("Sassy",4,5),
+            new Nature("Careful",4,3),
+            new Nature("Quirky",5,5)
+    };
 
 	public static final int[] GEN_TYPE_VERSIONS = {0,1,1,1,1,2};
 	public static final String[][] TYPE_NAMES = {
@@ -178,6 +205,20 @@ public class PokedexDatabase extends SQLiteOpenHelper {
 			{1.0f,2.0f,1.0f,0.5f,1.0f,1.0f,1.0f,1.0f,0.5f,0.5f,1.0f,1.0f,1.0f,1.0f,1.0f,2.0f,2.0f,1.0f} 
 		}
 	};
+
+    public static char getDamageMultiplierChar(float damage){
+        char symbol = 0;
+
+        if (damage == .5f) symbol = '\u00BD';
+        if (damage == .25f) symbol = '\u00BC';
+        if (damage == 2) symbol = '2';
+        if (damage == 4) symbol = '4';
+        if (damage == 0) symbol = '0';
+        if (damage == 1) symbol = '1';
+
+        return symbol;
+    }
+
 
 	public static final String[] DAMAGE_CLASS_NAMES = { "Status", "Physical", "Special"};
 

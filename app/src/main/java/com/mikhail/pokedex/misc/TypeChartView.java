@@ -70,7 +70,7 @@ public class TypeChartView extends View {
 		
 	}
 
-    private void setTypeVersion(int version) {
+    public void setTypeVersion(int version) {
         mTypeVersion = version;
         mTypeChart = PokedexDatabase.TYPE_EFFICIENCY[version];
 		selectedRows = new boolean[mTypeChart.length];
@@ -78,22 +78,68 @@ public class TypeChartView extends View {
         invalidate();
     }
 
+    public void deselectAllRows(){
+        for(int i=0;i<selectedRows.length;i++){
+            selectedRows[i] = false;
+        }
+        invalidate();
+    }
+    public void deselectAllCols(){
+        for(int i=0;i<selectedCols.length;i++){
+            selectedCols[i] = false;
+        }
+        invalidate();
+    }
+
+    public void selectRow(int row){
+        selectedRows[row] = true;
+        invalidate();
+    }
+    public void selectCol(int col){
+        selectedCols[col] = true;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        for (int r=0;r < mTypeChart.length;r++) {
-            for (int c = 0; c < mTypeChart[r].length; c++) {
-                float x = mHeaderSize + xOffset + mCellSize / 2 + mCellSize * (r);
-                float y = mHeaderSize + yOffset + mCellSize / 2 + mCellSize * (c);
-                String symbol = "x";
-                if (mTypeChart[c][r] == .5f) symbol += "\u00BD";
-                if (mTypeChart[c][r] == .25f) symbol += "\u00BC";
-                if (mTypeChart[c][r] == 2) symbol += "2";
-                if (mTypeChart[c][r] == 4) symbol += "4";
-                if (mTypeChart[c][r] == 0) symbol += "0";
-                if (mTypeChart[c][r] != 1)
+        for (int c=0;c < mTypeChart.length;c++) {
+            for (int r = 0; r < mTypeChart[c].length; r++) {
+
+                float x,y;
+
+                if(selectedCols[c] || selectedRows[r]){
+
+                    int color;
+                    if (selectedCols[c] && selectedRows[r]){
+                        int color1 = PokedexDatabase.TYPE_COLORS[mTypeVersion][c];
+                        int r1 = Color.red(color1);
+                        int g1 = Color.green(color1);
+                        int b1 = Color.blue(color1);
+
+                        int color2 = PokedexDatabase.TYPE_COLORS[mTypeVersion][r];
+                        int r2 = Color.red(color2);
+                        int g2 = Color.green(color2);
+                        int b2 = Color.blue(color2);
+                        color = Color.argb(0x66, (r1+r2)/2, (g1+g2)/2,(b1+b2)/2);
+                    }else{
+                        color = 0x66000000 + (selectedCols[c]?PokedexDatabase.TYPE_COLORS[mTypeVersion][c]:PokedexDatabase.TYPE_COLORS[mTypeVersion][r]);
+                    }
+
+                    x = mHeaderSize + xOffset + mCellSize * c;
+                    y = mHeaderSize + yOffset+ mCellSize * r;
+
+                    mTypePaint.setColor(color);
+                    canvas.drawRect(x,y,x+mCellSize,y+mCellSize, mTypePaint);
+                }
+
+                x = mHeaderSize + xOffset + mCellSize / 2 + mCellSize * c;
+                y = mHeaderSize + yOffset + mCellSize / 2 + mCellSize * r;
+
+                char damage = PokedexDatabase.getDamageMultiplierChar(mTypeChart[r][c]);
 				// canvas.drawText(symbol, x, y, mChartItemPaint);
-					drawTextCentred(canvas, mChartItemPaint, symbol, x, y);
+                if(damage != 0 && damage != '1')
+					drawTextCentred(canvas, mChartItemPaint, "x"+damage, x, y);
 
             }
 
@@ -149,8 +195,8 @@ public class TypeChartView extends View {
             case MotionEvent.ACTION_MOVE:
                 if (isHeld && !mScaleDetector.isInProgress()) {
 					int pointer = event.findPointerIndex(pointerId);
-                    xOffset = (int)(ogXOffset + event.getX(pointer) - touchStartX);
-                    yOffset = (int)(ogYOffset + event.getY(pointer) - touchStartY);
+                    xOffset = (int)(ogXOffset + event.getX(/*pointer*/) - touchStartX);
+                    yOffset = (int)(ogYOffset + event.getY(/*pointer*/) - touchStartY);
                     checkOffsetBounds();
                     invalidate();
                 }
@@ -160,6 +206,7 @@ public class TypeChartView extends View {
 					if(event.getX() < mHeaderSize || event.getY() < mHeaderSize
 				}*/
                 isHeld = false;
+
                 return true;
             case MotionEvent.ACTION_CANCEL:
                 isHeld = false;

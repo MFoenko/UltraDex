@@ -44,11 +44,18 @@ public class TypeView extends TextView{
 			bg = (GradientDrawable)getContext().getResources().getDrawable(R.drawable.type_background);
 			bg.setAlpha(0xCC);
 		}
-		bg.setColor(PokedexDatabase.TYPE_COLORS[mTypeVersion][mTypeId]);
-		setBackgroundDrawable(bg);
-		setText(PokedexDatabase.TYPE_NAMES[mTypeVersion][mTypeId]);
-		super.drawableStateChanged();
-	}
+        try {
+            bg.setColor(PokedexDatabase.TYPE_COLORS[mTypeVersion][mTypeId]);
+            setBackgroundDrawable(bg);
+            setText(PokedexDatabase.TYPE_NAMES[mTypeVersion][mTypeId]);
+            super.drawableStateChanged();
+        }catch(IndexOutOfBoundsException e){
+            setText("---");
+            bg.setColor(0x00FFFFFF);
+            setBackgroundDrawable(bg);
+        }
+
+     }
 
 
 
