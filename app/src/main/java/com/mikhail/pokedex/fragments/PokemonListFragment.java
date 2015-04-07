@@ -25,6 +25,17 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 	View filters;
 
+	private static final String KEY_SHOW_FORMS = "showforms";
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		((PokemonFilter)mFilter).showForms = getActivity().getSharedPreferences("", 0).getBoolean(KEY_SHOW_FORMS, true);
+		mFilter.filter();
+	}
+
+	
+	
 	@Override
 	public RecyclerFragment.ListItemAdapter<Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> getNewAdapter() {
 		return new PokemonListAdapter();
@@ -72,6 +83,11 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 		if (!super.displayData()) {
 			return false;
 		}
+
+		
+		CheckBox formsCB = (CheckBox)filters.findViewById(R.id.show_forms_cb);
+		formsCB.setChecked(((PokemonFilter)mFilter).showForms);
+		
 		return true;
 	}
 
@@ -84,6 +100,23 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	public View getRightDrawerLayout(LayoutInflater inflater, ViewGroup container) {
 		if (filters == null) {
 			filters = inflater.inflate(R.layout.pokemon_list_filter, container, false);
+
+			CheckBox formsCB = (CheckBox)filters.findViewById(R.id.show_forms_cb);
+			formsCB.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+					@Override
+					public void onCheckedChanged(CompoundButton p1, boolean p2) {
+						p1.getContext().getSharedPreferences("", 0).edit().putBoolean(KEY_SHOW_FORMS, p2).apply();
+						//if (mFilter != null) {
+							((PokemonFilter)mFilter).showForms = p2;
+							mFilter.filter();
+						//}
+					}
+
+
+				});
+			//formsCB.setChecked(formsCB.getContext().getSharedPreferences("", 0).getBoolean(KEY_SHOW_FORMS, true));
+
 			ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
 			for (int i=0;i < PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++) {
 				View typeFilter = inflater.inflate(R.layout.type_filter, typesContainer, false);
@@ -292,17 +325,22 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 		private int len = PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]].length;
 		public int[][] stats = {Arrays.copyOf(PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len), Arrays.copyOf(PokedexDatabase.STAT_MAXES[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len)};
 		public int[] total = {PokedexDatabase.STAT_TOTAL_MIN, PokedexDatabase.STAT_TOTAL_MAX};
+		public boolean showForms;
+		public boolean[] eggGroups = new boolean[PokedexDatabase.EGG_GROUP_NAMES.length];
+
 		public final static int MIN = 0;
 		public final static int MAX = 1;
+
+
 		public LoadIconsTask task;
-		
+
 		public PokemonFilter(ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder> adapter, Activity a) {
 			super(adapter, a);
 		}
 
 		@Override
 		public boolean isMatchFilter(PokedexClasses.Pokemon item) {
-			return isMatchSearch(item) && isMatchType(item) && isMatchStat(item);
+			return isMatchSearch(item) && isMatchType(item) && isMatchStat(item) && isMatchForm(item);
 		}
 
 		public boolean isMatchStat(Pokemon item) {
@@ -349,7 +387,22 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			}
 		}
 
-
+		public boolean isMatchEggGroup(Pokemon item){
+			if(sumItems(eggGroups) == 0){
+				return true;
+			}
+			
+			for(int group:item.eggGroups){
+				if(eggGroups[group]){
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public boolean isMatchForm(Pokemon item) {
+			return showForms || !item.isForm;			
+		}
 
 		private static int sumItems(int[] arr) {
 			int total=0;

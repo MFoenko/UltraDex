@@ -25,47 +25,47 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 
     public static final DrawerItem[] DRAWER_ITEMS = new DrawerItem[]{
-            new DrawerHeader("Dexes"),
-            new MainPokemonListFragment(),
-            new MainMoveListFragment(),
-            new MainAbilityListFragment(),
-            new MainItemListFragment(),
-            new DrawerHeader("Tools"),
-            new TypeChartFragment(),
-            new NaturesFragment(),
-            new DrawerHeader("App"),
-            new DrawerItem(){
+		new DrawerHeader("Dexes"),
+		new MainPokemonListFragment(),
+		new MainMoveListFragment(),
+		new MainAbilityListFragment(),
+		new MainItemListFragment(),
+		new DrawerHeader("Tools"),
+		new TypeChartFragment(),
+		new NaturesFragment(),
+		new DrawerHeader("App"),
+		new DrawerItem(){
 
-                @Override
-                public String getDrawerItemName() {
-                    return "Bug Report";
-                }
+			@Override
+			public String getDrawerItemName() {
+				return "Bug Report";
+			}
 
-                @Override
-                public int getDrawerItemIconResourceId() {
-                    return R.drawable.ic_bug_report;
-                }
+			@Override
+			public int getDrawerItemIconResourceId() {
+				return R.drawable.ic_bug_report;
+			}
 
-                @Override
-                public byte getDrawerItemType() {
-                    return DRAWER_ITEM_TYPE_CLICKABLE;
-                }
+			@Override
+			public byte getDrawerItemType() {
+				return DRAWER_ITEM_TYPE_CLICKABLE;
+			}
 
-                @Override
-                public boolean onDrawerItemClick(Context context) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/html");
-                    intent.putExtra(Intent.EXTRA_EMAIL, CrashDialog.DEV_EMAIL);
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "Ultadex 3.0b Bug");
-                    intent.putExtra(Intent.EXTRA_TEXT, "Describe the bug here");
+			@Override
+			public boolean onDrawerItemClick(Context context) {
+				Intent intent = new Intent(Intent.ACTION_SEND);
+				intent.setType("text/html");
+				intent.putExtra(Intent.EXTRA_EMAIL, CrashDialog.DEV_EMAIL);
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Ultadex 3.0b Bug");
+				intent.putExtra(Intent.EXTRA_TEXT, "Describe the bug here");
 
-                    context.startActivity(Intent.createChooser(intent, "Send Email"));
-                    return false;
-                }
+				context.startActivity(Intent.createChooser(intent, "Send Email"));
+				return false;
+			}
 
 
-            },
-            new CreditsFragment()
+		},
+		new CreditsFragment()
 
     };
 	public static final int POKEDEX_FRAGMENT = 1;
@@ -154,8 +154,6 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		if (DRAWER_ITEMS[p3].onDrawerItemClick(this)) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.beginTransaction().replace(R.id.content_view, (Fragment)DRAWER_ITEMS[p3]).commit();
-			if (DRAWER_ITEMS[p3] instanceof InfoPagerFragment)
-				((InfoPagerFragment)DRAWER_ITEMS[p3]).displayData();
 			getSupportActionBar().setTitle(DRAWER_ITEMS[p3].getDrawerItemName());
 			mLeftDrawer.setItemChecked(p3, true);
 			if (DRAWER_ITEMS[p3] instanceof UsesRightDrawer) {
@@ -172,6 +170,9 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 				? DrawerLayout.LOCK_MODE_UNLOCKED
 				: DrawerLayout.LOCK_MODE_LOCKED_CLOSED), mRightDrawer);
 
+			if (DRAWER_ITEMS[p3] instanceof InfoPagerFragment)
+				((InfoPagerFragment)DRAWER_ITEMS[p3]).displayData();
+			
 
 		}
 
@@ -260,13 +261,13 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 					TextView itemName = (TextView)listItemView.findViewById(R.id.name);
 					itemName.setText(item.getDrawerItemName());
-					if(item.getDrawerItemIconResourceId() != DrawerItem.DRAWER_ICON_NONE){
+					if (item.getDrawerItemIconResourceId() != DrawerItem.DRAWER_ICON_NONE) {
 						ImageView iconIV = (ImageView)listItemView.findViewById(R.id.icon);
-						
+
 						iconIV.setImageResource(item.getDrawerItemIconResourceId());
 					}
 					return listItemView;
-				
+
 				case DrawerItem.DRAWER_ITEM_TYPE_HEADER:
 					if (convertView == null) {
 						LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -278,7 +279,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 					TextView headerName = (TextView)listItemView.findViewById(R.id.header);
 					headerName.setText(item.getDrawerItemName());
 					return listItemView;
-					
+
 			}
 			return convertView;
 		}

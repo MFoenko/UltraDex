@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        style="@style/SubHeaderText"
+        style="@style/SmallText"
         />
     <TextView
         android:id="@+id/stat_down"
@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        style="@style/SubHeaderText"
+        style="@style/SmallText"
         />
 
 

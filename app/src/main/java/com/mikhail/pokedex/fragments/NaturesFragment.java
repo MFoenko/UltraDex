@@ -18,6 +18,8 @@ import com.mikhail.pokedex.R;
 import com.mikhail.pokedex.data.PokedexClasses;
 import com.mikhail.pokedex.data.PokedexDatabase;
 import com.mikhail.pokedex.misc.DrawerItem;
+import android.view.*;
+import android.content.*;
 
 /**
  * Created by mchail on 4/6/15.
@@ -28,9 +30,17 @@ public class NaturesFragment extends Fragment implements DrawerItem {
     public static final int ICON = R.drawable.ic_natures;
 
 
+	SharedPreferences mPrefs;
+	
+	
     RecyclerView mNaturesList;
     ViewGroup mNaturesTable;
+	
+	
 
+	public final static String KEY_IS_IN_LIST = "isinlist";
+	
+	boolean mIsInListForm = true;
 
 
     public static final PokedexClasses.Nature[] NATURES = PokedexDatabase.NATURES;
@@ -54,9 +64,48 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 
         createNaturesTable(mNaturesTable);
 
-
+		mPrefs = getActivity().getSharedPreferences("",0);
+		mIsInListForm =  mPrefs.getBoolean(KEY_IS_IN_LIST, true);
+		redrawLayout();
+		
         return root;
     }
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.switch_layout, menu);
+	}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		
+		menu.findItem(R.id.switch_layout).setIcon(!mIsInListForm? R.drawable.ic_view_stream_white_48dp:R.drawable.ic_view_module_white_48dp);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+			case R.id.switch_layout:
+				mIsInListForm = ! mIsInListForm;
+				redrawLayout();
+				getActivity().invalidateOptionsMenu();
+				mPrefs.edit().putBoolean(KEY_IS_IN_LIST, mIsInListForm).apply();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	private void redrawLayout(){
+		if(mIsInListForm){
+			mNaturesList.setVisibility(View.VISIBLE);
+			mNaturesTable.setVisibility(View.GONE);
+		}else{
+			mNaturesList.setVisibility(View.GONE);
+			mNaturesTable.setVisibility(View.VISIBLE);
+		}
+	}
+	
 
     private static void createNaturesTable(ViewGroup container){
         int NATURES_WIDTH = 5;
@@ -91,6 +140,9 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 
                 }else{
                     cell.setText(NATURES[r*NATURES_WIDTH+c].name);
+					if(r==c){
+						cell.setBackgroundColor(0x66+PokedexDatabase.STAT_TOTAL_COLOR);
+					}
 
                 }
                 row.addView(cell);

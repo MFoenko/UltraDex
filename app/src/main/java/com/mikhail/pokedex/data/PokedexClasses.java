@@ -77,6 +77,7 @@ public abstract class PokedexClasses {
 		public final int order;
 		public final boolean isDefault;
 		public final boolean hasUniqueIcon;
+		public final boolean isForm;
 
 		public Bitmap icon;
 
@@ -94,6 +95,7 @@ public abstract class PokedexClasses {
 			this.order = builder.order;
 			this.isDefault = true;
 			this.hasUniqueIcon = builder.hasUniqueIcon;
+			this.isForm = id != dispId;
 			this.baseHappiness = builder.baseHappiness;
 			this.catchRate = builder.catchRate;
 			this.hatchCycles = builder.stepsToHatch;
