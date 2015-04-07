@@ -664,10 +664,32 @@ public abstract class PokedexClasses {
             statDown = statIdDown;
         }
 
+        public static final int SORT_BY_NAME_ASC = 2;
+        public static final int SORT_BY_NAME_DES = -2;
+        public static final int SORT_BY_STAT_UP_ASC = 3;
+        public static final int SORT_BY_STAT_UP_DES = -3;
+        public static final int SORT_BY_STAT_DOWN_ASC = 4;
+        public static final int SORT_BY_STAT_DOWN_DES = -4;
+
         @Override
-        public int compareTo(Nature other, int compareOn) {
+        public int compareTo(Nature other, int sortBy) {
+            switch (sortBy) {
+                case SORT_BY_NAME_ASC:
+                    return name.compareTo(other.name);
+                case SORT_BY_NAME_DES:
+                    return other.name.compareTo(name);
+                case SORT_BY_STAT_UP_ASC:
+                    return statUp - other.statUp;
+                case SORT_BY_STAT_UP_DES:
+                    return other.statUp - statUp;
+                case SORT_BY_STAT_DOWN_ASC:
+                    return statDown - other.statDown;
+                case SORT_BY_STAT_DOWN_DES:
+                    return other.statDown - statDown;
+            }
             return 0;
         }
+
     }
 
 	public interface Linkable {

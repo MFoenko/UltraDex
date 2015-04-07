@@ -7,11 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mikhail.pokedex.R;
@@ -20,6 +24,8 @@ import com.mikhail.pokedex.data.PokedexDatabase;
 import com.mikhail.pokedex.misc.DrawerItem;
 import android.view.*;
 import android.content.*;
+
+import java.util.ArrayList;
 
 /**
  * Created by mchail on 4/6/15.
@@ -35,7 +41,8 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 	
     RecyclerView mNaturesList;
     ViewGroup mNaturesTable;
-	
+
+    NaturesListAdapter mAdapter;
 	
 
 	public final static String KEY_IS_IN_LIST = "isinlist";
@@ -59,7 +66,7 @@ public class NaturesFragment extends Fragment implements DrawerItem {
         mNaturesTable = (ViewGroup)root.findViewById(R.id.natures_table);
 
         mNaturesList.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        mNaturesList.setAdapter(new NaturesListAdapter());
+        mNaturesList.setAdapter(mAdapter = new NaturesListAdapter());
         mNaturesList.setVisibility(View.GONE);
 
         createNaturesTable(mNaturesTable);
@@ -74,13 +81,17 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.switch_layout, menu);
+		inflater.inflate(R.menu.sort, menu);
+        Spinner sortSpinner = (Spinner)menu.findItem(R.id.sort).getActionView();
+        sortSpinner.setAdapter(new NatureSortAdapter(mAdapter));
+        inflater.inflate(R.menu.switch_layout, menu);
+
 	}
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		
+		menu.findItem(R.id.sort).setVisible(mIsInListForm);
 		menu.findItem(R.id.switch_layout).setIcon(!mIsInListForm? R.drawable.ic_view_stream_white_48dp:R.drawable.ic_view_module_white_48dp);
 	}
 
@@ -141,7 +152,7 @@ public class NaturesFragment extends Fragment implements DrawerItem {
                 }else{
                     cell.setText(NATURES[r*NATURES_WIDTH+c].name);
 					if(r==c){
-						cell.setBackgroundColor(0x66+PokedexDatabase.STAT_TOTAL_COLOR);
+						cell.setBackgroundColor(0x66000000+PokedexDatabase.STAT_TOTAL_COLOR);
 					}
 
                 }
@@ -151,9 +162,150 @@ public class NaturesFragment extends Fragment implements DrawerItem {
         }
     }
 
+    protected static class NatureSortAdapter extends BaseAdapter implements AdapterView.OnItemSelectedListener {
+
+        private Pair<String, Integer>[] sortOptions;
+        private int sortBy;
+        private NaturesListAdapter mAdapter;
+        private PokedexClasses.Nature[] originalList = PokedexDatabase.NATURES;
+
+        public NatureSortAdapter(NaturesListAdapter adapter){
+            this.sortOptions = new Pair[]{
+                    new Pair<String, Integer>("Name ▲", PokedexClasses.Nature.SORT_BY_NAME_ASC),
+                    new Pair<String, Integer>("Name ▼", PokedexClasses.Nature.SORT_BY_NAME_DES),
+                    new Pair<String, Integer>("Stat + ▲", PokedexClasses.Nature.SORT_BY_STAT_UP_ASC),
+                    new Pair<String, Integer>("Stat + ▼", PokedexClasses.Nature.SORT_BY_STAT_UP_DES),
+                    new Pair<String, Integer>("Stat - ▲", PokedexClasses.Nature.SORT_BY_STAT_DOWN_ASC),
+                    new Pair<String, Integer>("Stat - ▼", PokedexClasses.Nature.SORT_BY_STAT_DOWN_DES)
+            };
+            this.mAdapter = adapter;
+        }
+
+        @Override
+        public int getCount(){
+            return sortOptions.length;
+        }
+
+        @Override
+        public Object getItem(int p1){
+
+            return sortOptions[p1];
+        }
+
+        @Override
+        public long getItemId(int p1){
+            return 0;
+        }
+
+        @Override
+        public View getView(int pos, View view, ViewGroup container){
+            if (sortOptions == null)
+                return null;
+
+            if (view == null){
+                LayoutInflater inflater = LayoutInflater.from(container.getContext());
+                view = inflater.inflate(R.layout.sort_spinner_list_item, container, false);
+            }
+
+            TextView labelTV = (TextView)view.findViewById(R.id.label);
+            labelTV.setText(sortOptions[pos].first);
+
+            return view;
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> p1){
+            //((TextView)((LinearLayout)p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
+
+        }
+
+        public void sort(){
+            sort(originalList, sortBy);
+        }
+
+        public void sort(PokedexClasses.VarComparable[] inputArr, int sortBy){
+
+            if (inputArr == null || inputArr.length == 0){
+                return;
+            }
+
+            int length = inputArr.length;
+            try{
+                quickSort(inputArr, length, sortBy, 0, length - 1);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+
+        }
+
+        private void quickSort(PokedexClasses.VarComparable[]array, int length, int sortBy, int lowerIndex, int higherIndex){
+
+            int i = lowerIndex;
+            int j = higherIndex;
+            // calculate pivot number, I am taking pivot as middle index number
+            PokedexClasses.VarComparable pivot = array[lowerIndex + (higherIndex - lowerIndex) / 2];
+            // Divide into two arrays
+            while (i <= j){
+                /**
+                 * In each iteration, we will identify a number from left side which
+                 * is greater then the pivot value, and also we will identify a number
+                 * from right side which is less then the pivot value. Once the search
+                 * is done, then we exchange both numbers.
+                 */
+                while (array[i].compareTo(pivot, sortBy) < 0){
+                    i++;
+                }
+                while (array[j].compareTo(pivot, sortBy) > 0){
+                    j--;
+                }
+                if (i <= j){
+                    exchangeObjects(array, i, j);
+                    //move index to next position on both sides
+                    i++;
+                    j--;
+                }
+            }
+            // call quickSort() method recursively
+            if (lowerIndex < j)
+                quickSort(array, length, sortBy, lowerIndex, j);
+            if (i < higherIndex)
+                quickSort(array, length, sortBy, i, higherIndex);
+        }
+
+        private void exchangeObjects(PokedexClasses.VarComparable[] array, int i, int j){
+            PokedexClasses.VarComparable temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+            adapterSwap(i, j);
+        }
+
+
+        private void adapterSwap(int i, int j){
+            ArrayList<PokedexClasses.Nature> list = mAdapter.listItems;
+            PokedexClasses.Nature k = list.get(j);
+            list.set(j, list.get(i));
+            list.set(i, k);
+        }
+
+
+        @Override
+        public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4){
+            sortBy = sortOptions[p3].second;
+            sort();
+			/*try {
+			 ((TextView) ((LinearLayout) p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
+			 }catch(NullPointerException e){
+			 e.printStackTrace();
+			 }*/
+        }
+
+    }
+
+
     private static final class NaturesListAdapter extends RecyclerView.Adapter<NatureViewHolder>{
 
-        public static final PokedexClasses.Nature[] NATURES = PokedexDatabase.NATURES;
+        public static final ArrayList<PokedexClasses.Nature> listItems = new ArrayList<PokedexClasses.Nature>();
 
         @Override
         public NatureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -163,17 +315,24 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 
         @Override
         public void onBindViewHolder(NatureViewHolder holder, int position) {
-            PokedexClasses.Nature nature = NATURES[position];
+            PokedexClasses.Nature nature = listItems.get(position);
             holder.nameTV.setText(nature.name);
-            holder.statUpTV.setText("-"+PokedexDatabase.STAT_LABELS[PokedexDatabase.STAT_LABELS.length-1][nature.statUp]);
-            holder.statUpTV.setBackgroundColor(0x66000000 + PokedexDatabase.STAT_COLORS[PokedexDatabase.STAT_COLORS.length-1][nature.statUp]);
-            holder.statDownTV.setText("+"+PokedexDatabase.STAT_LABELS[PokedexDatabase.STAT_LABELS.length-1][nature.statDown]);
-            holder.statDownTV.setBackgroundColor(0x66000000 + PokedexDatabase.STAT_COLORS[PokedexDatabase.STAT_COLORS.length-1][nature.statDown]);
+           if(nature.statUp != nature.statDown){
+               holder.statDownTV.setVisibility(View.VISIBLE);
+               holder.statUpTV.setText("-" + PokedexDatabase.STAT_LABELS[PokedexDatabase.STAT_LABELS.length - 1][nature.statUp]);
+               holder.statUpTV.setBackgroundColor(0x66000000 + PokedexDatabase.STAT_COLORS[PokedexDatabase.STAT_COLORS.length - 1][nature.statUp]);
+               holder.statDownTV.setText("+" + PokedexDatabase.STAT_LABELS[PokedexDatabase.STAT_LABELS.length - 1][nature.statDown]);
+               holder.statDownTV.setBackgroundColor(0x66000000 + PokedexDatabase.STAT_COLORS[PokedexDatabase.STAT_COLORS.length - 1][nature.statDown]);
+           }else{
+               holder.statDownTV.setVisibility(View.GONE);
+               holder.statUpTV.setText("No Effect");
+               holder.statUpTV.setBackgroundColor(0x66000000 + PokedexDatabase.STAT_TOTAL_COLOR);
+           }
         }
 
         @Override
         public int getItemCount() {
-            return NATURES.length;
+            return listItems.size();
         }
     }
 

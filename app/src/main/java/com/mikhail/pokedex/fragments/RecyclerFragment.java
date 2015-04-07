@@ -98,19 +98,20 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 		
 	}
 
-	
-	
 
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu){
 		super.onPrepareOptionsMenu(menu);
-		for (int i=0;i < menuItems.length;i++){
-			menuItems[i].setVisible(isPrimary);
-		}
+        for (MenuItem menuItem : menuItems) {
+            menuItem.setVisible(isPrimary);
+        }
 	}
 
-
+    public void clearFilters(View view){
+        mFilter = getNewFilter(getActivity());
+        mFilter.filter();
+    }
 
 
 	public abstract ListItemAdapter<T, VH> getNewAdapter();
@@ -304,12 +305,12 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 
 		public abstract boolean isMatchSearch(T item);
 
-		private void adapterSwap(int i, int j){
-			ArrayList<T> list = adapter.listItems;
-			T k = list.get(j);
-			list.set(j, list.get(i));
-			list.set(i, k);
-		}
+        private void adapterSwap(int i, int j){
+            ArrayList<T> list = adapter.listItems;
+            T k = list.get(j);
+            list.set(j, list.get(i));
+            list.set(i, k);
+        }
 
 
 

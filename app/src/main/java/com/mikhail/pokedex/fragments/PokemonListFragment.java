@@ -5,9 +5,7 @@ import android.os.*;
 import android.support.v7.widget.*;
 import android.util.*;
 import android.view.*;
-import android.view.View.*;
 import android.widget.*;
-import android.widget.CompoundButton.*;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.activities.*;
 import com.mikhail.pokedex.data.*;
@@ -24,13 +22,14 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 
 	View filters;
+    PokemonFilter mFilter;
 
 	private static final String KEY_SHOW_FORMS = "showforms";
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		((PokemonFilter)mFilter).showForms = getActivity().getSharedPreferences("", 0).getBoolean(KEY_SHOW_FORMS, true);
+		mFilter.showForms = getActivity().getSharedPreferences("", 0).getBoolean(KEY_SHOW_FORMS, true);
 		mFilter.filter();
 	}
 
@@ -45,28 +44,26 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	@Override
 	public Pair<String, Integer>[] getSortOptions() {
 		return new Pair[]{
-			new Pair<String, Integer>("ID \u25B2", Pokemon.SORT_BY_DISP_ID_ASC),
-			new Pair<String, Integer>("ID \u25BC", Pokemon.SORT_BY_DISP_ID_DES),
-			new Pair<String, Integer>("Name \u25B2", Pokemon.SORT_BY_NAME_ASC),
-			new Pair<String, Integer>("Name \u25BC", Pokemon.SORT_BY_NAME_DES),
-			new Pair<String, Integer>("Type \u25B2", Pokemon.SORT_BY_TYPE_ASC),
-			new Pair<String, Integer>("Type \u25BC", Pokemon.SORT_BY_TYPE_DES),
-			new Pair<String, Integer>("HP \u25B2", Pokemon.SORT_BY_HP_ASC),
-			new Pair<String, Integer>("HP \u25BC", Pokemon.SORT_BY_HP_DES),
-			new Pair<String, Integer>("Attack \u25B2", Pokemon.SORT_BY_ATTACK_ASC),
-			new Pair<String, Integer>("Attack \u25BC", Pokemon.SORT_BY_ATTACK_DES),
-			new Pair<String, Integer>("Defense \u25B2", Pokemon.SORT_BY_DEFENSE_ASC),
-			new Pair<String, Integer>("Defense \u25BC", Pokemon.SORT_BY_DEFENSE_DES),
-			new Pair<String, Integer>("Sp. Attack \u25B2", Pokemon.SORT_BY_SPECIAL_ATTACK_ASC),
-			new Pair<String, Integer>("Sp. Attack \u25BC", Pokemon.SORT_BY_SPECIAL_ATTACK_DES),
-			new Pair<String, Integer>("Sp. Defense \u25B2", Pokemon.SORT_BY_SPECIAL_DEFENSE_ASC),
-			new Pair<String, Integer>("Sp. Defense \u25BC", Pokemon.SORT_BY_SPECIAL_DEFENSE_DES),
-			new Pair<String, Integer>("Speed \u25B2", Pokemon.SORT_BY_SPEED_ASC),
-			new Pair<String, Integer>("Speed \u25BC", Pokemon.SORT_BY_SPEED_DES),
-			new Pair<String, Integer>("Total \u25B2", Pokemon.SORT_BY_STAT_TOTAL_ASC),
-			new Pair<String, Integer>("Total \u25BC", Pokemon.SORT_BY_STAT_TOTAL_DES),
-
-
+			new Pair<>("ID \u25B2", Pokemon.SORT_BY_DISP_ID_ASC),
+			new Pair<>("ID \u25BC", Pokemon.SORT_BY_DISP_ID_DES),
+			new Pair<>("Name \u25B2", Pokemon.SORT_BY_NAME_ASC),
+			new Pair<>("Name \u25BC", Pokemon.SORT_BY_NAME_DES),
+			new Pair<>("Type \u25B2", Pokemon.SORT_BY_TYPE_ASC),
+			new Pair<>("Type \u25BC", Pokemon.SORT_BY_TYPE_DES),
+			new Pair<>("HP \u25B2", Pokemon.SORT_BY_HP_ASC),
+			new Pair<>("HP \u25BC", Pokemon.SORT_BY_HP_DES),
+			new Pair<>("Attack \u25B2", Pokemon.SORT_BY_ATTACK_ASC),
+			new Pair<>("Attack \u25BC", Pokemon.SORT_BY_ATTACK_DES),
+			new Pair<>("Defense \u25B2", Pokemon.SORT_BY_DEFENSE_ASC),
+			new Pair<>("Defense \u25BC", Pokemon.SORT_BY_DEFENSE_DES),
+			new Pair<>("Sp. Attack \u25B2", Pokemon.SORT_BY_SPECIAL_ATTACK_ASC),
+			new Pair<>("Sp. Attack \u25BC", Pokemon.SORT_BY_SPECIAL_ATTACK_DES),
+			new Pair<>("Sp. Defense \u25B2", Pokemon.SORT_BY_SPECIAL_DEFENSE_ASC),
+			new Pair<>("Sp. Defense \u25BC", Pokemon.SORT_BY_SPECIAL_DEFENSE_DES),
+			new Pair<>("Speed \u25B2", Pokemon.SORT_BY_SPEED_ASC),
+			new Pair<>("Speed \u25BC", Pokemon.SORT_BY_SPEED_DES),
+			new Pair<>("Total \u25B2", Pokemon.SORT_BY_STAT_TOTAL_ASC),
+			new Pair<>("Total \u25BC", Pokemon.SORT_BY_STAT_TOTAL_DES),
 		};
 
 	}
@@ -86,14 +83,14 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 		
 		CheckBox formsCB = (CheckBox)filters.findViewById(R.id.show_forms_cb);
-		formsCB.setChecked(((PokemonFilter)mFilter).showForms);
+		formsCB.setChecked(mFilter.showForms);
 		
 		return true;
 	}
 
 	@Override
 	public RecyclerFragment.Filter<PokedexClasses.Pokemon, PokemonListFragment.PokemonListAdapter.PokemonViewHolder> getNewFilter(Activity a) {
-		return new PokemonFilter(mAdapter, a);
+		return mFilter = new PokemonFilter(mAdapter, a);
 	}
 
 	@Override
@@ -102,13 +99,13 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			filters = inflater.inflate(R.layout.pokemon_list_filter, container, false);
 
 			CheckBox formsCB = (CheckBox)filters.findViewById(R.id.show_forms_cb);
-			formsCB.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+			formsCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
 					@Override
 					public void onCheckedChanged(CompoundButton p1, boolean p2) {
 						p1.getContext().getSharedPreferences("", 0).edit().putBoolean(KEY_SHOW_FORMS, p2).apply();
 						//if (mFilter != null) {
-							((PokemonFilter)mFilter).showForms = p2;
+							mFilter.showForms = p2;
 							mFilter.filter();
 						//}
 					}
@@ -127,7 +124,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 						public void onCheckedChanged(CompoundButton p1, boolean p2) {
 							int type = (Integer)p1.getTag();
 							Log.e("AAA", "" + mFilter);
-							((PokemonFilter)mFilter).types[type] = p2;
+                            mFilter.types[type] = p2;
 							mFilter.filter();
 						}
 					});
@@ -144,7 +141,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 				((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_LABELS[statVersion][i] + ":");
 
 				ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
-				RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
+				RangeSeekBar<Integer> bar = new RangeSeekBar<>(
 					PokedexDatabase.STAT_MINS[statVersion][i],
 					PokedexDatabase.STAT_MAXES[statVersion][i],
 					container.getContext(),
@@ -159,8 +156,8 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 						public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
 							((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
 							int i = (Integer)bar.getTag();
-							((PokemonFilter)mFilter).stats[0][i] = minValue;
-							((PokemonFilter)mFilter).stats[1][i] = maxValue;
+                            mFilter.stats[0][i] = minValue;
+                            mFilter.stats[1][i] = maxValue;
 							mFilter.filter();
 						}
 					});
@@ -178,7 +175,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_TOTAL_LABEL + ":");
 
 			ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
-			RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
+			RangeSeekBar<Integer> bar = new RangeSeekBar<>(
 				PokedexDatabase.STAT_TOTAL_MIN,
 				PokedexDatabase.STAT_TOTAL_MAX,
 				container.getContext(),
@@ -191,8 +188,8 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 					@Override
 					public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
 						((TextView)((ViewGroup)bar.getParent().getParent()).findViewById(R.id.values)).setText(minValue + " - " + maxValue);
-						((PokemonFilter)mFilter).total[0] = minValue;
-						((PokemonFilter)mFilter).total[1] = maxValue;
+                        mFilter.total[0] = minValue;
+                        mFilter.total[1] = maxValue;
 						mFilter.filter();
 					}
 				});
@@ -201,7 +198,23 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 		}
 
+        ViewGroup eggGroupsContainer = (ViewGroup)filters.findViewById(R.id.egg_group_filters);
+        for(int e=0;e<PokedexDatabase.EGG_GROUP_NAMES.length;e++){
+            View eggGroupFilter = inflater.inflate(R.layout.egg_group_filter_item, eggGroupsContainer, false);
+            TextView nameTV = (TextView)eggGroupFilter.findViewById(R.id.name);
+            CheckBox checkBox = (CheckBox)eggGroupFilter.findViewById(R.id.check_box);
 
+            nameTV.setText(PokedexDatabase.EGG_GROUP_NAMES[e]);
+            checkBox.setTag(e);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mFilter.eggGroups[(int)buttonView.getTag()] = isChecked;
+                    mFilter.filter();
+                }
+            });
+            eggGroupsContainer.addView(eggGroupFilter);
+        }
 
 		return filters;
 	}
@@ -232,7 +245,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 				extrasView.removeAllViews();
 				if (Math.abs(sortBy) >= 10) {
 					TextView tv = new TextView(extrasView.getContext());
-					tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+					tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 					tv.setGravity(Gravity.CENTER);
 					extrasView.addView(tv);
 				}
@@ -340,7 +353,10 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 		@Override
 		public boolean isMatchFilter(PokedexClasses.Pokemon item) {
-			return isMatchSearch(item) && isMatchType(item) && isMatchStat(item) && isMatchForm(item);
+			Log.i("AAA", isMatchSearch(item) +" "+ isMatchType(item) +" "+ isMatchStat(item) +" "+ isMatchForm(item) +" "+ isMatchEggGroup(item));
+
+
+            return isMatchSearch(item) && isMatchType(item) && isMatchStat(item) && isMatchForm(item) && isMatchEggGroup(item);
 		}
 
 		public boolean isMatchStat(Pokemon item) {
@@ -351,16 +367,14 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 				}
 			}
 			int sumStat = sumItems(item.stats);
-			if (sumStat > total[MAX] || sumStat < total[MIN])
-				return false;
+			return sumStat <= total[MAX] && sumStat >= total[MIN];
 
-			return true;
 		}
 
 
 		@Override
 		public boolean isMatchSearch(PokedexClasses.Pokemon item) {
-			return item.getName().toLowerCase().indexOf(search.toString().toLowerCase()) > -1 || String.valueOf(item.getId()).indexOf(search.toString()) > -1; 
+            return item.getName().toLowerCase().contains(search.toLowerCase()) || String.valueOf(item.getId()).contains(search);
 		}
 
 		public boolean isMatchType(Pokemon item) {
@@ -388,7 +402,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 		}
 
 		public boolean isMatchEggGroup(Pokemon item){
-			if(sumItems(eggGroups) == 0){
+           if(sumItems(eggGroups) == 0){
 				return true;
 			}
 			
@@ -427,7 +441,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			if (task != null)
 				task.cancel(true);
 			task = new LoadIconsTask(mActivity, adapter);
-			task.execute(adapter.listItems.toArray(new Pokemon[0]));
+			task.execute(adapter.listItems.toArray(new Pokemon[adapter.listItems.size()]));
 		}
 
 
