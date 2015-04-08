@@ -211,6 +211,7 @@
     <eat-comment/>
     <string name="app_name">Ultradex</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="clear_filter_button_text">Clear Filters</string>
     <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values/common_strings.xml -->
     <eat-comment/>
     <string name="common_android_wear_notification_needs_update_text">An application requires an update to the Android Wear app.</string>
@@ -249,7 +250,7 @@
     <eat-comment/>
     <string name="credits_mchail">Concieved, designed, and programmed by McHail</string>
     <string name="credits_nintendo">Pokémon © 2002-2015 Pokémon. © 1995-2015 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo. No copyright or trademark infringement is intended in using Pokémon content in Ultradex</string>
-    <string name="credits_pkparasio">Models by Pkparasio  </string>
+    <string name="credits_pkparasio">Models by www.pkparaiso.com  </string>
     <string name="credits_silverbawxer">Additional graphics by Silverbawxer</string>
     <string name="credits_veekun">Database and icons by Veekun  </string>
     <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values/admob_strings.xml -->
