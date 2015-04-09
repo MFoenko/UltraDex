@@ -3,6 +3,7 @@ package com.mikhail.pokedex.fragments;
 import android.content.*;
 import android.support.v4.app.*;
 import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.PokedexDatabase;
 import com.mikhail.pokedex.misc.*;
 import android.view.*;
 import android.os.*;
@@ -19,8 +20,8 @@ public class IVCalculatorFragment extends Fragment implements DrawerItem {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.iv_calculator_fragment, container, false);
 		mPokemonACTV = (AutoCompleteTextView)root.findViewById(R.id.pokemon_auto_complete);
-		mPokemonACTV.setAdapter(new PokemonAutoCompleteAdapter());
-		
+		mPokemonACTV.setAdapter(new PokemonAutoCompleteAdapter(PokedexDatabase.getInstance(getActivity()).getAllPokemon()));
+		mPokemonACTV.setThreshold(1);
 		return root;
 	}
 

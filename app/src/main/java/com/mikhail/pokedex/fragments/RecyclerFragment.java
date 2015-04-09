@@ -115,7 +115,7 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 
 
 	public abstract ListItemAdapter<T, VH> getNewAdapter();
-	public abstract Filter<? extends VarComparable<T>, VH> getNewFilter(Activity a);
+	public abstract Filter<T, VH> getNewFilter(Activity a);
 	public abstract Pair<String,Integer>[] getSortOptions();
 
 

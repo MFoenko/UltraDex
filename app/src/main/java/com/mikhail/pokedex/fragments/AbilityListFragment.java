@@ -22,7 +22,7 @@ public abstract class AbilityListFragment<T> extends RecyclerFragment<T, Ability
 	}
 
 	@Override
-	public RecyclerFragment.Filter<? extends VarComparable<Ability>, AbilityListFragment.AbilityListAdapter.AbilityViewHolder> getNewFilter(Activity a){
+	public RecyclerFragment.Filter<Ability, AbilityListFragment.AbilityListAdapter.AbilityViewHolder> getNewFilter(Activity a){
 		return new AbilityFilter(mAdapter, a);
 	}
 

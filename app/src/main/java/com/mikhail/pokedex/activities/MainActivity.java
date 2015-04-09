@@ -133,13 +133,15 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		super.onResume();
 	}
 
-	@Override
-	public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-		super.onSaveInstanceState(outState, outPersistentState);
-		outState.putInt(KEY_FRAG, mLeftDrawer.getSelectedItemPosition());
-	}
 
-	@Override
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_FRAG, mLeftDrawer.getSelectedItemPosition());
+    }
+
+    @Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		onItemClick(null, null, savedInstanceState.getInt(KEY_FRAG), 0);

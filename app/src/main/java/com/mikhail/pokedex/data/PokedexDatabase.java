@@ -63,7 +63,8 @@ public class PokedexDatabase extends SQLiteOpenHelper {
         try {
             mContext.getAssets();
             InputStream input = mContext.getAssets().open(DATABASE_NAME);
-			db.deleteDatabase(new File(oldDbPath));
+			//db.deleteDatabase(new File(oldDbPath));
+            mContext.deleteDatabase(DATABASE_NAME);
             OutputStream output = new FileOutputStream(oldDbPath);
 
             byte[] buffer = new byte[1024];

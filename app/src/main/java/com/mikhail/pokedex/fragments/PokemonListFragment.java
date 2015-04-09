@@ -44,26 +44,26 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	@Override
 	public Pair<String, Integer>[] getSortOptions() {
 		return new Pair[]{
-			new Pair<>("ID \u25B2", Pokemon.SORT_BY_DISP_ID_ASC),
-			new Pair<>("ID \u25BC", Pokemon.SORT_BY_DISP_ID_DES),
-			new Pair<>("Name \u25B2", Pokemon.SORT_BY_NAME_ASC),
-			new Pair<>("Name \u25BC", Pokemon.SORT_BY_NAME_DES),
-			new Pair<>("Type \u25B2", Pokemon.SORT_BY_TYPE_ASC),
-			new Pair<>("Type \u25BC", Pokemon.SORT_BY_TYPE_DES),
-			new Pair<>("HP \u25B2", Pokemon.SORT_BY_HP_ASC),
-			new Pair<>("HP \u25BC", Pokemon.SORT_BY_HP_DES),
-			new Pair<>("Attack \u25B2", Pokemon.SORT_BY_ATTACK_ASC),
-			new Pair<>("Attack \u25BC", Pokemon.SORT_BY_ATTACK_DES),
-			new Pair<>("Defense \u25B2", Pokemon.SORT_BY_DEFENSE_ASC),
-			new Pair<>("Defense \u25BC", Pokemon.SORT_BY_DEFENSE_DES),
-			new Pair<>("Sp. Attack \u25B2", Pokemon.SORT_BY_SPECIAL_ATTACK_ASC),
-			new Pair<>("Sp. Attack \u25BC", Pokemon.SORT_BY_SPECIAL_ATTACK_DES),
-			new Pair<>("Sp. Defense \u25B2", Pokemon.SORT_BY_SPECIAL_DEFENSE_ASC),
-			new Pair<>("Sp. Defense \u25BC", Pokemon.SORT_BY_SPECIAL_DEFENSE_DES),
-			new Pair<>("Speed \u25B2", Pokemon.SORT_BY_SPEED_ASC),
-			new Pair<>("Speed \u25BC", Pokemon.SORT_BY_SPEED_DES),
-			new Pair<>("Total \u25B2", Pokemon.SORT_BY_STAT_TOTAL_ASC),
-			new Pair<>("Total \u25BC", Pokemon.SORT_BY_STAT_TOTAL_DES),
+			new Pair<String, Integer>("ID \u25B2", Pokemon.SORT_BY_DISP_ID_ASC),
+			new Pair<String, Integer>("ID \u25BC", Pokemon.SORT_BY_DISP_ID_DES),
+			new Pair<String, Integer>("Name \u25B2", Pokemon.SORT_BY_NAME_ASC),
+			new Pair<String, Integer>("Name \u25BC", Pokemon.SORT_BY_NAME_DES),
+			new Pair<String, Integer>("Type \u25B2", Pokemon.SORT_BY_TYPE_ASC),
+			new Pair<String, Integer>("Type \u25BC", Pokemon.SORT_BY_TYPE_DES),
+			new Pair<String, Integer>("HP \u25B2", Pokemon.SORT_BY_HP_ASC),
+			new Pair<String, Integer>("HP \u25BC", Pokemon.SORT_BY_HP_DES),
+			new Pair<String, Integer>("Attack \u25B2", Pokemon.SORT_BY_ATTACK_ASC),
+			new Pair<String, Integer>("Attack \u25BC", Pokemon.SORT_BY_ATTACK_DES),
+			new Pair<String, Integer>("Defense \u25B2", Pokemon.SORT_BY_DEFENSE_ASC),
+			new Pair<String, Integer>("Defense \u25BC", Pokemon.SORT_BY_DEFENSE_DES),
+			new Pair<String, Integer>("Sp. Attack \u25B2", Pokemon.SORT_BY_SPECIAL_ATTACK_ASC),
+			new Pair<String, Integer>("Sp. Attack \u25BC", Pokemon.SORT_BY_SPECIAL_ATTACK_DES),
+			new Pair<String, Integer>("Sp. Defense \u25B2", Pokemon.SORT_BY_SPECIAL_DEFENSE_ASC),
+			new Pair<String, Integer>("Sp. Defense \u25BC", Pokemon.SORT_BY_SPECIAL_DEFENSE_DES),
+			new Pair<String, Integer>("Speed \u25B2", Pokemon.SORT_BY_SPEED_ASC),
+			new Pair<String, Integer>("Speed \u25BC", Pokemon.SORT_BY_SPEED_DES),
+			new Pair<String, Integer>("Total \u25B2", Pokemon.SORT_BY_STAT_TOTAL_ASC),
+			new Pair<String, Integer>("Total \u25BC", Pokemon.SORT_BY_STAT_TOTAL_DES),
 		};
 
 	}
@@ -141,7 +141,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 				((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_LABELS[statVersion][i] + ":");
 
 				ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
-				RangeSeekBar<Integer> bar = new RangeSeekBar<>(
+				RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
 					PokedexDatabase.STAT_MINS[statVersion][i],
 					PokedexDatabase.STAT_MAXES[statVersion][i],
 					container.getContext(),
@@ -175,7 +175,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 			((TextView)rangeView.findViewById(R.id.label)).setText(PokedexDatabase.STAT_TOTAL_LABEL + ":");
 
 			ViewGroup seekBarContainer = (ViewGroup)rangeView.findViewById(R.id.seek_bar_container);
-			RangeSeekBar<Integer> bar = new RangeSeekBar<>(
+			RangeSeekBar<Integer> bar = new RangeSeekBar<Integer>(
 				PokedexDatabase.STAT_TOTAL_MIN,
 				PokedexDatabase.STAT_TOTAL_MAX,
 				container.getContext(),
@@ -209,7 +209,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mFilter.eggGroups[(int)buttonView.getTag()] = isChecked;
+                    mFilter.eggGroups[(Integer)buttonView.getTag()] = isChecked;
                     mFilter.filter();
                 }
             });
@@ -353,10 +353,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 		@Override
 		public boolean isMatchFilter(PokedexClasses.Pokemon item) {
-			Log.i("AAA", isMatchSearch(item) +" "+ isMatchType(item) +" "+ isMatchStat(item) +" "+ isMatchForm(item) +" "+ isMatchEggGroup(item));
-
-
-            return isMatchSearch(item) && isMatchType(item) && isMatchStat(item) && isMatchForm(item) && isMatchEggGroup(item);
+			 return isMatchSearch(item) && isMatchType(item) && isMatchStat(item) && isMatchForm(item) && isMatchEggGroup(item);
 		}
 
 		public boolean isMatchStat(Pokemon item) {
