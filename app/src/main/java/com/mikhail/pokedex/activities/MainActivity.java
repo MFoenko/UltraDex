@@ -33,6 +33,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		new DrawerHeader("Tools"),
 		new TypeChartFragment(),
 		new NaturesFragment(),
+		new IVCalculatorFragment(),
 		new DrawerHeader("App"),
 		new DrawerItem(){
 

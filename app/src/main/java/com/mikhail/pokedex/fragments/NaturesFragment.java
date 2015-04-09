@@ -1,31 +1,18 @@
 package com.mikhail.pokedex.fragments;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.mikhail.pokedex.R;
-import com.mikhail.pokedex.data.PokedexClasses;
-import com.mikhail.pokedex.data.PokedexDatabase;
-import com.mikhail.pokedex.misc.DrawerItem;
-import android.view.*;
 import android.content.*;
-
-import java.util.ArrayList;
+import android.os.*;
+import android.support.annotation.*;
+import android.support.v4.app.*;
+import android.support.v4.view.*;
+import android.support.v7.widget.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.*;
+import com.mikhail.pokedex.misc.*;
+import java.util.*;
 
 /**
  * Created by mchail on 4/6/15.
@@ -43,7 +30,7 @@ public class NaturesFragment extends Fragment implements DrawerItem {
     ViewGroup mNaturesTable;
 
     NaturesListAdapter mAdapter;
-	
+	NatureSortAdapter mSortAdapter;
 
 	public final static String KEY_IS_IN_LIST = "isinlist";
 	
@@ -83,7 +70,8 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.sort, menu);
         Spinner sortSpinner = (Spinner)menu.findItem(R.id.sort).getActionView();
-        sortSpinner.setAdapter(new NatureSortAdapter(mAdapter));
+        sortSpinner.setAdapter(mSortAdapter = new NatureSortAdapter(mAdapter));
+		sortSpinner.setOnItemSelectedListener(mSortAdapter);
         inflater.inflate(R.menu.switch_layout, menu);
 
 	}
@@ -179,6 +167,7 @@ public class NaturesFragment extends Fragment implements DrawerItem {
                     new Pair<String, Integer>("Stat - ▼", PokedexClasses.Nature.SORT_BY_STAT_DOWN_DES)
             };
             this.mAdapter = adapter;
+			mAdapter.listItems = new ArrayList<PokedexClasses.Nature>(Arrays.asList(originalList));
         }
 
         @Override
@@ -286,13 +275,18 @@ public class NaturesFragment extends Fragment implements DrawerItem {
             PokedexClasses.Nature k = list.get(j);
             list.set(j, list.get(i));
             list.set(i, k);
+			//mAdapter.notifyItemMoved(i,j);
+			//mAdapter.notifyItemMoved(j,i);
         }
 
 
         @Override
         public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4){
-            sortBy = sortOptions[p3].second;
+           	Log.i("AAA" , mAdapter.listItems.toString());
+			sortBy = sortOptions[p3].second;
             sort();
+			Log.i("AAA", mAdapter.listItems.toString());
+			mAdapter.notifyDataSetChanged();
 			/*try {
 			 ((TextView) ((LinearLayout) p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);
 			 }catch(NullPointerException e){
@@ -305,7 +299,7 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 
     private static final class NaturesListAdapter extends RecyclerView.Adapter<NatureViewHolder>{
 
-        public static final ArrayList<PokedexClasses.Nature> listItems = new ArrayList<PokedexClasses.Nature>();
+        public ArrayList<PokedexClasses.Nature> listItems = new ArrayList<PokedexClasses.Nature>();
 
         @Override
         public NatureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

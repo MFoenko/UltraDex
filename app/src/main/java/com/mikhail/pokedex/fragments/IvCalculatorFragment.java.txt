@@ -1,0 +1,629 @@
+package com.mikhail.pokedex.fragments;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.mikhail.pokedex.Activity.MainActivity;
+import com.mikhail.pokedex.Database.PokedexClasses;
+import com.mikhail.pokedex.Database.PokedexDatabase;
+import com.mikhail.pokedex.Database.UserDatabase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
+/*
+ * Failed to analyse overrides
+ */
+public class IvCalculatorFragment
+extends Fragment
+implements MainActivity.DrawerItem {
+    PokemonAutoCompleteAdapter autoAdapter;
+    int[][] chartIds;
+    UserDatabase db;
+    PokedexDatabase dex;
+    int[] favoriteIds;
+    PokedexClasses.Nature nat;
+    NatureSpinnerAdapter natureAdapter;
+    PokedexClasses.Pokemon poke;
+
+    public static int calculateStat(double d, double d2, double d3, double d4, double d5, boolean bl) {
+        if (!bl) return (int)(d3 * (d2 * (d5 + d * (double)2 + d4 / (double)4) / (double)100 + (double)5));
+        return (int)(d2 * (d5 + (double)100 + d * (double)2 + d4 / (double)4) / (double)100 + (double)10);
+    }
+
+    public void calculateIvs(View var1_1) {
+    }
+
+    public void createStatChart(LinearLayout linearLayout) {
+        String[] arrstring = new String[]{"Stats", "EVs", "IVs"};
+        int n = -1;
+        block0 : while (n < 6) {
+            LinearLayout linearLayout2 = new LinearLayout(linearLayout.getContext());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(-1, 0, (float)true ? 1 : 0);
+            linearLayout2.setLayoutParams((ViewGroup.LayoutParams)layoutParams);
+            int n2 = -1;
+            do {
+                TextView textView;
+                if (n2 >= arrstring.length) {
+                    linearLayout.addView((View)linearLayout2);
+                    ++n;
+                    continue block0;
+                }
+                if (n == -1) {
+                    TextView textView2;
+                    textView = textView2 = new TextView(linearLayout2.getContext());
+                    if (n2 == -1) {
+                        textView.setText((CharSequence)"");
+                    } else {
+                        textView.setText((CharSequence)arrstring[n2]);
+                    }
+                } else if (n2 == -1) {
+                    TextView textView3;
+                    textView = textView3 = new TextView(linearLayout2.getContext());
+                    textView.setText((CharSequence)PokedexDatabase.STAT_LABELS[n]);
+                    linearLayout2.setBackgroundColor(64 + PokedexDatabase.STAT_COLORS[n]);
+                } else if (n2 == -1 + arrstring.length) {
+                    TextView textView4;
+                    textView = textView4 = new TextView(linearLayout2.getContext());
+                    textView.setText((CharSequence)"---");
+                } else {
+                    EditText editText;
+                    textView = editText = new EditText(linearLayout2.getContext());
+                    textView.setInputType(2);
+                    textView.setSelectAllOnFocus(true);
+                    if (n2 == 0 && n == 5) {
+                        textView.setNextFocusDownId(2131296283);
+                    }
+                    if (n2 == 1) {
+                        TextView textView5 = textView;
+                        TextView textView6 = textView;
+                        StringBuffer stringBuffer = new StringBuffer();
+                        EditTextBoundChecker editTextBoundChecker = new EditTextBoundChecker(this, textView6, stringBuffer.append(PokedexDatabase.STAT_LABELS[n]).append(" EV").toString(), 255);
+                        textView5.addTextChangedListener((TextWatcher)editTextBoundChecker);
+                        if (n == 0) {
+                            textView.setId(2131296283);
+                        }
+                        if (n == 5) {
+                            textView.setImeOptions(2);
+                            TextView textView7 = textView;
+                            100000003 var19_18 = new 100000003(this);
+                            textView7.setOnKeyListener((View.OnKeyListener)var19_18);
+                        }
+                    }
+                }
+                TextView textView8 = textView;
+                LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(0, -1, (float)true ? 1 : 0);
+                textView8.setLayoutParams((ViewGroup.LayoutParams)layoutParams2);
+                textView.setGravity(17);
+                linearLayout2.addView((View)textView);
+                ++n2;
+            } while (true);
+            break;
+        }
+        return;
+    }
+
+    @Override
+    public int getItemIcon() {
+        return 2130837565;
+    }
+
+    @Override
+    public String getItemTitle() {
+        return "IV Calculator";
+    }
+
+    @Override
+    public int getItemType() {
+        return 1;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.dex = PokedexDatabase.getInstance((Context)activity);
+        this.db = UserDatabase.getInstance((Context)activity);
+        this.favoriteIds = this.db.getFavoritePokemonIds();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        NatureSpinnerAdapter natureSpinnerAdapter;
+        PokemonAutoCompleteAdapter pokemonAutoCompleteAdapter;
+        View view = layoutInflater.inflate(2130903056, viewGroup, false);
+        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView)view.findViewById(2131296306);
+        this.autoAdapter = pokemonAutoCompleteAdapter = new PokemonAutoCompleteAdapter(this, this.dex.getAllPokemonArray());
+        autoCompleteTextView.setAdapter((ListAdapter)this.autoAdapter);
+        autoCompleteTextView.setOnItemClickListener((AdapterView.OnItemClickListener)this.autoAdapter);
+        EditText editText = (EditText)view.findViewById(2131296307);
+        EditTextBoundChecker editTextBoundChecker = new EditTextBoundChecker(this, (TextView)editText, "Level", 100);
+        editText.addTextChangedListener((TextWatcher)editTextBoundChecker);
+        Spinner spinner = (Spinner)view.findViewById(2131296308);
+        this.natureAdapter = natureSpinnerAdapter = new NatureSpinnerAdapter(this);
+        spinner.setAdapter((SpinnerAdapter)natureSpinnerAdapter);
+        100000000 var11_11 = new 100000000(this);
+        spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener)var11_11);
+        this.createStatChart((LinearLayout)view.findViewById(2131296309));
+        Button button = (Button)view.findViewById(2131296310);
+        100000001 var13_13 = new 100000001(this);
+        button.setOnClickListener((View.OnClickListener)var13_13);
+        return view;
+    }
+
+    @Override
+    public boolean onOpenItem(Context context) {
+        return true;
+    }
+
+    public void setPoke(PokedexClasses.Pokemon pokemon) {
+        this.poke = pokemon;
+    }
+
+    public void throwErr(String string) {
+        Toast.makeText((Context)this.getActivity(), (CharSequence)string, (int)200).show();
+    }
+
+    @Override
+    public boolean usesRightDrawer() {
+        return false;
+    }
+
+    /*
+     * Failed to analyse overrides
+     */
+    class 100000000
+    implements AdapterView.OnItemSelectedListener {
+        private final IvCalculatorFragment this$0;
+
+        100000000(IvCalculatorFragment ivCalculatorFragment) {
+            this.this$0 = ivCalculatorFragment;
+        }
+
+        static IvCalculatorFragment access$0(100000000 var0) {
+            return var0.this$0;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int n, long l) {
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+    }
+
+    /*
+     * Failed to analyse overrides
+     */
+    class 100000001
+    implements View.OnClickListener {
+        private final IvCalculatorFragment this$0;
+
+        100000001(IvCalculatorFragment ivCalculatorFragment) {
+            this.this$0 = ivCalculatorFragment;
+        }
+
+        static IvCalculatorFragment access$0(100000001 var0) {
+            return var0.this$0;
+        }
+
+        @Override
+        public void onClick(View view) {
+            this.this$0.calculateIvs((View)view.getParent());
+        }
+    }
+
+    /*
+     * Failed to analyse overrides
+     */
+    class 100000003
+    implements View.OnKeyListener {
+        private final IvCalculatorFragment this$0;
+
+        100000003(IvCalculatorFragment ivCalculatorFragment) {
+            this.this$0 = ivCalculatorFragment;
+        }
+
+        static IvCalculatorFragment access$0(100000003 var0) {
+            return var0.this$0;
+        }
+
+        /*
+         * Enabled force condition propagation
+         * Lifted jumps to return sites
+         */
+        public boolean onKey(View view, int n, KeyEvent keyEvent) {
+            if (keyEvent.getAction() != 0) return false;
+            switch (n) {
+                default: {
+                    return false;
+                }
+                case 23: 
+                case 66: 
+            }
+            this.this$0.calculateIvs((View)((LinearLayout)view.getParent().getParent().getParent()));
+            return true;
+        }
+    }
+
+    /*
+     * Failed to analyse overrides
+     */
+    public class EditTextBoundChecker
+    implements TextWatcher {
+        String fieldName;
+        int lowerBound;
+        private final IvCalculatorFragment this$0;
+        TextView tv;
+        int upperBound;
+
+        public EditTextBoundChecker(IvCalculatorFragment ivCalculatorFragment, TextView textView, String string, int n) {
+            this(ivCalculatorFragment, textView, string, 0, n);
+        }
+
+        public EditTextBoundChecker(IvCalculatorFragment ivCalculatorFragment, TextView textView, String string, int n, int n2) {
+            this.this$0 = ivCalculatorFragment;
+            this.fieldName = string;
+            this.tv = textView;
+            this.lowerBound = n;
+            this.upperBound = n2;
+        }
+
+        static IvCalculatorFragment access$0(EditTextBoundChecker editTextBoundChecker) {
+            return editTextBoundChecker.this$0;
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int n, int n2, int n3) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int n, int n2, int n3) {
+            if (charSequence.toString().equals((Object)"")) {
+                return;
+            }
+            try {
+                int n4 = Integer.parseInt((String)charSequence.toString());
+                if (n4 > this.upperBound) {
+                    this.tv.setText((CharSequence)String.valueOf((int)this.upperBound));
+                    IvCalculatorFragment ivCalculatorFragment = this.this$0;
+                    StringBuffer stringBuffer = new StringBuffer();
+                    StringBuffer stringBuffer2 = new StringBuffer();
+                    ivCalculatorFragment.throwErr(stringBuffer.append(stringBuffer2.append(this.fieldName).append(" must be less than ").toString()).append(1 + this.upperBound).toString());
+                }
+                if (n4 < this.lowerBound) {
+                    this.tv.setText((CharSequence)String.valueOf((int)this.lowerBound));
+                    IvCalculatorFragment ivCalculatorFragment = this.this$0;
+                    StringBuffer stringBuffer = new StringBuffer();
+                    StringBuffer stringBuffer3 = new StringBuffer();
+                    ivCalculatorFragment.throwErr(stringBuffer.append(stringBuffer3.append(this.fieldName).append(" must be greater than ").toString()).append(-1 + this.lowerBound).toString());
+                }
+                return;
+            }
+            catch (NumberFormatException var5_12) {
+                this.tv.setText((CharSequence)"");
+                IvCalculatorFragment ivCalculatorFragment = this.this$0;
+                StringBuffer stringBuffer = new StringBuffer();
+                ivCalculatorFragment.throwErr(stringBuffer.append(this.fieldName).append(" must be an integer").toString());
+                return;
+            }
+        }
+    }
+
+    public class IconLoadingTask
+    extends AsyncTask<PokedexClasses.Pokemon, Void, Void> {
+        private final IvCalculatorFragment this$0;
+
+        public IconLoadingTask(IvCalculatorFragment ivCalculatorFragment) {
+            this.this$0 = ivCalculatorFragment;
+        }
+
+        static IvCalculatorFragment access$0(IconLoadingTask iconLoadingTask) {
+            return iconLoadingTask.this$0;
+        }
+
+        /*
+         * Loose catch block
+         * Enabled aggressive block sorting
+         * Enabled unnecessary exception pruning
+         * Lifted jumps to return sites
+         */
+        @Override
+        protected Void doInBackground(PokedexClasses.Pokemon[] arrpokemon) {
+            int n = 0;
+            do {
+                if (n >= arrpokemon.length) {
+                    return null;
+                }
+                PokedexClasses.Pokemon pokemon = arrpokemon[n];
+                if (this.isCancelled()) {
+                    return null;
+                }
+                if (pokemon.getIcon() == null) {
+                    pokemon.loadIcon((Context)this.this$0.getActivity());
+                    this.publishProgress((Object[])new Void[0]);
+                }
+                ++n;
+            } while (true);
+            catch (Exception exception) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onCancelled(Void void_) {
+            super.onCancelled((Object)void_);
+        }
+
+        @Override
+        protected void onProgressUpdate() {
+            super.onProgressUpdate((Object[])new Void[0]);
+            this.this$0.autoAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /*
+     * Failed to analyse overrides
+     */
+    public class NatureSpinnerAdapter
+    extends BaseAdapter
+    implements AdapterView.OnItemSelectedListener {
+        public PokedexClasses.Nature[] natures;
+        private final IvCalculatorFragment this$0;
+
+        public NatureSpinnerAdapter(IvCalculatorFragment ivCalculatorFragment) {
+            this.this$0 = ivCalculatorFragment;
+            this.natures = this.this$0.dex.getNaturesList();
+            this.this$0.nat = this.natures[0];
+        }
+
+        static IvCalculatorFragment access$0(NatureSpinnerAdapter natureSpinnerAdapter) {
+            return natureSpinnerAdapter.this$0;
+        }
+
+        @Override
+        public int getCount() {
+            return this.natures.length;
+        }
+
+        @Override
+        public Object getItem(int n) {
+            return this.natures[n];
+        }
+
+        @Override
+        public long getItemId(int n) {
+            return n;
+        }
+
+        /*
+         * Enabled force condition propagation
+         * Lifted jumps to return sites
+         */
+        @Override
+        public View getView(int n, View view, ViewGroup viewGroup) {
+            View view2 = view;
+            if (view2 == null) {
+                View view3 = view2 = this.this$0.getActivity().getLayoutInflater().inflate(2130903062, viewGroup, false);
+                AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(-1, -2);
+                view3.setLayoutParams((ViewGroup.LayoutParams)layoutParams);
+            }
+            PokedexClasses.Nature nature = (PokedexClasses.Nature)this.getItem(n);
+            TextView textView = (TextView)view2.findViewById(2131296285);
+            TextView textView2 = (TextView)view2.findViewById(2131296330);
+            TextView textView3 = (TextView)view2.findViewById(2131296331);
+            TextView textView4 = (TextView)view2.findViewById(2131296332);
+            textView.setText((CharSequence)nature.getName());
+            if (nature.getStatDown() == nature.getStatUp()) {
+                textView4.setVisibility(0);
+                textView2.setVisibility(8);
+                textView3.setVisibility(8);
+                do {
+                    return view2;
+                    break;
+                } while (true);
+            }
+            textView4.setVisibility(8);
+            textView2.setVisibility(0);
+            textView3.setVisibility(0);
+            StringBuffer stringBuffer = new StringBuffer();
+            textView2.setText((CharSequence)stringBuffer.append("+ ").append(PokedexDatabase.STAT_LABELS[nature.getStatUp()]).toString());
+            textView2.setBackgroundColor(1073741824 + PokedexDatabase.STAT_COLORS[nature.getStatUp()]);
+            StringBuffer stringBuffer2 = new StringBuffer();
+            textView3.setText((CharSequence)stringBuffer2.append("- ").append(PokedexDatabase.STAT_LABELS[nature.getStatDown()]).toString());
+            textView3.setBackgroundColor(1073741824 + PokedexDatabase.STAT_COLORS[nature.getStatDown()]);
+            return view2;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int n, long l) {
+            this.this$0.nat = this.natures[n];
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            adapterView.setSelection(0);
+        }
+    }
+
+    /*
+     * Failed to analyse overrides
+     */
+    public class PokemonAutoCompleteAdapter
+    extends BaseAdapter
+    implements AdapterView.OnItemClickListener,
+    Filterable {
+        ArrayList<PokedexClasses.Pokemon> filteredList;
+        PokedexClasses.Pokemon[] list;
+        private final IvCalculatorFragment this$0;
+
+        public PokemonAutoCompleteAdapter(IvCalculatorFragment ivCalculatorFragment, PokedexClasses.Pokemon[] arrpokemon) {
+            ArrayList arrayList;
+            this.this$0 = ivCalculatorFragment;
+            this.filteredList = arrayList = new ArrayList();
+            this.list = arrpokemon;
+        }
+
+        static IvCalculatorFragment access$0(PokemonAutoCompleteAdapter pokemonAutoCompleteAdapter) {
+            return pokemonAutoCompleteAdapter.this$0;
+        }
+
+        @Override
+        public int getCount() {
+            return this.filteredList.size();
+        }
+
+        @Override
+        public Filter getFilter() {
+            100000002 var1_1 = new 100000002(this);
+            return var1_1;
+        }
+
+        @Override
+        public Object getItem(int n) {
+            return ((PokedexClasses.Pokemon)this.filteredList.get(n)).getSpeciesName();
+        }
+
+        @Override
+        public long getItemId(int n) {
+            return ((PokedexClasses.Pokemon)this.filteredList.get(n)).getId();
+        }
+
+        /*
+         * Enabled aggressive block sorting
+         */
+        @Override
+        public View getView(int n, View view, ViewGroup viewGroup) {
+            View view2 = view;
+            PokedexClasses.Pokemon pokemon = (PokedexClasses.Pokemon)this.filteredList.get(n);
+            if (view2 == null) {
+                view2 = this.this$0.getActivity().getLayoutInflater().inflate(2130903068, viewGroup, false);
+            }
+            View view3 = view2.findViewById(2131296290);
+            if (Arrays.binarySearch((int[])this.this$0.favoriteIds, (int)pokemon.getId()) > -1) {
+                view3.setVisibility(0);
+            } else {
+                view3.setVisibility(4);
+            }
+            ImageView imageView = (ImageView)view2.findViewById(2131296349);
+            TextView textView = (TextView)view2.findViewById(2131296350);
+            TextView textView2 = (TextView)view2.findViewById(2131296351);
+            LinearLayout linearLayout = (LinearLayout)view2.findViewById(2131296329);
+            imageView.setImageBitmap(pokemon.getIcon());
+            textView.setText((CharSequence)pokemon.getDispId());
+            textView2.setText((CharSequence)pokemon.getSpeciesName());
+            linearLayout.removeAllViews();
+            return view2;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int n, long l) {
+            this.this$0.setPoke((PokedexClasses.Pokemon)this.filteredList.get(n));
+        }
+
+        /*
+         * Failed to analyse overrides
+         */
+        class 100000002
+        extends Filter {
+            private final PokemonAutoCompleteAdapter this$0;
+
+            100000002(PokemonAutoCompleteAdapter pokemonAutoCompleteAdapter) {
+                this.this$0 = pokemonAutoCompleteAdapter;
+            }
+
+            static PokemonAutoCompleteAdapter access$0(100000002 var0) {
+                return var0.this$0;
+            }
+
+            /*
+             * Unable to fully structure code
+             * Enabled aggressive block sorting
+             * Lifted jumps to return sites
+             */
+            @Override
+            protected Filter.FilterResults performFiltering(CharSequence var1_1) {
+                var2_2 = new Filter.FilterResults();
+                if (var1_1 == null) return var2_2;
+                var3_3 = var1_1.toString().toLowerCase();
+                var4_4 = new ArrayList();
+                var5_5 = new ArrayList();
+                var6_6 = new ArrayList();
+                var7_7 = 0;
+                do {
+                    if (var7_7 >= this.this$0.list.length) {
+                        this.this$0.filteredList.clear();
+                        this.this$0.filteredList.addAll((Collection)var4_4);
+                        this.this$0.filteredList.addAll((Collection)var5_5);
+                        this.this$0.filteredList.addAll((Collection)var6_6);
+                        var2_2.values = this.this$0.filteredList;
+                        var2_2.count = this.this$0.filteredList.size();
+                        return var2_2;
+                    }
+                    switch (this.this$0.list[var7_7].getSpeciesName().toLowerCase().indexOf(var3_3)) {
+                        default: {
+                            if (Arrays.binarySearch((int[])PokemonAutoCompleteAdapter.access$0((PokemonAutoCompleteAdapter)this.this$0).favoriteIds, (int)this.this$0.list[var7_7].getId()) <= -1) break;
+                            var4_4.add((Object)this.this$0.list[var7_7]);
+                            ** GOTO lbl28
+                        }
+                        case -1: {
+                            ** GOTO lbl28
+                        }
+                        case 0: {
+                            var5_5.add((Object)this.this$0.list[var7_7]);
+                            ** GOTO lbl28
+                        }
+                    }
+                    var6_6.add((Object)this.this$0.list[var7_7]);
+lbl28: // 4 sources:
+                    if (this.this$0.list[var7_7].getSpeciesName().toLowerCase().equals((Object)var3_3)) {
+                        PokemonAutoCompleteAdapter.access$0(this.this$0).setPoke(this.this$0.list[var7_7]);
+                    } else {
+                        PokemonAutoCompleteAdapter.access$0(this.this$0).setPoke(null);
+                    }
+                    ++var7_7;
+                } while (true);
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, Filter.FilterResults filterResults) {
+                IconLoadingTask iconLoadingTask = new IconLoadingTask(PokemonAutoCompleteAdapter.access$0(this.this$0));
+                iconLoadingTask.execute((Object[])((PokedexClasses.Pokemon[])this.this$0.filteredList.toArray((Object[])new PokedexClasses.Pokemon[0])));
+                this.this$0.notifyDataSetChanged();
+            }
+        }
+
+    }
+
+}
+
