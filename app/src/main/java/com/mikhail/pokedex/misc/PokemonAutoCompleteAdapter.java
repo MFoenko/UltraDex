@@ -15,7 +15,7 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
     ArrayList<PokedexClasses.Pokemon> filteredList;
     Filter filter;
 
-	PokedexClasses.Pokemon mPokemon;
+	public PokedexClasses.Pokemon mPokemon;
 
     public PokemonAutoCompleteAdapter(PokedexClasses.Pokemon[] pokemonArray){
         allPokemon = pokemonArray;
@@ -53,7 +53,7 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
         TextView nameTV = (TextView)p2.findViewById(R.id.name);
 
         iconIV.setImageBitmap(poke.loadBitmap(p2.getContext()));
-		idTV.setText(poke.dispId);
+		idTV.setText(String.valueOf(poke.dispId));
         nameTV.setText(poke.name);
 
         return p2;
@@ -81,7 +81,7 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
 
 			if(p1 == null) return null;
 			
-//            int favoritesIndex = 0;
+//          int favoritesIndex = 0;
             int firstLetterIndex = 0;
             int otherMatchesIndex = 0;
             filteredList.clear();
@@ -102,7 +102,6 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
 
 		@Override
 		protected void publishResults(CharSequence p1, Filter.FilterResults p2) {
-            Log.i("AAA", p1.toString());
             notifyDataSetChanged();
 			if(filteredList.size() == 1){
 				mPokemon = filteredList.get(0);

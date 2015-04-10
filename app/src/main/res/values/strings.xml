@@ -22,5 +22,18 @@
 	
 	<string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="clear_filter_button_text">Clear Filters</string>
+    <string name="ivs_header">IVs</string>
+    <string name="evs_header">EVs</string>
+    <string name="stats_header">Stats</string>
+    <string name="num_zero">0</string>
+    <string name="hp_header">HP</string>
+    <string name="attack_header">Attack</string>
+    <string name="defense_header">Defense</string>
+    <string name="sp_attack_header">Sp. Attack</string>
+    <string name="sp_defense_header">Sp. Defense</string>
+    <string name="speed_header">Speed</string>
+    <string name="calculate">Calculate</string>
+    <string name="level_hint">Level</string>
+    <string name="pokemon_hint">Pokemon</string>
 
 </resources>

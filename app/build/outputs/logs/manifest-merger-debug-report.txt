@@ -1,6 +1,8 @@
 -- Merging decision tree log ---
 manifest
 ADDED from AndroidManifest.xml:1:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:1:11
 	package
 		ADDED from AndroidManifest.xml:1:70
 		INJECTED from AndroidManifest.xml:0:0
@@ -8,8 +10,6 @@ ADDED from AndroidManifest.xml:1:1
 	android:versionName
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-	xmlns:android
-		ADDED from AndroidManifest.xml:1:11
 	android:versionCode
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
@@ -50,10 +50,10 @@ MERGED from com.android.support:support-v4:22.0.0:22:5
 meta-data#com.google.android.gms.version
 ADDED from AndroidManifest.xml:12:3
 MERGED from com.google.android.gms:play-services:6.5.87:21:9
-	android:value
-		ADDED from AndroidManifest.xml:13:4
 	android:name
 		ADDED from AndroidManifest.xml:12:14
+	android:value
+		ADDED from AndroidManifest.xml:13:4
 activity#com.mikhail.pokedex.activities.SplashActivity
 ADDED from AndroidManifest.xml:14:9
 	android:name
@@ -70,48 +70,50 @@ ADDED from AndroidManifest.xml:19:17
 		ADDED from AndroidManifest.xml:19:27
 activity#com.mikhail.pokedex.activities.MainActivity
 ADDED from AndroidManifest.xml:25:9
-	android:launchMode
-		ADDED from AndroidManifest.xml:27:4
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:28:13
 	android:name
 		ADDED from AndroidManifest.xml:26:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:27:4
 activity#com.mikhail.pokedex.activities.PokemonInfoActivity
-ADDED from AndroidManifest.xml:30:3
+ADDED from AndroidManifest.xml:31:3
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:32:4
+		ADDED from AndroidManifest.xml:33:4
 	android:name
-		ADDED from AndroidManifest.xml:31:13
+		ADDED from AndroidManifest.xml:32:13
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from AndroidManifest.xml:33:4
-	android:value
+ADDED from AndroidManifest.xml:34:4
+	android:name
 		ADDED from AndroidManifest.xml:35:5
-	android:name
-		ADDED from AndroidManifest.xml:34:5
+	android:value
+		ADDED from AndroidManifest.xml:36:5
 activity#com.mikhail.pokedex.activities.MoveInfoActivity
-ADDED from AndroidManifest.xml:37:3
+ADDED from AndroidManifest.xml:38:3
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:39:4
+		ADDED from AndroidManifest.xml:40:4
 	android:name
-		ADDED from AndroidManifest.xml:38:13
+		ADDED from AndroidManifest.xml:39:13
 activity#com.mikhail.pokedex.activities.AbilityInfoActivity
-ADDED from AndroidManifest.xml:44:3
+ADDED from AndroidManifest.xml:45:3
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:46:4
+		ADDED from AndroidManifest.xml:47:4
 	android:name
-		ADDED from AndroidManifest.xml:45:13
+		ADDED from AndroidManifest.xml:46:13
 activity#com.mikhail.pokedex.activities.ItemInfoActivity
-ADDED from AndroidManifest.xml:51:9
+ADDED from AndroidManifest.xml:52:9
 	android:parentActivityName
+		ADDED from AndroidManifest.xml:54:13
+	android:name
 		ADDED from AndroidManifest.xml:53:13
-	android:name
-		ADDED from AndroidManifest.xml:52:13
 activity#com.google.android.gms.ads.AdActivity
-ADDED from AndroidManifest.xml:59:9
+ADDED from AndroidManifest.xml:60:9
 	android:configChanges
-		ADDED from AndroidManifest.xml:60:13
-	android:theme
 		ADDED from AndroidManifest.xml:61:13
+	android:theme
+		ADDED from AndroidManifest.xml:62:13
 	android:name
-		ADDED from AndroidManifest.xml:59:19
+		ADDED from AndroidManifest.xml:60:19
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
