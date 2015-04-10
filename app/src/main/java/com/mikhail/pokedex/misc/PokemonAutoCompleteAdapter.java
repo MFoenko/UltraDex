@@ -3,19 +3,19 @@ package com.mikhail.pokedex.misc;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
+import android.widget.AdapterView.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.*;
+import java.util.*;
 
-import com.mikhail.pokedex.R;
-import com.mikhail.pokedex.data.PokedexClasses;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterable 
+public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterable, OnItemClickListener
 {
 
     PokedexClasses.Pokemon[] allPokemon;
     ArrayList<PokedexClasses.Pokemon> filteredList;
     Filter filter;
+
+	PokedexClasses.Pokemon mPokemon;
 
     public PokemonAutoCompleteAdapter(PokedexClasses.Pokemon[] pokemonArray){
         allPokemon = pokemonArray;
@@ -35,7 +35,7 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
 
 	@Override
 	public long getItemId(int p1) {
-		return 0;
+		return filteredList.get(p1).id;
 	}
 
 	@Override
@@ -49,9 +49,11 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
         PokedexClasses.Pokemon poke = filteredList.get(p1);
 
         ImageView iconIV = (ImageView)p2.findViewById(R.id.icon);
+		TextView idTV = (TextView)p2.findViewById(R.id.id);
         TextView nameTV = (TextView)p2.findViewById(R.id.name);
 
         iconIV.setImageBitmap(poke.loadBitmap(p2.getContext()));
+		idTV.setText(poke.dispId);
         nameTV.setText(poke.name);
 
         return p2;
@@ -61,13 +63,25 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
 	public Filter getFilter() {
 		return filter;
 	}
+
+	@Override
+	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+
+		 mPokemon = filteredList.get(p3);
+	
+	}
+
+	
+	
 	
 	private final class PokemonSearchFilter extends Filter {
 
                 @Override
 		protected Filter.FilterResults performFiltering(CharSequence p1) {
 
-            int favoritesIndex = 0;
+			if(p1 == null) return null;
+			
+//            int favoritesIndex = 0;
             int firstLetterIndex = 0;
             int otherMatchesIndex = 0;
             filteredList.clear();
@@ -90,6 +104,13 @@ public class PokemonAutoCompleteAdapter extends BaseAdapter implements Filterabl
 		protected void publishResults(CharSequence p1, Filter.FilterResults p2) {
             Log.i("AAA", p1.toString());
             notifyDataSetChanged();
+			if(filteredList.size() == 1){
+				mPokemon = filteredList.get(0);
+			}
+			else if(filteredList.size() > 1 && p1 != null)
+			if(filteredList.get(0).name.toLowerCase().equals(p1.toString().toLowerCase())){
+				mPokemon = filteredList.get(0);
+			}
 		}
 	}
 	

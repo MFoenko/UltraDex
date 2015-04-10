@@ -297,7 +297,7 @@ public class NaturesFragment extends Fragment implements DrawerItem {
     }
 
 
-    private static final class NaturesListAdapter extends RecyclerView.Adapter<NatureViewHolder>{
+    public static final class NaturesListAdapter extends RecyclerView.Adapter<NatureViewHolder>{
 
         public ArrayList<PokedexClasses.Nature> listItems = new ArrayList<PokedexClasses.Nature>();
 
