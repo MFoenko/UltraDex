@@ -1,5 +1,7 @@
 package com.mikhail.pokedex.activities;
 
+import android.app.*;
+import android.content.*;
 import android.content.res.*;
 import android.os.*;
 import android.support.v4.app.*;
@@ -9,14 +11,16 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
+import com.android.vending.billing.*;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.fragments.*;
 import com.mikhail.pokedex.misc.*;
+import org.json.*;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarDrawerToggle;
-import java.util.*;
-import android.content.*;
 
 /**
  * Created by MFoenko on 3/7/2015.
@@ -24,7 +28,7 @@ import android.content.*;
 public class MainActivity extends ActionBarActivity implements OnItemClickListener {
 
 
-    public static final DrawerItem[] DRAWER_ITEMS = new DrawerItem[]{
+    public final DrawerItem[] DRAWER_ITEMS = new DrawerItem[]{
 		new DrawerHeader("Dexes"),
 		new MainPokemonListFragment(),
 		new MainMoveListFragment(),
@@ -35,6 +39,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		new NaturesFragment(),
 		new IVCalculatorFragment(),
 		new DrawerHeader("App"),
+		new AppSettingsActivity(),
 		new DrawerItem(){
 
 			@Override
@@ -66,7 +71,57 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 
 		},
-		new CreditsFragment()
+		new CreditsFragment(),
+		new DrawerItem(){
+
+			@Override
+			public String getDrawerItemName()
+			{
+				return "Remove Ads";
+			}
+
+			@Override
+			public int getDrawerItemIconResourceId()
+			{
+				return DRAWER_ICON_NONE;
+			}
+
+			@Override
+			public byte getDrawerItemType()
+			{
+				// TODO: Implement this method
+				return DRAWER_ITEM_TYPE_CLICKABLE;
+			}
+
+			@Override
+			public boolean onDrawerItemClick(Context context)
+			{
+
+				try
+				{
+					Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
+																   "remove_ads", "inapp", "");
+				
+				
+				PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
+				
+					((Activity)context).startIntentSenderForResult(pendingIntent.getIntentSender(),
+																   1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
+																   Integer.valueOf(0));
+				}
+				catch (IntentSender.SendIntentException e)
+				{}
+				catch (RemoteException e){
+					
+				}
+
+				
+				return false;
+			}
+			
+			
+			
+		}
 
     };
 	public static final int POKEDEX_FRAGMENT = 1;
@@ -83,16 +138,40 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	ViewGroup mRightDrawer;
     DrawerItemAdapter mLeftDrawerAdapter;
 	ActionBarDrawerToggle mLeftDrawerToggle;
+	IInAppBillingService mService;
+
+	ServiceConnection mServiceConn = new ServiceConnection() {
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			mService = null;
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName name, 
+									   IBinder service) {
+			mService = IInAppBillingService.Stub.asInterface(service);
+		}
+	};
+	
+	
 
 	public MainActivity() {
 		Thread.setDefaultUncaughtExceptionHandler(new CrashDialog(this));
 	}
+	
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+		Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+		serviceIntent.setPackage("com.android.vending");
+		bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+
+		
+		
+		
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mLeftDrawer = (ListView) findViewById(R.id.left_drawer);
@@ -206,7 +285,27 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {	
+		if (requestCode == 1001) {    	
+			int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
+			Log.i("AAA", ""+responseCode);
+			String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
+			String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
 
+			if (resultCode == RESULT_OK) {
+				try {
+					JSONObject jo = new JSONObject(purchaseData);
+					String sku = jo.getString("productId");
+					getSharedPreferences("", 0).edit().putBoolean(AdmobBannerAd.PREF_SHOW_ADS, false).apply();
+					AdmobBannerAd.showAds = false;
+				}
+				catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 
 

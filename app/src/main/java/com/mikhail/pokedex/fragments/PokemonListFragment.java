@@ -209,7 +209,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mFilter.eggGroups[(Integer)buttonView.getTag()] = isChecked;
+                    mFilter.eggGroups[(int)buttonView.getTag()] = isChecked;
                     mFilter.filter();
                 }
             });

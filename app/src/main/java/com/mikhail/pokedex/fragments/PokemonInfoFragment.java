@@ -67,7 +67,8 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 	};
 
 
-
+	TextView dexTextTV;
+	
 	TextView metricHeightTV;
 	TextView imperialHeightTV;
 	TextView metricWeightTV;
@@ -93,6 +94,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 		evolutionsHeader = (TextView)mLayout.findViewById(R.id.evolutions_header);
 		formsHeader = (TextView)mLayout.findViewById(R.id.forms_header);
 
+		dexTextTV = (TextView)mLayout.findViewById(R.id.pokedex_text);
 
 		metricHeightTV = (TextView)mLayout.findViewById(R.id.height_m);
 		imperialHeightTV = (TextView)mLayout.findViewById(R.id.height_ft);
@@ -303,6 +305,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 
         }
 
+		dexTextTV.setText(pokedexDatabase.getPokemonPokedexText(mPoke.id));
 
 		metricHeightTV.setText(mPoke.height + "m");
 		int heightIn = (int)(mPoke.height * 100 / 2.54);

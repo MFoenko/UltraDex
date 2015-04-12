@@ -39,8 +39,24 @@
             android:gravity="center"
 		/>
 
-	
-	
+		<TextView
+			android:text="Pokedex Text"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			style="@style/SubHeaderText"
+		/>
+
+
+		<TextView
+			android:id="@+id/pokedex_text"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			style="@style/SmallText"
+		/>
+
+		
         <LinearLayout
             android:id="@+id/sizes"
             android:layout_width="match_parent"
