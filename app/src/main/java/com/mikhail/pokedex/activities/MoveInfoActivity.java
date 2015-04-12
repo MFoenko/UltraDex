@@ -1,15 +1,22 @@
 package com.mikhail.pokedex.activities;
 
-import android.support.v4.app.*;
-import android.text.*;
-import android.text.method.*;
-import android.view.*;
-import android.widget.*;
-import com.mikhail.pokedex.*;
-import com.mikhail.pokedex.data.*;
-import com.mikhail.pokedex.data.PokedexClasses.*;
-import com.mikhail.pokedex.fragments.*;
-import com.mikhail.pokedex.misc.*;
+import android.support.v4.app.FragmentManager;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.mikhail.pokedex.R;
+import com.mikhail.pokedex.data.PokedexClasses;
+import com.mikhail.pokedex.data.PokedexClasses.Move;
+import com.mikhail.pokedex.data.PokedexDatabase;
+import com.mikhail.pokedex.fragments.InfoPagerFragment;
+import com.mikhail.pokedex.fragments.MovePokemonListFragment;
+import com.mikhail.pokedex.fragments.MoveTypingFragment;
+import com.mikhail.pokedex.misc.InfoFragmentPagerAdapter;
+import com.mikhail.pokedex.misc.TypeView;
 
 public class MoveInfoActivity extends PagerInfoActivity<Move>{
 

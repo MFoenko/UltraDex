@@ -1,78 +1,77 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.mikhail.pokedex">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mikhail.pokedex" >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
-	<uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-		
-	<uses-permission android:name="com.android.vending.BILLING" />
-		
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:icon="@drawable/ultradex_launcher_icon" android:theme="@style/AppTheme">
-		<meta-data android:name="com.google.android.gms.version"
-			android:value="@integer/google_play_services_version" />
-        <activity
-            android:name=".activities.SplashActivity"
-           >
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ultradex_launcher_icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".activities.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		
-		
-
         <activity
             android:name=".activities.MainActivity"
-			android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"
-			/>
-		
-
-
-		<activity
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".activities.AppSettingsActivity"
-			android:title="Settings" 
-			android:parentActivityName =".activities.MainActivity" >
-			<meta-data
-				android:name = "android.support.PARENT_ACTIVITY"
-				android:value = ".activities.MainActivity" />
-		</activity>
-
-
-		<activity
+            android:parentActivityName=".activities.MainActivity"
+            android:title="Settings" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.PokemonInfoActivity"
-			android:parentActivityName =".activities.MainActivity" >
-			<meta-data
-				android:name = "android.support.PARENT_ACTIVITY"
-				android:value = ".activities.MainActivity" />
-		</activity>
-		<activity
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.MoveInfoActivity"
-			android:parentActivityName = ".activities.MainActivity" >
-			<meta-data
-				android:name = "android.support.PARENT_ACTIVITY"
-				android:value = ".activities.MainActivity" />
-		</activity>
-		<activity
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.AbilityInfoActivity"
-			android:parentActivityName = ".activities.MainActivity" >
-			<meta-data
-				android:name = "android.support.PARENT_ACTIVITY"
-				android:value = ".activities.MainActivity" />
-		</activity>
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
         <activity
             android:name=".activities.ItemInfoActivity"
-            android:parentActivityName = ".activities.MainActivity" >
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
-                android:name = "android.support.PARENT_ACTIVITY"
-                android:value = ".activities.MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
         </activity>
-
-        <activity android:name="com.google.android.gms.ads.AdActivity"
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

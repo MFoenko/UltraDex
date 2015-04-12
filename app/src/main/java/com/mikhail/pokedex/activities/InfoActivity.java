@@ -1,13 +1,14 @@
 package com.mikhail.pokedex.activities;
 
-import android.*;
-import android.animation.*;
-import android.os.*;
-import android.support.v7.app.*;
-import android.view.*;
-import com.mikhail.pokedex.data.*;
-import com.mikhail.pokedex.misc.*;
-import android.support.v4.app.*;
+import android.animation.ObjectAnimator;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.View;
+
+import com.mikhail.pokedex.data.PokedexDatabase;
+import com.mikhail.pokedex.misc.CrashDialog;
+import com.mikhail.pokedex.misc.OnSwipeTouchListener;
 
 public abstract class InfoActivity<T> extends ActionBarActivity{
 

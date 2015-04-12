@@ -1,13 +1,15 @@
 package com.mikhail.pokedex.activities;
 
-import android.os.*;
-import android.support.v7.graphics.*;
-import android.text.*;
-import android.text.method.*;
-import android.view.*;
-import android.widget.*;
-import com.mikhail.pokedex.*;
-import com.mikhail.pokedex.data.PokedexClasses.*;
+import android.os.Bundle;
+import android.support.v7.graphics.Palette;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.mikhail.pokedex.R;
+import com.mikhail.pokedex.data.PokedexClasses.Item;
 
 /**
  *

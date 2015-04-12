@@ -2,6 +2,7 @@ package com.mikhail.pokedex.fragments;
 import android.app.*;
 import android.content.*;
 import android.os.*;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.*;
 import android.util.*;
 import android.view.*;
@@ -29,7 +30,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		mFilter.showForms = getActivity().getSharedPreferences("", 0).getBoolean(KEY_SHOW_FORMS, true);
+		mFilter.showForms = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(KEY_SHOW_FORMS, true);
 		mFilter.filter();
 	}
 
@@ -103,7 +104,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 					@Override
 					public void onCheckedChanged(CompoundButton p1, boolean p2) {
-						p1.getContext().getSharedPreferences("", 0).edit().putBoolean(KEY_SHOW_FORMS, p2).apply();
+						PreferenceManager.getDefaultSharedPreferences(p1.getContext()).edit().putBoolean(KEY_SHOW_FORMS, p2).apply();
 						//if (mFilter != null) {
 							mFilter.showForms = p2;
 							mFilter.filter();

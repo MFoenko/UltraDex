@@ -2,32 +2,60 @@
 <items version="2" >
 
     <item
-        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/palette-v7/22.0.0/classes.jar"
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="285506e1cf9d5a66878e2aab3884b3427f8734e9">
-        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-ffbe750a6ca1e7b1b86c0f75cc90be2ae6b5564e.jar" />
+        sha1="4cd0b093824b3228fffc21ea369b98d0b1db6566">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-20954ce9aa9ce3a6a511e1f6822b80df309e6094.jar" />
     </item>
     <item
-        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-fa7136ad1d6cca159b507f2de3016c156be6d6f6.jar" />
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-4835750aa0eacffdd2aa83352915a25c1ebfda5a.jar" />
     </item>
     <item
-        jar="/home/mchail/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-e7bd4d0460b2c08db7503585045093befa9a846d.jar" />
+        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-1feba88cb0708a32756df33d286db46bd8f6c3d9.jar" />
     </item>
     <item
-        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-9b15c7836112ca24221e577ad909c6166dc90a7f.jar" />
+        sha1="e3d791b42eaa90416cd0b2d2e608092794a3baa4">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-404e6bc31c3514cc087a8392e9da644bc7ab3d5c.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c6d79137693d494dee16372d3921f919eb724ced">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-9db47c7351f409b2f9e8f78d04735898f17df00e.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-109f9b7f5b845875f5161131bd55e215da0ea925.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-e5b20107a9eae51ecb69b77674b532c820c0a7e0.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-89ac3f454f061de14581ec27d6c3a02731fad5bc.jar" />
     </item>
     <item
         jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
@@ -37,18 +65,116 @@
         <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-e3b67fb913f98418a7a02546fb7cf2722141d338.jar" />
     </item>
     <item
-        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
-        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-e11a66669b24665478ff94539b3a949ba63ec27e.jar" />
+        sha1="9224bc4c54ba95147c7eabd874573763c07cb6be">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-ceea582ddd98797b7d3d27d9ef0ceae87deb2bc3.jar" />
     </item>
     <item
-        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/classes.jar"
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
-        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-47215079c9d180046e85ae2cc7877eef39086b18.jar" />
+        sha1="fb04b12526b0073c7fb1ebb70c5842d82ee95596">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-eddf328e055e481306a14568a2f6422bea30fadb.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-fa7136ad1d6cca159b507f2de3016c156be6d6f6.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-89c3399a4541d36abea5dc7d16022c749002391b.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ef5f051e7308febe289dc93c67c5f32785b4260a">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-6864a1bdcbcc38977b6fe8fd00d7280ab32ec963.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-6712c49e6794dea72aa9bf8473778b005d269d82.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a08d65794b844d8e7540bf9a33859bf3b2482d7f">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-fce7ba2b7c38b181a7a8ade3d4a8cb5555e2915f.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1c5a76debf0c2857ccad422c4a80ed785982f8df">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-d9a26fd2ac3aa095ec08df95f1a8a1c4210c03e9.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="055783146ba9654a725442563be78cad303aad1f">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-1deddf14c167824403dbbe168c7b67d3ddc94ebd.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a96b762bde4139de855735f175ec4d17dca55a6d">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-2d1456e7621f86959f0c0df3eb0e478b9e9b65bf.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-3773de7997c36792cb014ba0cacf564dcc2ae56f.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="17f8750d5c0749e44dd7c54aa390d9c937803825">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-a02b1157a73f29c742d405ea4909456e53446947.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="7ff613bf78ab057293892fdbd4169eda899c89b9">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-75481fa1477637a488f6f4e85d50df0ae7eb641b.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="41b3870cbe5fa546d8095b5b89d42cb69f3dd175">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-ad07e29ac06fa9d2813961f6287ecbdf58878a8a.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-e7bd4d0460b2c08db7503585045093befa9a846d.jar" />
+    </item>
+    <item
+        jar="/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/palette-v7/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="285506e1cf9d5a66878e2aab3884b3427f8734e9">
+        <dex dex="/home/mchail/Documents/Ultradex/app/build/intermediates/pre-dexed/debug/classes-ffbe750a6ca1e7b1b86c0f75cc90be2ae6b5564e.jar" />
     </item>
 
 </items>

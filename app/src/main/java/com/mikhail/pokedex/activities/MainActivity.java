@@ -1,26 +1,54 @@
 package com.mikhail.pokedex.activities;
 
-import android.app.*;
-import android.content.*;
-import android.content.res.*;
-import android.os.*;
-import android.support.v4.app.*;
-import android.support.v4.widget.*;
-import android.support.v7.app.*;
-import android.util.*;
-import android.view.*;
-import android.widget.*;
-import android.widget.AdapterView.*;
-import com.android.vending.billing.*;
-import com.mikhail.pokedex.*;
-import com.mikhail.pokedex.data.*;
-import com.mikhail.pokedex.fragments.*;
-import com.mikhail.pokedex.misc.*;
-import org.json.*;
-
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.content.ServiceConnection;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.android.vending.billing.IInAppBillingService;
+import com.mikhail.pokedex.R;
+import com.mikhail.pokedex.data.PokedexDatabase;
+import com.mikhail.pokedex.fragments.AdmobBannerAd;
+import com.mikhail.pokedex.fragments.CreditsFragment;
+import com.mikhail.pokedex.fragments.IVCalculatorFragment;
+import com.mikhail.pokedex.fragments.InfoPagerFragment;
+import com.mikhail.pokedex.fragments.MainAbilityListFragment;
+import com.mikhail.pokedex.fragments.MainItemListFragment;
+import com.mikhail.pokedex.fragments.MainMoveListFragment;
+import com.mikhail.pokedex.fragments.MainPokemonListFragment;
+import com.mikhail.pokedex.fragments.NaturesFragment;
+import com.mikhail.pokedex.fragments.TypeChartFragment;
+import com.mikhail.pokedex.misc.CrashDialog;
+import com.mikhail.pokedex.misc.DrawerHeader;
+import com.mikhail.pokedex.misc.DrawerItem;
+import com.mikhail.pokedex.misc.UsesRightDrawer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by MFoenko on 3/7/2015.
@@ -39,7 +67,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		new NaturesFragment(),
 		new IVCalculatorFragment(),
 		new DrawerHeader("App"),
-		new AppSettingsActivity(),
+		new SettingsActivity(),
 		new DrawerItem(){
 
 			@Override
@@ -156,7 +184,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	
 
 	public MainActivity() {
-		Thread.setDefaultUncaughtExceptionHandler(new CrashDialog(this));
+		//Thread.setDefaultUncaughtExceptionHandler(new CrashDialog(this));
 	}
 	
 
@@ -297,7 +325,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 				try {
 					JSONObject jo = new JSONObject(purchaseData);
 					String sku = jo.getString("productId");
-					getSharedPreferences("", 0).edit().putBoolean(AdmobBannerAd.PREF_SHOW_ADS, false).apply();
+					PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(AdmobBannerAd.PREF_SHOW_ADS, false).apply();
 					AdmobBannerAd.showAds = false;
 				}
 				catch (JSONException e) {

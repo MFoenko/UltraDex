@@ -4,7 +4,14 @@
     android:orientation="vertical">
 
 	
-	<!--<CheckBoxPreference
-		/>-->
-	
+	<ListPreference
+        android:key="version_index"
+        android:entries="@array/version_names"
+        android:entryValues="@array/version_indeces"
+
+        android:title="Game"
+        android:dialogTitle="Game"
+        android:defaultValue="24" />
+        />
+
 </PreferenceScreen>    

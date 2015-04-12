@@ -1,19 +1,29 @@
 package com.mikhail.pokedex.activities;
 
-import android.os.*;
-import android.support.v4.app.*;
-import android.support.v4.view.*;
-import android.util.*;
-import android.view.*;
-import android.webkit.*;
-import android.widget.*;
-import com.mikhail.pokedex.*;
-import com.mikhail.pokedex.data.*;
-import com.mikhail.pokedex.data.PokedexClasses.*;
-import com.mikhail.pokedex.fragments.*;
-import com.mikhail.pokedex.misc.*;
-import android.graphics.*;
-import android.view.View.*;
+import android.graphics.Color;
+import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.TextView;
+
+import com.mikhail.pokedex.R;
+import com.mikhail.pokedex.data.PokedexClasses;
+import com.mikhail.pokedex.data.PokedexClasses.Move;
+import com.mikhail.pokedex.data.PokedexClasses.Pokemon;
+import com.mikhail.pokedex.data.PokedexDatabase;
+import com.mikhail.pokedex.fragments.InfoPagerFragment;
+import com.mikhail.pokedex.fragments.PokemonAbilityListFragment;
+import com.mikhail.pokedex.fragments.PokemonInfoFragment;
+import com.mikhail.pokedex.fragments.PokemonMoveListFragment;
+import com.mikhail.pokedex.fragments.PokemonStatsFragment;
+import com.mikhail.pokedex.fragments.PokemonTypingFragment;
+import com.mikhail.pokedex.misc.InfoFragmentPagerAdapter;
+import com.mikhail.pokedex.misc.TypeView;
 
 public class PokemonInfoActivity extends PagerInfoActivity<Pokemon> {
 

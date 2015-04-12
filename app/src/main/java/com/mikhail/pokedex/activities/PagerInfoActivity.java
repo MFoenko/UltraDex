@@ -1,10 +1,15 @@
 package com.mikhail.pokedex.activities;
-import android.os.*;
-import android.support.v4.view.*;
-import android.support.v4.widget.*;
-import android.view.*;
-import com.mikhail.pokedex.*;
-import com.mikhail.pokedex.misc.*;
+
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.mikhail.pokedex.R;
+import com.mikhail.pokedex.misc.InfoFragmentPagerAdapter;
+import com.mikhail.pokedex.misc.UsesRightDrawer;
 
 public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements ViewPager.OnPageChangeListener
 {

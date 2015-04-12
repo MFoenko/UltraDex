@@ -3,6 +3,7 @@ package com.mikhail.pokedex.data;
 import android.content.*;
 import android.database.*;
 import android.database.sqlite.*;
+import android.preference.PreferenceManager;
 import android.text.*;
 import android.text.style.*;
 import android.util.*;
@@ -29,6 +30,10 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
+        VERSION = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("version_index","24"));
+        VERSION_GROUP = VERSION_VERSION_GROUP[VERSION];
+        GEN = VERSION_GROUP_GENERATION[VERSION_GROUP];
+        Log.i("AAA", ""+VERSION);
 		int failcoint = 0;
 		while (dex == null && failcoint < 50)
 		{
@@ -251,11 +256,11 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	public static final int[] VERSION_GROUP_GENERATION = {0,0,1,1,2,2,2,3,3,3,4,2,2,4,5,5};
 
 
-	public static final int VERSION = 24;
+	public static int VERSION = 24;
 	public static final int LANG = 9;
 
-	public static final int VERSION_GROUP = VERSION_VERSION_GROUP[VERSION];
-	public static final int GEN = VERSION_GROUP_GENERATION[VERSION_GROUP];
+	public static int VERSION_GROUP = VERSION_VERSION_GROUP[VERSION];
+	public static int GEN = VERSION_GROUP_GENERATION[VERSION_GROUP];
 
 
 	public static int getTypeVersion()
@@ -384,9 +389,9 @@ public class PokedexDatabase extends SQLiteOpenHelper
 		int vgr = VERSION_VERSION_GROUP[ver];
 
 		Cursor c = this.dex.rawQuery(ALL_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(vgr)});
-
-
-		return preloadedPokemon = getPokemonArrayFromCursor(c);
+        preloadedPokemon = getPokemonArrayFromCursor(c);
+        c.close();
+		return preloadedPokemon;
 	}
 
 

@@ -1,20 +1,46 @@
 package com.mikhail.pokedex.activities;
 
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.util.*;
-import android.widget.*;
-import com.google.android.gms.analytics.*;
-import com.mikhail.pokedex.*;
-import com.mikhail.pokedex.data.*;
-import com.mikhail.pokedex.misc.*;
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import com.android.vending.billing.*;
-import com.mikhail.pokedex.fragments.*;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.android.vending.billing.IInAppBillingService;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.mikhail.pokedex.R;
+import com.mikhail.pokedex.data.PokedexDatabase;
+import com.mikhail.pokedex.fragments.AdmobBannerAd;
+import com.mikhail.pokedex.misc.CrashDialog;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 
 public class SplashActivity extends Activity
@@ -191,7 +217,7 @@ public class SplashActivity extends Activity
 	public void checkPurchase()
 	{
 
-		AdmobBannerAd.showAds = getSharedPreferences("", 0).getBoolean(AdmobBannerAd.PREF_SHOW_ADS, true);
+		AdmobBannerAd.showAds = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(AdmobBannerAd.PREF_SHOW_ADS, true);
 
 	}
 
