@@ -49,11 +49,12 @@ public abstract class TypingFragment<T> extends InfoPagerFragment<T>{
 
 		ArrayList<TypeItem>[] effectivesLists = new ArrayList[]{new ArrayList<TypeItem>(), new ArrayList<TypeItem>(), new ArrayList<TypeItem>(), new ArrayList<TypeItem>()};
 
-		final int numTypes = PokedexDatabase.TYPE_EFFICIENCY[0].length;
+		final int numTypes = PokedexDatabase.TYPES[mTypeVersion].length;
 
-		for (int oT = 0;oT < numTypes;oT++){
-			float effectiveness = getEffectiveness(mTypes, oT);
-			TypeItem typeItem = new TypeItem(PokedexDatabase.TYPE_NAMES[mTypeVersion][oT], effectiveness, oT);
+		for (int oTi = 0;oTi < numTypes;oTi++){
+			int offensiveType = PokedexDatabase.TYPES[mTypeVersion][oTi];
+			float effectiveness = getEffectiveness(mTypes, offensiveType);
+			TypeItem typeItem = new TypeItem(PokedexDatabase.TYPE_NAMES[mTypeVersion][offensiveType], effectiveness, offensiveType);
 
 			if (effectiveness == 1){
 				effectivesLists[REGULLARLY_EFFECTIVE].add(typeItem);

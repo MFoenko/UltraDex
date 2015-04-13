@@ -168,7 +168,7 @@ public class SplashActivity extends Activity
 			new MediaSetup(this).execute();
 		}
 
-		new PokedexSetup(this).execute(this);
+		new PokedexSetup(this).execute(getApplicationContext());
 
 		moveOn();
 	}
@@ -517,7 +517,7 @@ public class SplashActivity extends Activity
 		protected Void doInBackground(Context[] p1)
 		{
 
-			PokedexDatabase dex = PokedexDatabase.getInstance(act);
+			PokedexDatabase dex = PokedexDatabase.getInstance(p1[0]);
 			try
 			{
 				dex.getAllPokemon();

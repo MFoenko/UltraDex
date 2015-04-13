@@ -55,6 +55,7 @@ public class StatBarView extends View{
 
 	public void setTextSize(float textSize){
 		mTextPaint.setTextSize(textSize);
+		mCenterTextPaint.setTextSize(textSize);
 		if (mTotalBounds != null){
 			mCenterTextOrigin.y = mRightTextOrigin.y = mLeftTextOrigin.y = (int)(mTotalBounds.bottom / 2f + textSize / 2);
 		}

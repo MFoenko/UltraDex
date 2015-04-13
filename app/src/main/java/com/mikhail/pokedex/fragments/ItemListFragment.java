@@ -48,7 +48,7 @@ public abstract class ItemListFragment<I> extends RecyclerFragment<I, Item, Item
 
             @Override
         public boolean isMatchSearch(Item item) {
-            return true;
+            return item.name.toLowerCase().contains(search.toLowerCase()) || item.description.toLowerCase().contains(search.toLowerCase()); 
         }
 
         @Override
@@ -121,9 +121,7 @@ public abstract class ItemListFragment<I> extends RecyclerFragment<I, Item, Item
 
             int len = p1.length;
             for (int i=0;i < len;i++) {
-				Log.i("AAA", ""+i);
                 Item item = p1[i];
-				Log.i("AAA", ""+item);
                 item.loadBitmap(con);
                 publishProgress(i);
                 if (isCancelled()) {

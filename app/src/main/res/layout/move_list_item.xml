@@ -27,11 +27,12 @@
 		android:layout_weight="1"
 		android:gravity="center"
 		/>
-	<ImageView
+	<TextView
 		android:id="@+id/damage_class"
 		android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1"
+		android:gravity="center"
 	/>
 
 </LinearLayout>

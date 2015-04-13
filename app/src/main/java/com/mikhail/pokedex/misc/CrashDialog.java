@@ -109,7 +109,7 @@ public class CrashDialog implements UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
-                builder.setTitle("Sorry...!");
+                builder.setTitle("Ultradex Crashed!");
                 builder.create();
                 builder.setNegativeButton("Cancel",
 					new DialogInterface.OnClickListener() {
@@ -143,7 +143,7 @@ public class CrashDialog implements UncaughtExceptionHandler {
 							System.exit(0);
 						}
 					});
-                builder.setMessage("Oops,Your application has crashed");
+                builder.setMessage("If this is your first time experiencing this issue, please send a crash report.");
                 builder.show();
                 Looper.loop();
             }

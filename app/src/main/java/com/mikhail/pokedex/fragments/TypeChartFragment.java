@@ -122,10 +122,11 @@ public class TypeChartFragment extends Fragment implements DrawerItem
         private TypeSpinnerAdapter(int mTypeVersion, PokedexDatabase dex) {
             this.mTypeVersion = mTypeVersion;
             this.mPokedexDatabase = dex;
-            mTypes = new int[dex.TYPE_NAMES[mTypeVersion].length];
-            for(int i=-1;i<mTypes.length -1;i++){
-                mTypes[i+1] = i;
-            }
+            mTypes = new int[PokedexDatabase.TYPES[mTypeVersion].length+1];
+			mTypes[0] = -1;
+			for(int i=1;i<mTypes.length;i++){
+				mTypes[i] = PokedexDatabase.TYPES[mTypeVersion][i-1];
+			}
         }
 
         private TypeSpinnerAdapter(PokedexDatabase dex) {
@@ -144,7 +145,7 @@ public class TypeChartFragment extends Fragment implements DrawerItem
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return mTypes[position];
         }
 
         @Override

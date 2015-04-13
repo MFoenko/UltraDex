@@ -122,7 +122,8 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 
 	protected static class MoveListAdapter extends RecyclerFragment.ListItemAdapter<Move, MoveListAdapter.MoveViewHolder>{
 
-
+		public static final int[] DAMAGE_CLASS_DRAWABLE_RES = new int[]{R.drawable.status, R.drawable.physical, R.drawable.special};
+		
 		@Override
 		public MoveListFragment.MoveListAdapter.MoveViewHolder onCreateViewHolder(ViewGroup p1, int p2){
 			LayoutInflater inflater = LayoutInflater.from(p1.getContext());
@@ -137,6 +138,9 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 			Move m = listItems.get(p2);
 			p1.nameTV.setText(m.name);
 			p1.typeTV.setType(m.type);
+			p1.classTV.setBackgroundResource(DAMAGE_CLASS_DRAWABLE_RES[m.damageClass]);
+			p1.classTV.getBackground().setAlpha(0x66);
+			p1.classTV.setText(PokedexDatabase.DAMAGE_CLASS_NAMES[m.damageClass]);
 			if (m.learnMethod != -1){
 				p1.learnTV.setVisibility(View.VISIBLE);
 				if (m.learnMethod == 0 && m.level == 0){
@@ -152,7 +156,7 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 			public final TextView learnTV;
 			public final TextView nameTV;
 			public final TypeView typeTV;
-			public final ImageView classIV;
+			public final TextView classTV;
 
 
 			public MoveViewHolder(View v){
@@ -160,7 +164,7 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 				learnTV = (TextView)v.findViewById(R.id.learn_method);
 				nameTV = (TextView)v.findViewById(R.id.name);
 				typeTV = (TypeView)v.findViewById(R.id.type);
-				classIV = (ImageView)v.findViewById(R.id.damage_class);
+				classTV = (TextView)v.findViewById(R.id.damage_class);
 				v.setOnClickListener(this);
 			}
 

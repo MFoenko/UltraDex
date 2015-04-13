@@ -53,7 +53,8 @@ import org.json.JSONObject;
 /**
  * Created by MFoenko on 3/7/2015.
  */
-public class MainActivity extends ActionBarActivity implements OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements OnItemClickListener
+{
 
 
     public final DrawerItem[] DRAWER_ITEMS = new DrawerItem[]{
@@ -67,31 +68,72 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		new NaturesFragment(),
 		new IVCalculatorFragment(),
 		new DrawerHeader("App"),
-		new SettingsActivity(),
+		new AppSettingsActivity(),
 		new DrawerItem(){
 
 			@Override
-			public String getDrawerItemName() {
-				return "Bug Report";
+			public String getDrawerItemName()
+			{
+				return "Suggest a Feature";
 			}
 
 			@Override
-			public int getDrawerItemIconResourceId() {
-				return R.drawable.ic_bug_report;
+			public int getDrawerItemIconResourceId()
+			{
+				return R.drawable.ic_suggest_feature;
 			}
 
 			@Override
-			public byte getDrawerItemType() {
+			public byte getDrawerItemType()
+			{
 				return DRAWER_ITEM_TYPE_CLICKABLE;
 			}
 
 			@Override
-			public boolean onDrawerItemClick(Context context) {
+			public boolean onDrawerItemClick(Context context)
+			{
 				Intent intent = new Intent(Intent.ACTION_SEND);
-				intent.setType("text/html");
-				intent.putExtra(Intent.EXTRA_EMAIL, CrashDialog.DEV_EMAIL);
-				intent.putExtra(Intent.EXTRA_SUBJECT, "Ultadex 3.0b Bug");
-				intent.putExtra(Intent.EXTRA_TEXT, "Describe the bug here");
+				//intent.setType("text/html");
+				intent.setType("message/rfc822");
+				intent.putExtra(Intent.EXTRA_EMAIL, new String[]{CrashDialog.DEV_EMAIL});
+				intent.putExtra(Intent.EXTRA_SUBJECT, "I have an idea for Ultradex!");
+				intent.putExtra(Intent.EXTRA_TEXT, "Describe the idea here: \n \n");
+
+				context.startActivity(Intent.createChooser(intent, "Send Email"));
+				return false;
+			}
+
+
+		},
+		new DrawerItem(){
+
+			@Override
+			public String getDrawerItemName()
+			{
+				return "Report a Bug";
+			}
+
+			@Override
+			public int getDrawerItemIconResourceId()
+			{
+				return R.drawable.ic_bug_report;
+			}
+
+			@Override
+			public byte getDrawerItemType()
+			{
+				return DRAWER_ITEM_TYPE_CLICKABLE;
+			}
+
+			@Override
+			public boolean onDrawerItemClick(Context context)
+			{
+				Intent intent = new Intent(Intent.ACTION_SEND);
+				//intent.setType("text/html");
+				intent.setType("message/rfc822");
+				intent.putExtra(Intent.EXTRA_EMAIL, new String[]{CrashDialog.DEV_EMAIL});
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Ultadex 3.0 Bug Report");
+				intent.putExtra(Intent.EXTRA_TEXT, "Describe the bug here: \n \n");
 
 				context.startActivity(Intent.createChooser(intent, "Send Email"));
 				return false;
@@ -128,27 +170,25 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 				try
 				{
 					Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
-																   "remove_ads", "inapp", "");
-				
-				
-				PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
-				
+																   "remove_ads", "inapp", "abc");
+					PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
 					((Activity)context).startIntentSenderForResult(pendingIntent.getIntentSender(),
 																   1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
 																   Integer.valueOf(0));
 				}
 				catch (IntentSender.SendIntentException e)
 				{}
-				catch (RemoteException e){
-					
+				catch (RemoteException e)
+				{
+
 				}
 
-				
+
 				return false;
 			}
-			
-			
-			
+
+
+
 		}
 
     };
@@ -170,26 +210,30 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 	ServiceConnection mServiceConn = new ServiceConnection() {
 		@Override
-		public void onServiceDisconnected(ComponentName name) {
+		public void onServiceDisconnected(ComponentName name)
+		{
 			mService = null;
 		}
 
 		@Override
 		public void onServiceConnected(ComponentName name, 
-									   IBinder service) {
+									   IBinder service)
+		{
 			mService = IInAppBillingService.Stub.asInterface(service);
 		}
 	};
-	
-	
 
-	public MainActivity() {
-		//Thread.setDefaultUncaughtExceptionHandler(new CrashDialog(this));
+
+
+	public MainActivity()
+	{
+		Thread.setDefaultUncaughtExceptionHandler(new CrashDialog(this));
 	}
-	
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+	{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
@@ -197,9 +241,9 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		serviceIntent.setPackage("com.android.vending");
 		bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 
-		
-		
-		
+
+
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mLeftDrawer = (ListView) findViewById(R.id.left_drawer);
@@ -220,7 +264,8 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     }
 
 	@Override
-	protected void onStart() {
+	protected void onStart()
+	{
 		super.onStart();
 
         PokedexDatabase pokedexDatabase = PokedexDatabase.getInstance(this);
@@ -233,7 +278,8 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume()
+	{
 		//Log.i("AAA", Arrays.toString(DRAWER_ITEMS));
 
 
@@ -243,13 +289,15 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState)
+	{
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_FRAG, mLeftDrawer.getSelectedItemPosition());
     }
 
     @Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
 		super.onRestoreInstanceState(savedInstanceState);
 		onItemClick(null, null, savedInstanceState.getInt(KEY_FRAG), 0);
 	}
@@ -259,17 +307,21 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 
 	@Override
-	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
+	{
 
-		if (DRAWER_ITEMS[p3].onDrawerItemClick(this)) {
+		if (DRAWER_ITEMS[p3].onDrawerItemClick(this))
+		{
 			FragmentManager fm = getSupportFragmentManager();
 			fm.beginTransaction().replace(R.id.content_view, (Fragment)DRAWER_ITEMS[p3]).commit();
 			getSupportActionBar().setTitle(DRAWER_ITEMS[p3].getDrawerItemName());
-			mLeftDrawer.setItemChecked(p3, true);
-			if (DRAWER_ITEMS[p3] instanceof UsesRightDrawer) {
+			//mLeftDrawer.setItemChecked(p3, true);
+			if (DRAWER_ITEMS[p3] instanceof UsesRightDrawer)
+			{
 				mRightDrawer.removeAllViews();
 				View filters = ((UsesRightDrawer)DRAWER_ITEMS[p3]).getRightDrawerLayout(getLayoutInflater(), mRightDrawer);
-				if (filters.getParent() != null) {
+				if (filters.getParent() != null)
+				{
 					((ViewGroup)filters.getParent()).removeAllViews();
 				}
 				mRightDrawer.addView(filters);
@@ -282,7 +334,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 			if (DRAWER_ITEMS[p3] instanceof InfoPagerFragment)
 				((InfoPagerFragment)DRAWER_ITEMS[p3]).displayData();
-			
+
 
 		}
 
@@ -291,20 +343,24 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	}
 
 	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
+	protected void onPostCreate(Bundle savedInstanceState)
+	{
 		super.onPostCreate(savedInstanceState);
 		mLeftDrawerToggle.syncState();
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(Configuration newConfig)
+	{
 		super.onConfigurationChanged(newConfig);
 		mLeftDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (mLeftDrawerToggle.onOptionsItemSelected(item)) {
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		if (mLeftDrawerToggle.onOptionsItemSelected(item))
+		{
 			return true;
 		}
 
@@ -314,21 +370,26 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {	
-		if (requestCode == 1001) {    	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{	
+		if (requestCode == 1001)
+		{    	
 			int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
-			Log.i("AAA", ""+responseCode);
+			Log.i("AAA", "" + responseCode);
 			String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
 			String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
 
-			if (resultCode == RESULT_OK) {
-				try {
+			if (resultCode == RESULT_OK)
+			{
+				try
+				{
 					JSONObject jo = new JSONObject(purchaseData);
 					String sku = jo.getString("productId");
 					PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(AdmobBannerAd.PREF_SHOW_ADS, false).apply();
 					AdmobBannerAd.showAds = false;
 				}
-				catch (JSONException e) {
+				catch (JSONException e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -338,60 +399,73 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 
 
-	public static class DrawerItemAdapter extends BaseAdapter {
+	public static class DrawerItemAdapter extends BaseAdapter
+	{
 
 		public DrawerItem[] drawerItems;
 
-		public DrawerItemAdapter(DrawerItem[] drawerItems) {
+		public DrawerItemAdapter(DrawerItem[] drawerItems)
+		{
 			this.drawerItems = drawerItems;
 		}
 
 
 		@Override
-		public int getCount() {
+		public int getCount()
+		{
 			return drawerItems.length;
 		}
 
 		@Override
-		public Object getItem(int position) {
+		public Object getItem(int position)
+		{
 			return drawerItems[position];
 		}
 
 		@Override
-		public long getItemId(int position) {
+		public long getItemId(int position)
+		{
 			return 0;
 		}
 
 		@Override
-		public int getItemViewType(int position) {
+		public int getItemViewType(int position)
+		{
 			return drawerItems[position].getDrawerItemType();
 		}
 
 		@Override
-		public int getViewTypeCount() {
+		public int getViewTypeCount()
+		{
 			return 2;
 		}
 
 
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
 
 			DrawerItem item = (DrawerItem)getItem(position);
 			ViewGroup listItemView;
-			switch (getItemViewType(position)) {
+			switch (getItemViewType(position))
+			{
 
 				case DrawerItem.DRAWER_ITEM_TYPE_CLICKABLE:
-					if (convertView == null) {
+					if (convertView == null)
+					{
 						LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 						listItemView = (ViewGroup)inflater.inflate(R.layout.drawer_list_item, parent, false);
-					} else {
+					}
+					else
+					{
 						listItemView = (ViewGroup)convertView;
 					}
 
 					TextView itemName = (TextView)listItemView.findViewById(R.id.name);
 					itemName.setText(item.getDrawerItemName());
-					if (item.getDrawerItemIconResourceId() != DrawerItem.DRAWER_ICON_NONE) {
+					if (item.getDrawerItemIconResourceId() != DrawerItem.DRAWER_ICON_NONE)
+					{
 						ImageView iconIV = (ImageView)listItemView.findViewById(R.id.icon);
 
 						iconIV.setImageResource(item.getDrawerItemIconResourceId());
@@ -399,10 +473,13 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 					return listItemView;
 
 				case DrawerItem.DRAWER_ITEM_TYPE_HEADER:
-					if (convertView == null) {
+					if (convertView == null)
+					{
 						LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 						listItemView = (ViewGroup)inflater.inflate(R.layout.drawer_header_itemi, parent, false);
-					} else {
+					}
+					else
+					{
 						listItemView = (ViewGroup)convertView;
 					}
 

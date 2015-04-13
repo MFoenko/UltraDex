@@ -140,6 +140,9 @@ public class IVCalculatorFragment extends Fragment implements DrawerItem {
 
         try {
             baseStats = mAutoAdapter.mPokemon.stats;
+			if(baseStats == null){
+				throw new NullPointerException();
+			}
         } catch (NullPointerException e) {
             toast(ERR_NO_POKEMON);
         }

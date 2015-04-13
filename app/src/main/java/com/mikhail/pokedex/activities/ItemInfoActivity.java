@@ -1,15 +1,14 @@
 package com.mikhail.pokedex.activities;
 
-import android.os.Bundle;
-import android.support.v7.graphics.Palette;
-import android.text.Spannable;
-import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.mikhail.pokedex.R;
-import com.mikhail.pokedex.data.PokedexClasses.Item;
+import android.graphics.*;
+import android.os.*;
+import android.support.v7.graphics.*;
+import android.text.*;
+import android.text.method.*;
+import android.view.*;
+import android.widget.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.PokedexClasses.*;
 
 /**
  *
@@ -55,7 +54,9 @@ public class ItemInfoActivity extends InfoActivity<Item> {
         mIconIV.setImageBitmap(curentItem.icon);
 		mNameTV.setText(curentItem.name);
 		try{
-		getWindow().getDecorView().setBackgroundColor(mPallete.getLightVibrantColor(0xFFFFFF));
+			int color = mPallete.getVibrantColor(0xFFFFFF);
+			color = Color.argb(0x66, Color.red(color), Color.blue(color), Color.green(color));
+		getWindow().getDecorView().setBackgroundColor(color);
 		}catch(NullPointerException e){}
         mDescriptionTV.setText(curentItem.description);
 		new Thread(new Runnable(){

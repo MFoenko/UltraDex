@@ -282,10 +282,8 @@ public class NaturesFragment extends Fragment implements DrawerItem {
 
         @Override
         public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4){
-           	Log.i("AAA" , mAdapter.listItems.toString());
 			sortBy = sortOptions[p3].second;
             sort();
-			Log.i("AAA", mAdapter.listItems.toString());
 			mAdapter.notifyDataSetChanged();
 			/*try {
 			 ((TextView) ((LinearLayout) p1.getChildAt(0)).findViewById(R.id.label)).setTextColor(0xFFFFFFFF);

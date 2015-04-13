@@ -30,10 +30,16 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
-        VERSION = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("version_index","24"));
-        VERSION_GROUP = VERSION_VERSION_GROUP[VERSION];
-        GEN = VERSION_GROUP_GENERATION[VERSION_GROUP];
-        Log.i("AAA", ""+VERSION);
+		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		if (mPrefs.getBoolean("use_time_machine", false))
+		{
+			VERSION = Integer.parseInt(mPrefs.getString("version_index", "24"));
+		}else{
+			VERSION = 24;
+		}
+			VERSION_GROUP = VERSION_VERSION_GROUP[VERSION];
+			GEN = VERSION_GROUP_GENERATION[VERSION_GROUP];
+        
 		int failcoint = 0;
 		while (dex == null && failcoint < 50)
 		{
@@ -59,6 +65,20 @@ public class PokedexDatabase extends SQLiteOpenHelper
         return instance;
     }
 
+	public static void deleteInstance(){
+		if(instance != null){
+			instance.dex.close();
+			instance.preloadedPokemon = null;
+			instance.preloadedMoves = null;
+			instance.preloadedAbilities = null;
+			instance.preloadedItems = null;
+			
+			
+			instance = null;
+		}
+		
+	}
+	
 	@Override
     public void onCreate(SQLiteDatabase db)
 	{
@@ -152,6 +172,12 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	};
 
 	public static final int[] GEN_TYPE_VERSIONS = {0,1,1,1,1,2};
+	public static final int[][] TYPES = {
+		{0,1,2,3,4,5,6,7,9,10,11,12,13,14,15},
+		{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
+		{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17}
+
+	};
 	public static final String[][] TYPE_NAMES = {
 		{"Normal","Fighting","Flying","Poison","Ground","Rock","Bug","Ghost","","Fire","Water","Grass","Electric","Psychic","Ice","Dragon"},
 		{"Normal","Fighting","Flying","Poison","Ground","Rock","Bug","Ghost","Steel","Fire","Water","Grass","Electric","Psychic","Ice","Dragon","Dark"},
@@ -278,13 +304,13 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	private static Pokemon[] preloadedPokemon;
 
 
-	private static final String BASE_POKEMON_QUERY_W_O_SELECT = "p._id, p.species_id, CASE f.form_order WHEN 1 THEN sn.name ELSE fn.pokemon_name END, f.form_identifier, (SELECT GROUP_CONCAT(t.type_id-1,',') FROM pokemon_types AS t WHERE t.pokemon_id=p._id AND generation_id-1 <= ? GROUP BY pokemon_id,generation_id ORDER BY slot, generation_id DESC LIMIT 1), (SELECT GROUP_CONCAT(s.base_stat,',') FROM pokemon_stats AS s WHERE s.pokemon_id = p._id AND stat_id != (5*(?=='1')) AND generation_id-1 <= ? GROUP BY s.generation_id ORDER BY stat_id, generation_id DESC LIMIT 1), sn.genus, p.height/10.0, p.weight/10.0, s.gender_rate, p.base_experience, s.base_happiness, s.capture_rate, s.hatch_counter, (SELECT group_concat(effort) FROM pokemon_stats AS stats WHERE stats.pokemon_id = p._id GROUP BY stats.generation_id ORDER BY stat_id LIMIT 1), (SELECT egg_group_id-1 FROM pokemon_egg_groups WHERE species_id = s.id), p.identifier FROM pokemon AS p JOIN pokemon_species AS s ON (p.species_id = s.id) JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ?";
+	private static final String BASE_POKEMON_QUERY_W_O_SELECT = "p._id, p.species_id, CASE f.form_order WHEN 1 THEN sn.name ELSE fn.pokemon_name END, f.form_identifier, (SELECT GROUP_CONCAT(t.type_id-1,',') FROM pokemon_types AS t WHERE t.pokemon_id=p._id AND generation_id-1 <= CAST(? AS INTEGER) GROUP BY pokemon_id,generation_id ORDER BY slot, generation_id DESC LIMIT 1), (SELECT GROUP_CONCAT(s.base_stat,',') FROM pokemon_stats AS s WHERE s.pokemon_id = p._id AND stat_id != (5*(?=='1')) AND generation_id-1 <= CAST(? AS INTEGER) GROUP BY s.generation_id ORDER BY stat_id, generation_id DESC LIMIT 1), sn.genus, p.height/10.0, p.weight/10.0, s.gender_rate, p.base_experience, s.base_happiness, s.capture_rate, s.hatch_counter, (SELECT group_concat(effort) FROM pokemon_stats AS stats WHERE stats.pokemon_id = p._id GROUP BY stats.generation_id ORDER BY stat_id LIMIT 1), (SELECT egg_group_id-1 FROM pokemon_egg_groups WHERE species_id = s.id), p.identifier FROM pokemon AS p JOIN pokemon_species AS s ON (p.species_id = s.id) JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ?";
 	private static final String BASE_POKEMON_QUERY = "SELECT " + BASE_POKEMON_QUERY_W_O_SELECT;
-	private static final String ALL_POKEMON_QUERY = BASE_POKEMON_QUERY + "AND f.introduced_in_version_group_id+1 <= ? AND f.is_default = 1 ORDER BY p._id;";
+	private static final String ALL_POKEMON_QUERY = BASE_POKEMON_QUERY + " AND f.introduced_in_version_group_id-1 <= CAST(? AS INTEGER) AND f.is_default = 1 ORDER BY p._id;";
 	private static final String SINGLE_POKEMON_QUERY = BASE_POKEMON_QUERY + " AND p._id = ? ORDER BY RANDOM();";
 	private static final String SINGLE_POKEMON_QUERY_BY_IDENTIFIER = BASE_POKEMON_QUERY + " AND p.identifier = ? ORDER BY RANDOM();";
-	private static final String MOVE_POKEMON_QUERY = "SELECT DISTINCT " + BASE_POKEMON_QUERY_W_O_SELECT + " AND p._id IN (SELECT pokemon_id FROM pokemon_moves WHERE version_group_id+1 <= ? AND move_id = ?) ;";
-	private static final String ABILITY_POKEMON_QUERY = "SELECT DISTINCT " + BASE_POKEMON_QUERY_W_O_SELECT + " AND p._id IN (SELECT pokemon_id FROM pokemon_abilities WHERE generation_id+1 <= ? AND ability_id = ?) ;";
+	private static final String MOVE_POKEMON_QUERY = "SELECT DISTINCT " + BASE_POKEMON_QUERY_W_O_SELECT + " AND p._id IN (SELECT pokemon_id FROM pokemon_moves WHERE version_group_id-1 <= CAST(? AS INTEGER) AND move_id = ?) ;";
+	private static final String ABILITY_POKEMON_QUERY = "SELECT DISTINCT " + BASE_POKEMON_QUERY_W_O_SELECT + " AND p._id IN (SELECT pokemon_id FROM pokemon_abilities WHERE generation_id-1 <= CAST(? AS INTEGER) AND ability_id = ?) ;";
 
 
 
@@ -296,10 +322,9 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	public Pokemon getPokemon(int id, int ver, int lang)
 	{
 
-        if (preloadedPokemon != null)
-		{
-            return (Pokemon)binarySearch(preloadedPokemon, id);
-        }
+        Pokemon p = (Pokemon)binarySearch(preloadedPokemon, id);
+		if (p != null) return p;
+
 
 		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]];
 
@@ -308,7 +333,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 
 		c.moveToFirst();
-		Pokemon p = getPokemon(c);
+		p = getPokemon(c);
 		c.close();
 		return p;
 	}
@@ -388,6 +413,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]];
 		int vgr = VERSION_VERSION_GROUP[ver];
 
+
 		Cursor c = this.dex.rawQuery(ALL_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(vgr)});
         preloadedPokemon = getPokemonArrayFromCursor(c);
         c.close();
@@ -433,11 +459,11 @@ public class PokedexDatabase extends SQLiteOpenHelper
 		return getPokemonArrayFromCursor(c);
 	}
 
-	private static final String EVO_QUERY = "SELECT s.id, s.evolves_from_species_id, evolution_trigger_id, trigger_item_id, minimum_level, gender_id, location_id, held_item_id, time_of_day, known_move_id, known_move_type_id, minimum_happiness, minimum_beauty, minimum_affection, relative_physical_stats + 1, party_species_id, party_type_id, trade_species_id, needs_overworld_rain, turn_upside_down FROM pokemon_species AS s  LEFT OUTER JOIN pokemon_evolution AS e ON  s.id = e.evolved_species_id WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id =?) ORDER BY e.id;";
+	private static final String EVO_QUERY = "SELECT s.id, s.evolves_from_species_id, evolution_trigger_id, trigger_item_id, minimum_level, gender_id, (SELECT name FROM location_names AS l WHERE l.location_id = e.location_id AND local_language_id = ?) , held_item_id, time_of_day, known_move_id, known_move_type_id-1, minimum_happiness, minimum_beauty, minimum_affection, relative_physical_stats + 1, party_species_id, party_type_id-1, trade_species_id, needs_overworld_rain, turn_upside_down FROM pokemon_species AS s  LEFT OUTER JOIN pokemon_evolution AS e ON  s.id = e.evolved_species_id WHERE evolution_chain_id = (SELECT evolution_chain_id FROM pokemon_species WHERE id =?) ORDER BY e.id;";
 
 	public ArrayList<ArrayList<Evolution>> getEvolutions(int id)
 	{
-		Cursor c = dex.rawQuery(EVO_QUERY, new String[]{String.valueOf(id)});
+		Cursor c = dex.rawQuery(EVO_QUERY, new String[]{String.valueOf(LANG), String.valueOf(id)});
 		ArrayList<ArrayList<Evolution>> tree = new ArrayList<ArrayList<Evolution>>();
 
 
@@ -493,7 +519,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
             if (c.getInt(5) != 0)
                 evolutionReqs.append(c.getInt(5) == 1 ? "Female" : "Male").append("\n");
             if (c.getInt(6) != 0)
-                evolutionReqs.append("at ").append("<location>").append(c.getInt(6)).append("</location>").append("\n");
+                evolutionReqs.append("at ")/*.append("<location>").append(c.getInt(6)).append("</location>")*/.append(c.getString(6)).append("\n");
             if (c.getInt(7) != 0)
                 evolutionReqs.append("holding").append("<item>").append(c.getInt(7)).append("</item>").append("\n");
             if (c.getString(8) != null)
@@ -545,7 +571,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 		if (preloadedPokemon != null)
 		{
-			Cursor c = this.dex.rawQuery("SELECT p._id FROM pokemon AS p JOIN pokemon_forms AS f ON (f.pokemon_id = p._id) WHERE f.introduced_in_version_group_id-1 <= ? AND p.species_id = ? and p._id != ?;", new String[]{String.valueOf(vgr), String.valueOf(id), String.valueOf(id)});
+			Cursor c = this.dex.rawQuery("SELECT p._id FROM pokemon AS p JOIN pokemon_forms AS f ON (f.pokemon_id = p._id) WHERE f.introduced_in_version_group_id-1 <= CAST(? AS INTEGER) AND p.species_id = ? and p._id != ?;", new String[]{String.valueOf(vgr), String.valueOf(id), String.valueOf(id)});
 			int len;
 			Pokemon[] forms = new Pokemon[len = c.getCount()];
 			for (int i=0;i < len;i++)
@@ -610,7 +636,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	public static final String BASE_MOVE_FROM = " FROM moves AS m JOIN move_names AS mn ON (m.id = mn.move_id) JOIN move_effect_prose AS mp ON (m.effect_id = mp.move_effect_id AND mp.local_language_id=mn.local_language_id)";
 	public static final String BASE_MOVE_WHERE = " WHERE mp.local_language_id = ?";
 	public static final String BASE_MOVE_QUERY = BASE_MOVE_SELECT + BASE_MOVE_FROM + BASE_MOVE_WHERE;
-	public static final String ALL_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.generation_id <= ? AND m.id < 10000";
+	public static final String ALL_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.generation_id <= CAST(? AS INTEGER) AND m.id < 10000";
 	public static final String SINGLE_MOVE_QUERY = BASE_MOVE_QUERY + " AND m.id = ?;";
 	public static final String POKEMON_MOVE_QUERY = BASE_MOVE_SELECT + ", pm.pokemon_move_method_id-1, pm.level" + BASE_MOVE_FROM + " JOIN pokemon_moves AS pm ON (pm.move_id=m.id)" + BASE_MOVE_WHERE + " AND pm.version_group_id = ? AND pm.pokemon_id = ? ;";
 
@@ -627,14 +653,11 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	public Move getMove(int id, int ver, int lang)
 	{
 		//int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
-		if (preloadedMoves != null)
-		{
-			return (Move)binarySearch(preloadedMoves, id);
-		}
-
+		Move move = (Move)binarySearch(preloadedMoves, id);
+		if (move != null) return move;
 		Cursor c=dex.rawQuery(SINGLE_MOVE_QUERY, new String[]{String.valueOf(lang), String.valueOf(id)});
 
-		Move move = null;
+		move = null;
 		if (c.moveToFirst())
 		{
 			Move.Builder builder = new Move.Builder();
@@ -673,7 +696,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]] + 1;
 
-		String query = "SELECT m.id, mn.name, m.type_id-1,m.damage_class_id-1, m.power, m.accuracy, m.pp, m.priority , mp.effect, m.effect_chance FROM moves AS m JOIN move_names AS mn ON (m.id = mn.move_id) JOIN move_effect_prose AS mp ON (m.effect_id = mp.move_effect_id AND mp.local_language_id=mn.local_language_id) WHERE m.identifier = ? AND m.generation_id <= ? AND mp.local_language_id = ?";
+		String query = "SELECT m.id, mn.name, m.type_id-1,m.damage_class_id-1, m.power, m.accuracy, m.pp, m.priority , mp.effect, m.effect_chance FROM moves AS m JOIN move_names AS mn ON (m.id = mn.move_id) JOIN move_effect_prose AS mp ON (m.effect_id = mp.move_effect_id AND mp.local_language_id=mn.local_language_id) WHERE m.identifier = ? AND m.generation_id <= CAST(? AS INTEGER) AND mp.local_language_id = ?";
 		Cursor c=dex.rawQuery(query, new String[]{id.toString(), String.valueOf(gen), String.valueOf(lang)});
 
 		Move move = null;
@@ -801,7 +824,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	}
 
 
-	public static final String ALL_ABILITIES_QUERY = "Select a.id, n.name, p.effect FROM abilities AS a JOIN ability_names AS n ON (a.id = n.ability_id) JOIN ability_prose AS p ON (a.id = p.ability_id AND n.local_language_id = p.local_language_id) WHERE a.generation_id <= ? AND n.local_language_id = ?";
+	public static final String ALL_ABILITIES_QUERY = "Select a.id, n.name, p.effect FROM abilities AS a JOIN ability_names AS n ON (a.id = n.ability_id) JOIN ability_prose AS p ON (a.id = p.ability_id AND n.local_language_id = p.local_language_id) WHERE a.generation_id <=CAST(? AS INTEGER) AND n.local_language_id = ?";
 	public static final String SINGLE_ABILITY_QUERY = ALL_ABILITIES_QUERY + " AND a.id = ?";
 	public static final String SINGLE_ABILITY_BY_IDENTIFIER_QUERY = ALL_ABILITIES_QUERY + " AND a.identifier = ?";
 	public static final String ABILITIES_BY_POKEMON_QUERY = ALL_ABILITIES_QUERY + " AND a.id IN (SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = ?)";
@@ -845,16 +868,17 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 	public Ability getAbility(int id, int lang)
 	{
-		if (preloadedAbilities != null)
+		Ability a = (Ability)binarySearch(preloadedAbilities, id);;
+		if (a != null)
 		{
-			return (Ability)binarySearch(preloadedAbilities, id);
+			return a;
 		}
 
 		int gen = GEN;
 
 		Cursor c = dex.rawQuery(SINGLE_ABILITY_QUERY, new String[]{String.valueOf(gen + 1), String.valueOf(lang), String.valueOf(id)});
 		c.moveToFirst();
-		Ability a = getAbilityFromCursor(c);
+		a = getAbilityFromCursor(c);
 		c.close();
 
 		return a;
@@ -910,7 +934,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
     private Item[] preloadedItems;
 
-    public static final String ITEM_QUERY = "SELECT i.id, n.name, p.effect, i.identifier FROM items AS i JOIN item_names AS n ON(i.id = n.item_id) LEFT OUTER JOIN item_prose AS p ON(i.id = p.item_id AND n.local_language_id  = p.local_language_id) WHERE n.local_language_id = ?";
+    public static final String ITEM_QUERY = "SELECT i.id, n.name, p.effect, i.identifier FROM items AS i JOIN item_names AS n ON(i.id = n.item_id) LEFT OUTER JOIN item_prose AS p ON(i.id = p.item_id AND n.local_language_id  = p.local_language_id) WHERE n.local_language_id = ? AND i.id IN (SELECT item_id FROM ITEM_GAME_INDICES WHERE generation_id-1 <= CAST(? AS INTEGER))";
     public static final String SINGLE_ITEM_QUERY = ITEM_QUERY + " AND i.id = ?";
 
     public Item[] getAllItems()
@@ -921,9 +945,11 @@ public class PokedexDatabase extends SQLiteOpenHelper
     public Item[] getAllItems(int ver, int lang)
 	{
 
+		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]];
+
         if (preloadedItems == null)
 		{
-            Cursor c = dex.rawQuery(ITEM_QUERY, new String[]{String.valueOf(lang)});
+            Cursor c = dex.rawQuery(ITEM_QUERY, new String[]{String.valueOf(lang), String.valueOf(gen)});
             preloadedItems = new Item[c.getCount()];
             for (int i = 0;i < preloadedItems.length;i++)
 			{
@@ -944,13 +970,15 @@ public class PokedexDatabase extends SQLiteOpenHelper
     public Item getItem(int id, int ver, int lang)
 	{
 
-        if (preloadedItems != null)
+		Item i = (Item)binarySearch(preloadedItems, id);
+
+		if (i != null)
 		{
-            return (Item)binarySearch(preloadedItems, id);
-        }
+			return i;
+		}
 
         Cursor c = dex.rawQuery(SINGLE_ITEM_QUERY, new String[]{String.valueOf(lang), String.valueOf(id)});
-        Item i = getItemFromCursor(c);
+        i = getItemFromCursor(c);
         c.close();
 
         return i;
@@ -971,6 +999,11 @@ public class PokedexDatabase extends SQLiteOpenHelper
     }
     public static DexObject binarySearch(DexObject[] array, int id, int pos, int low, int high)
 	{
+
+		if (array == null)
+		{
+			return null;
+		}
 
 		if (pos < 0 || pos > array.length || high < low)
 		{

@@ -9,9 +9,14 @@
         android:entries="@array/version_names"
         android:entryValues="@array/version_indeces"
 
-        android:title="Game"
+        android:title="Default Game"
         android:dialogTitle="Game"
         android:defaultValue="24" />
         />
+	<CheckBoxPreference
+		android:key="use_time_machine"
+		android:title="Time Machine"
+		android:summary="Enabling this option removes all Pokemon, Moves, Abilities, and Items that were added after the game selected above. This also changes type charts and some Pokemon's stats"
+		/>
 
 </PreferenceScreen>    

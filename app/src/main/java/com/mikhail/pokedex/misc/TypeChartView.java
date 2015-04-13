@@ -7,10 +7,8 @@ import android.view.*;
 import com.mikhail.pokedex.data.*;
 import android.view.ScaleGestureDetector.*;
 
-/**
- * Created by mchail on 4/5/15.
- */
-public class TypeChartView extends View {
+public class TypeChartView extends View
+{
 
     private int mTypeVersion;
     private float[][] mTypeChart;
@@ -33,24 +31,27 @@ public class TypeChartView extends View {
 
 	private Rect textBounds = new Rect();
 
-    public TypeChartView(Context context) {
+    public TypeChartView(Context context)
+	{
         super(context);
         init();
     }
 
-    public TypeChartView(Context context, AttributeSet attrs) {
+    public TypeChartView(Context context, AttributeSet attrs)
+	{
         super(context, attrs);
         init();
     }
 
-    private void init() {
+    private void init()
+	{
 
         mCellSize *= getContext().getResources().getDisplayMetrics().density;
 		MAX_CELL_SIZE = mCellSize * 2;
 		MIN_CELL_SIZE = mCellSize / 2;
-		
+
         mChartItemPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        
+
         mTypePaint = new Paint();
         mOverLapPaint = new Paint();
         mOverLapPaint.setColor(0xFFFFFFFF);
@@ -61,16 +62,18 @@ public class TypeChartView extends View {
 		mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
     }
 
-	public void calcSizes() {
+	public void calcSizes()
+	{
 		mHeaderSize = 2 * mCellSize;
-	
+
 		mChartItemPaint.setTextSize(mCellSize / 4);
-		
+
 		mHeaderTextPaint.setTextSize(mCellSize / 3);
-		
+
 	}
 
-    public void setTypeVersion(int version) {
+    public void setTypeVersion(int version)
+	{
         mTypeVersion = version;
         mTypeChart = PokedexDatabase.TYPE_EFFICIENCY[version];
 		selectedRows = new boolean[mTypeChart.length];
@@ -78,93 +81,121 @@ public class TypeChartView extends View {
         invalidate();
     }
 
-    public void deselectAllRows(){
-        for(int i=0;i<selectedRows.length;i++){
+    public void deselectAllRows()
+	{
+        for (int i=0;i < selectedRows.length;i++)
+		{
             selectedRows[i] = false;
         }
         invalidate();
     }
-    public void deselectAllCols(){
-        for(int i=0;i<selectedCols.length;i++){
+    public void deselectAllCols()
+	{
+        for (int i=0;i < selectedCols.length;i++)
+		{
             selectedCols[i] = false;
         }
         invalidate();
     }
 
-    public void selectRow(int row){
+    public void selectRow(int row)
+	{
         selectedRows[row] = true;
         invalidate();
     }
-    public void selectCol(int col){
+    public void selectCol(int col)
+	{
         selectedCols[col] = true;
         invalidate();
     }
 
+
+
+
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas)
+	{
         super.onDraw(canvas);
-        for (int c=0;c < mTypeChart.length;c++) {
-            for (int r = 0; r < mTypeChart[c].length; r++) {
 
-                float x,y;
+        for (int c=0;c < PokedexDatabase.TYPES[mTypeVersion].length;c++)
+		{
+			int colType = PokedexDatabase.TYPES[mTypeVersion][c];
+            for (int r = 0; r <  PokedexDatabase.TYPES[mTypeVersion].length;r++)
+			{
 
-                if(selectedCols[c] || selectedRows[r]){
+				int rowType = PokedexDatabase.TYPES[mTypeVersion][r];
+
+				float x;
+				float y;
+
+
+
+
+                if (selectedCols[colType] || selectedRows[rowType])
+				{
 
                     int color;
-                    if (selectedCols[c] && selectedRows[r]){
-                        int color1 = PokedexDatabase.TYPE_COLORS[mTypeVersion][c];
+                    if (selectedCols[colType] && selectedRows[rowType])
+					{
+                        int color1 = PokedexDatabase.TYPE_COLORS[mTypeVersion][colType];
                         int r1 = Color.red(color1);
                         int g1 = Color.green(color1);
                         int b1 = Color.blue(color1);
 
-                        int color2 = PokedexDatabase.TYPE_COLORS[mTypeVersion][r];
+                        int color2 = PokedexDatabase.TYPE_COLORS[mTypeVersion][rowType];
                         int r2 = Color.red(color2);
                         int g2 = Color.green(color2);
                         int b2 = Color.blue(color2);
-                        color = Color.argb(0x66, (r1+r2)/2, (g1+g2)/2,(b1+b2)/2);
-                    }else{
-                        color = 0x66000000 + (selectedCols[c]?PokedexDatabase.TYPE_COLORS[mTypeVersion][c]:PokedexDatabase.TYPE_COLORS[mTypeVersion][r]);
+                        color = Color.argb(0x66, (r1 + r2) / 2, (g1 + g2) / 2, (b1 + b2) / 2);
+                    }
+					else
+					{
+                        color = 0x66000000 + (selectedCols[colType] ?PokedexDatabase.TYPE_COLORS[mTypeVersion][colType]: PokedexDatabase.TYPE_COLORS[mTypeVersion][rowType]);
                     }
 
-                    x = mHeaderSize + xOffset + mCellSize * c;
-                    y = mHeaderSize + yOffset+ mCellSize * r;
+                    x = mHeaderSize + xOffset + mCellSize * colType;
+                    y = mHeaderSize + yOffset + mCellSize * rowType;
 
                     mTypePaint.setColor(color);
-                    canvas.drawRect(x,y,x+mCellSize,y+mCellSize, mTypePaint);
+                    canvas.drawRect(x, y, x + mCellSize, y + mCellSize, mTypePaint);
                 }
 
-                x = mHeaderSize + xOffset + mCellSize / 2 + mCellSize * c;
-                y = mHeaderSize + yOffset + mCellSize / 2 + mCellSize * r;
+                x = mHeaderSize + xOffset + mCellSize / 2 + mCellSize * colType;
+                y = mHeaderSize + yOffset + mCellSize / 2 + mCellSize * rowType;
 
-                char damage = PokedexDatabase.getDamageMultiplierChar(mTypeChart[r][c]);
+                char damage = PokedexDatabase.getDamageMultiplierChar(mTypeChart[rowType][colType]);
 				// canvas.drawText(symbol, x, y, mChartItemPaint);
-                if(damage != 0 && damage != '1')
-					drawTextCentred(canvas, mChartItemPaint, "x"+damage, x, y);
+                if (damage != 0 && damage != '1')
+					drawTextCentred(canvas, mChartItemPaint, "x" + damage, x, y);
 
             }
 
         }
 
-		for (int t=0;t < mTypeChart.length;t++) {
-			mTypePaint.setColor(PokedexDatabase.TYPE_COLORS[mTypeVersion][t]);
+		for (int t=0;t < PokedexDatabase.TYPES[mTypeVersion].length;t++)
+		{
+			int type = PokedexDatabase.TYPES[mTypeVersion][t];
+
+			mTypePaint.setColor(PokedexDatabase.TYPE_COLORS[mTypeVersion][type]);
             float posX =  mHeaderSize + xOffset + mCellSize * (t);
             float posY =  mHeaderSize + yOffset + mCellSize * (t);
 
 
             canvas.drawRect(0, posY, mHeaderSize, posY + mCellSize, mTypePaint);
             //canvas.drawText(PokedexDatabase.TYPE_NAMES[mTypeVersion][r], mHeaderSize / 2, posY + mCellSize / 2, mHeaderTextPaint);
-          	drawTextCentred(canvas, mHeaderTextPaint, PokedexDatabase.TYPE_NAMES[mTypeVersion][t], mHeaderSize / 2, posY + mCellSize / 2);
+          	drawTextCentred(canvas, mHeaderTextPaint, PokedexDatabase.TYPE_NAMES[mTypeVersion][type], mHeaderSize / 2, posY + mCellSize / 2);
 			canvas.drawRect(posX, 0, posX + mCellSize, mHeaderSize, mTypePaint);
 			canvas.save();
 			canvas.rotate(-90, posX + mCellSize / 2, mHeaderSize / 2);
 			//canvas.drawText(PokedexDatabase.TYPE_NAMES[mTypeVersion][r],posX+mCellSize/2,mHeaderSize/2, mHeaderTextPaint);
-         	drawTextCentred(canvas, mHeaderTextPaint, PokedexDatabase.TYPE_NAMES[mTypeVersion][t], posX + mCellSize / 2, mHeaderSize / 2);
+         	drawTextCentred(canvas, mHeaderTextPaint, PokedexDatabase.TYPE_NAMES[mTypeVersion][type], posX + mCellSize / 2, mHeaderSize / 2);
 			canvas.restore();
 		}
 		canvas.drawRect(0, 0, mHeaderSize, mHeaderSize, mOverLapPaint);
     }
 
-	public void drawTextCentred(Canvas canvas, Paint paint, String text, float cx, float cy) {
+	public void drawTextCentred(Canvas canvas, Paint paint, String text, float cx, float cy)
+	{
 		paint.getTextBounds(text, 0, text.length(), textBounds);
 		canvas.drawText(text, cx - textBounds.exactCenterX(), cy - textBounds.exactCenterY(), paint);
 	}
@@ -178,10 +209,12 @@ public class TypeChartView extends View {
     float ogYOffset;
 	ScaleGestureDetector mScaleDetector;
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event)
+	{
 		//if(mScaleDetector.onTouchEvent(event)) return true;
 		mScaleDetector.onTouchEvent(event);
-        switch (event.getAction()) {
+        switch (event.getAction())
+		{
             case MotionEvent.ACTION_DOWN:
 				//timeStart = System.currentTimeMillis();
                 isHeld = true;
@@ -193,18 +226,19 @@ public class TypeChartView extends View {
 				return true;
 
             case MotionEvent.ACTION_MOVE:
-                if (isHeld && !mScaleDetector.isInProgress()) {
+                if (isHeld && !mScaleDetector.isInProgress())
+				{
 					int pointer = event.findPointerIndex(pointerId);
-                    xOffset = (int)(ogXOffset + event.getX(/*pointer*/) - touchStartX);
-                    yOffset = (int)(ogYOffset + event.getY(/*pointer*/) - touchStartY);
+                    xOffset = (int)(ogXOffset + event.getX() - touchStartX);
+                    yOffset = (int)(ogYOffset + event.getY() - touchStartY);
                     checkOffsetBounds();
                     invalidate();
                 }
                 return true;
             case MotionEvent.ACTION_UP:
 				/*if(System.currentTimeMillis() - timeStart <500){
-					if(event.getX() < mHeaderSize || event.getY() < mHeaderSize
-				}*/
+				 if(event.getX() < mHeaderSize || event.getY() < mHeaderSize
+				 }*/
                 isHeld = false;
 
                 return true;
@@ -217,11 +251,13 @@ public class TypeChartView extends View {
     }
 
 
-	private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+	private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
+	{
 
 
 		@Override
-		public boolean onScale(ScaleGestureDetector detector) {
+		public boolean onScale(ScaleGestureDetector detector)
+		{
 
 			mCellSize *= detector.getScaleFactor();
 			//xOffset*= detector.getScaleFactor();
@@ -236,11 +272,12 @@ public class TypeChartView extends View {
 		}
 	}
 
-    public void checkOffsetBounds() {
+    public void checkOffsetBounds()
+	{
         if (xOffset > 0) xOffset = 0;
         if (yOffset > 0) yOffset = 0;
 
-        float chartSize = mCellSize * mTypeChart.length;
+        float chartSize = mHeaderSize + mCellSize * PokedexDatabase.TYPES[mTypeVersion].length;
 
         if (chartSize > getWidth() && xOffset < getWidth() - chartSize) xOffset = getWidth() - chartSize;
         if (chartSize > getHeight() && yOffset < getHeight() - chartSize) yOffset = getHeight() - chartSize;

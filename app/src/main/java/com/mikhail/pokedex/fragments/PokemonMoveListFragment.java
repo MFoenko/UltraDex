@@ -1,13 +1,14 @@
 package com.mikhail.pokedex.fragments;
 
 import android.os.*;
+import android.preference.*;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
+import android.widget.AdapterView.*;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
-import android.widget.AdapterView.*;
 
 public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 
@@ -41,7 +42,7 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 		gameSpinner.setVisibility(View.VISIBLE);
 		gameSpinner.setAdapter(new GamesAdapter());
 		gameSpinner.setOnItemSelectedListener(GAMES_SPINNER_LISTENER);
-		gameSpinner.setSelection(PokedexDatabase.VERSION_GROUP);
+		gameSpinner.setSelection(PokedexDatabase.VERSION_VERSION_GROUP[Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(inflater.getContext()).getString("version_index", "24"))]);
 		return view;
 	}
 
@@ -83,16 +84,24 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 
 	private static class GamesAdapter extends BaseAdapter {
 
-		public static String[] GAMES = PokedexDatabase.VERSION_GROUP_NAMES;
+		public String[] mGames;
 
+		public GamesAdapter(){
+			mGames = new String[PokedexDatabase.VERSION_GROUP+1];
+			for(int i=0;i<mGames.length;i++){
+				mGames[i] = PokedexDatabase.VERSION_GROUP_NAMES[i];
+			}
+			
+		}
+		
 		@Override
 		public int getCount() {
-			return GAMES.length;
+			return mGames.length;
 		}
 
 		@Override
 		public Object getItem(int p1) {
-			return GAMES[p1];
+			return mGames[p1];
 		}
 
 		@Override
@@ -109,7 +118,7 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 			} else {
 				gameTV = (TextView)p2;
 			}
-			gameTV.setText(GAMES[p1]);
+			gameTV.setText(mGames[p1]);
 			return gameTV;
 		}
 

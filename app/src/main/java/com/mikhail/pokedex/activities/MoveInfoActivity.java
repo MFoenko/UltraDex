@@ -42,7 +42,7 @@ public class MoveInfoActivity extends PagerInfoActivity<Move>{
 
 		mNameTV = (TextView)mLayout.findViewById(R.id.name);
 		mDescriptionTV = (TextView)mLayout.findViewById(R.id.description);
-		//mTypeTV = (TypeView)content.findViewById(R.id.type);
+		mTypeTV = (TypeView)mLayout.findViewById(R.id.type);
 		mDamageClassTV = (TextView)mLayout.findViewById(R.id.damage_class);
 		mPowerTV = (TextView)mLayout.findViewById(R.id.power);
 		mPowerTV.getBackground().setAlpha(ICON_OPACITY);
@@ -103,7 +103,7 @@ public class MoveInfoActivity extends PagerInfoActivity<Move>{
 				}
 			}).start();
 
-		//mTypeTV.setType(data.type);
+		mTypeTV.setType(data.type);
 		mDamageClassTV.setText(PokedexDatabase.DAMAGE_CLASS_NAMES[data.damageClass]);
 		mDamageClassTV.setBackgroundResource(DAMAGE_CLASS_ICONS[data.damageClass]);
 		mDamageClassTV.getBackground().setAlpha(ICON_OPACITY);
