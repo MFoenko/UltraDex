@@ -9,6 +9,16 @@
 		android:src="@drawable/banner"
 		/>
 	
+
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/tumblr_link"
+		style="@style/CreditsText"
+	/>
+	
+	
 	<TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -41,4 +51,4 @@
 	/>
 	
 </LinearLayout>
-<!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/credits.xml -->
+<!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/layout/credits.xml -->

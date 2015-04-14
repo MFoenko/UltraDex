@@ -70,18 +70,6 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon> {
 		return mContent;
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.clear();
-		return super.onCreateOptionsMenu(menu);
-	}
-
-
-
-
-
-
-
 
 	@Override
 	public InfoFragmentPagerAdapter getNewAdapter() {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:menu="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/filter"
+        android:title="@string/filter"
+        android:icon="@drawable/ic_action_filter"
+        menu:showAsAction="ifRoom"
+        android:orderInCategory="1"
+
+        />
+</menu><!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/menu/filter.xml -->

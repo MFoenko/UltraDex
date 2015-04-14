@@ -36,5 +36,6 @@
     <string name="calculate">Calculate</string>
     <string name="level_hint">Level</string>
     <string name="pokemon_hint">Pokemon</string>
+    <string name="filter">Filter</string>
 
 </resources>

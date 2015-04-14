@@ -35,6 +35,40 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		setSwipeListener(mContentView);
 	}
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.filter,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.filter).setVisible(mAdapter.getFragment(mViewPager.getCurrentItem()) instanceof UsesRightDrawer);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId()){
+            case R.id.filter:
+                if(mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                    mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                }else{
+                     mDrawerLayout.openDrawer(Gravity.RIGHT);
+                }
+
+                return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
 	@Override
 	public void displayData(T currentItem){
 		mAdapter.setData(currentItem);

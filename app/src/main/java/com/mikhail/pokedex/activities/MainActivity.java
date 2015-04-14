@@ -18,7 +18,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -197,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     public static final int ABILITYDEX_FRAGMENT = 3;
     public static final int ITEMDEX_FRAGMENT = 4;
 
-	public static final int DEFAULT_INDEX = POKEDEX_FRAGMENT;
+	public static int SELECTED_ITEM = POKEDEX_FRAGMENT;
 
 	public static final String KEY_FRAG = "frag_selecred";
 
@@ -259,9 +261,11 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 
 
-		onItemClick(null, null, DEFAULT_INDEX, 0);
+		onItemClick(null, null, SELECTED_ITEM, 0);
 
     }
+
+
 
 	@Override
 	protected void onDestroy()
@@ -301,14 +305,14 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     protected void onSaveInstanceState(Bundle outState)
 	{
         super.onSaveInstanceState(outState);
-        outState.putInt(KEY_FRAG, mLeftDrawer.getSelectedItemPosition());
+        outState.putInt(KEY_FRAG, SELECTED_ITEM);
     }
 
     @Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
 		super.onRestoreInstanceState(savedInstanceState);
-	//	onItemClick(null, null, savedInstanceState.getInt(KEY_FRAG), 0);
+		onItemClick(null, null, savedInstanceState.getInt(KEY_FRAG), 0);
 	}
 
 
@@ -321,6 +325,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 		if (DRAWER_ITEMS[p3].onDrawerItemClick(this))
 		{
+            SELECTED_ITEM = p3;
 			FragmentManager fm = getSupportFragmentManager();
 			fm.beginTransaction().replace(R.id.content_view, (Fragment)DRAWER_ITEMS[p3]).commit();
 			getSupportActionBar().setTitle(DRAWER_ITEMS[p3].getDrawerItemName());
@@ -335,6 +340,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 					((ViewGroup)filters.getParent()).removeAllViews();
 				}
 				mRightDrawer.addView(filters);
+                invalidateOptionsMenu();
 			}
 
 			mDrawerLayout.setDrawerLockMode(
@@ -366,13 +372,41 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		mLeftDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	@Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.filter,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+            menu.findItem(R.id.filter).setVisible(DRAWER_ITEMS[SELECTED_ITEM] instanceof UsesRightDrawer);
+
+        return true;
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		if (mLeftDrawerToggle.onOptionsItemSelected(item))
 		{
+            mDrawerLayout.closeDrawer(Gravity.RIGHT);
 			return true;
 		}
+
+        switch(item.getItemId()){
+            case R.id.filter:
+                if(mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                    mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                }else{
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mDrawerLayout.openDrawer(Gravity.RIGHT);
+                }
+
+                return true;
+        }
 
 
 		return super.onOptionsItemSelected(item);

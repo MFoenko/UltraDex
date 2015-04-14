@@ -14,7 +14,7 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 		setRetainInstance(true);
 	}
 	
-	
+	MenuItem[] menuItems;
 	
 	public void loadData(final I data){
 		isDisplayed = false;
@@ -48,8 +48,16 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	public void setPagePrimary(boolean isPrimary){
 		this.isPrimary = isPrimary;
 	}
-	
-	
+
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu){
+        super.onPrepareOptionsMenu(menu);
+        for (MenuItem menuItem : menuItems) {
+            menuItem.setVisible(isPrimary);
+        }
+    }
 
 	@Override
 	public void onStart(){

@@ -35,6 +35,7 @@
 				android:layout_weight="1"
 			/>
 		</LinearLayout>
+        <include layout="@layout/clear_filter"/>
 		<GridLayout
 			android:id="@+id/type_filters"
 			android:layout_width="match_parent"

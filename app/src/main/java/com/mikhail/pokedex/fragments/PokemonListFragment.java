@@ -30,8 +30,6 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		mFilter.showForms = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(KEY_SHOW_FORMS, true);
-		mFilter.filter();
 	}
 
 	
@@ -99,7 +97,11 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 		if (filters == null) {
 			filters = inflater.inflate(R.layout.pokemon_list_filter, container, false);
 
-			CheckBox formsCB = (CheckBox)filters.findViewById(R.id.show_forms_cb);
+            Button clearFilterButton = (Button)filters.findViewById(R.id.clear_filter_button);
+            clearFilterButton.setOnClickListener(mClearFiltersOnClickListener);
+
+
+            CheckBox formsCB = (CheckBox)filters.findViewById(R.id.show_forms_cb);
 			formsCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
 					@Override
@@ -113,7 +115,6 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 
 				});
-			//formsCB.setChecked(formsCB.getContext().getSharedPreferences("", 0).getBoolean(KEY_SHOW_FORMS, true));
 
 			ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
 			for (int i=0;i < PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++) {
@@ -350,9 +351,21 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 
 		public PokemonFilter(ListItemAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder> adapter, Activity a) {
 			super(adapter, a);
-		}
+		    showForms = PreferenceManager.getDefaultSharedPreferences(a).getBoolean(KEY_SHOW_FORMS, true);
+        }
 
-		@Override
+        @Override
+        public void clear() {
+            super.clear();
+            types = new boolean[PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length];
+            len = PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]].length;
+            stats = new int[][]{Arrays.copyOf(PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len), Arrays.copyOf(PokedexDatabase.STAT_MAXES[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len)};
+            total = new int[]{PokedexDatabase.STAT_TOTAL_MIN, PokedexDatabase.STAT_TOTAL_MAX};
+            eggGroups = new boolean[PokedexDatabase.EGG_GROUP_NAMES.length];
+
+        }
+
+        @Override
 		public boolean isMatchFilter(PokedexClasses.Pokemon item) {
 			 return isMatchSearch(item) && isMatchType(item) && isMatchStat(item) && isMatchForm(item) && isMatchEggGroup(item);
 		}

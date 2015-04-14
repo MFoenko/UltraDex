@@ -23,7 +23,14 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 	protected Filter mFilter;
 	protected SortAdapter mSortAdapter;
 	protected T[] mData;
-	private MenuItem[] menuItems = new MenuItem[2];
+
+    protected View.OnClickListener mClearFiltersOnClickListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            mFilter.clear();
+            mFilter.filter();
+        }
+    };
 
 	Menu menu;
 	
@@ -57,6 +64,7 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 		super.onCreateOptionsMenu(menu, inflater);
+        menuItems = new MenuItem[2];
 		this.menu = menu;
 		//if (menuItems[0] == null){
 			//menu.clear();
@@ -99,14 +107,6 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 	}
 
 
-
-	@Override
-	public void onPrepareOptionsMenu(Menu menu){
-		super.onPrepareOptionsMenu(menu);
-        for (MenuItem menuItem : menuItems) {
-            menuItem.setVisible(isPrimary);
-        }
-	}
 
     public void clearFilters(View view){
         mFilter = getNewFilter(getActivity());
@@ -293,6 +293,9 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 			this.mOriginalList = mOriginalList;
 		}
 
+        public void clear(){
+            search = "";
+        }
 
 		public void filter(){
 			filterTask.cancel();

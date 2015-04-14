@@ -59,6 +59,9 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 		if (filters == null){
 			filters = inflater.inflate(R.layout.move_list_filter, container, false);
 
+            Button clearFilterButton = (Button)filters.findViewById(R.id.clear_filter_button);
+            clearFilterButton.setOnClickListener(mClearFiltersOnClickListener);
+
 			ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
 			for (int i=0;i < PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++){
 				View typeFilter = inflater.inflate(R.layout.type_filter, typesContainer, false);

@@ -27,12 +27,13 @@
 		android:layout_weight="1"
 		android:gravity="center"
 		/>
-	<ImageView
+	<TextView
 		android:id="@+id/damage_class"
 		android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1"
+		android:gravity="center"
 	/>
 
 </LinearLayout>
-<!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/move_list_item.xml -->
+<!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/layout/move_list_item.xml -->

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings_activity_settings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
@@ -28,7 +28,7 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/versions.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/versions.xml -->
     <eat-comment/>
     <string-array name="version_indeces">
         <item>0</item>
@@ -67,9 +67,9 @@
         <item>Crystal</item>
         <item>Ruby</item>
         <item>Sapphire</item>
+		<item>Emerald</item>
         <item>FireRed</item>
         <item>LeafGreen</item>
-        <item>Emerald</item>
         <item>Diamond</item>
         <item>Pearl</item>
         <item>Platinum</item>
@@ -86,7 +86,7 @@
         <item>Omega Ruby</item>
         <item>Alpha Sapphire</item>
     </string-array>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -116,7 +116,7 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/res/values/common_colors.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/res/values/common_colors.xml -->
     <eat-comment/>
     <color name="common_action_bar_splitter">#d2d2d2</color>
     <color name="common_signin_btn_dark_text_default">@android:color/white</color>
@@ -128,10 +128,10 @@
     <color name="common_signin_btn_light_text_disabled">#FFAAAAAA</color>
     <color name="common_signin_btn_light_text_focused">#FF737373</color>
     <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="container_background">#FFFFFF</color>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
@@ -164,7 +164,7 @@
     <color name="secondary_text_disabled_material_light">#24000000</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/res/values/wallet_colors.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/res/values/wallet_colors.xml -->
     <eat-comment/>
     <color name="wallet_bright_foreground_disabled_holo_light">#ffb2b2b2</color>
     <color name="wallet_bright_foreground_holo_dark">#fff3f3f3</color>
@@ -209,7 +209,7 @@
     <declare-styleable name="ViewStubCompat"><attr name="android:layout"/><attr name="android:inflatedId"/><attr name="android:id"/></declare-styleable>
     <declare-styleable name="WalletFragmentOptions"><attr format="enum" name="appTheme"><enum name="holo_dark" value="0"/><enum name="holo_light" value="1"/></attr><attr format="enum" name="environment"><enum name="production" value="1"/><enum name="sandbox" value="0"/><enum name="strict_sandbox" value="2"/></attr><attr format="reference" name="fragmentStyle"/><attr format="enum" name="fragmentMode"><enum name="buyButton" value="1"/><enum name="selectionDetails" value="2"/></attr></declare-styleable>
     <declare-styleable name="WalletFragmentStyle"><attr format="dimension" name="buyButtonHeight"><enum name="match_parent" value="-1"/><enum name="wrap_content" value="-2"/></attr><attr format="dimension" name="buyButtonWidth"><enum name="match_parent" value="-1"/><enum name="wrap_content" value="-2"/></attr><attr format="enum" name="buyButtonText"><enum name="buy_with_google" value="1"/><enum name="buy_now" value="2"/><enum name="book_now" value="3"/><enum name="donate_with_google" value="4"/></attr><attr format="enum" name="buyButtonAppearance"><enum name="classic" value="1"/><enum name="grayscale" value="2"/><enum name="monochrome" value="3"/></attr><attr format="reference" name="maskedWalletDetailsTextAppearance"/><attr format="reference" name="maskedWalletDetailsHeaderTextAppearance"/><attr format="reference|color" name="maskedWalletDetailsBackground"/><attr format="reference" name="maskedWalletDetailsButtonTextAppearance"/><attr format="reference|color" name="maskedWalletDetailsButtonBackground"/><attr format="color" name="maskedWalletDetailsLogoTextColor"/><attr format="enum" name="maskedWalletDetailsLogoImageType"><enum name="classic" value="1"/><enum name="monochrome" value="2"/></attr></declare-styleable>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="abc_action_bar_default_height_material">56dp</dimen>
     <dimen name="abc_action_bar_default_padding_material">4dp</dimen>
@@ -259,12 +259,12 @@
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/dimensions.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/dimensions.xml -->
     <eat-comment/>
     <dimen name="drawer_item_height">48dp</dimen>
     <dimen name="drawer_width">300dp</dimen>
     <dimen name="type_filter_width">150dp</dimen>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_bar_spinner" type="id"/>
@@ -278,10 +278,10 @@
     <integer name="abc_config_activityDefaultDur">220</integer>
     <integer name="abc_config_activityShortDur">150</integer>
     <integer name="abc_max_action_buttons">2</integer>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/res/values/version.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/res/values/version.xml -->
     <eat-comment/>
     <integer name="google_play_services_version">7095000</integer>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <string name="abc_action_bar_home_description">Navigate home</string>
     <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
@@ -299,17 +299,17 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
     <eat-comment/>
     <string name="accept">Accept</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">Ultradex</string>
     <string name="attack_header">Attack</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="calculate">Calculate</string>
     <string name="clear_filter_button_text">Clear Filters</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/res/values/common_strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/res/values/common_strings.xml -->
     <eat-comment/>
     <string name="common_android_wear_notification_needs_update_text">An application requires an update to the Android Wear app.</string>
     <string name="common_android_wear_update_text">This app won\'t run unless you update the Android Wear app.</string>
@@ -343,25 +343,26 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <string name="commono_google_play_services_api_unavailable_text">This app requires one or more Google Play services that are not currently
 available. Please contact the developer for assistance.</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
     <eat-comment/>
     <string name="create_calendar_message">Allow Ad to create a calendar event?</string>
     <string name="create_calendar_title">Create calendar event</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="credits_mchail">Concieved, designed, and programmed by McHail</string>
     <string name="credits_nintendo">Pokémon © 2002-2015 Pokémon. © 1995-2015 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo. No copyright or trademark infringement is intended in using Pokémon content in Ultradex</string>
     <string name="credits_pkparasio">Models by www.pkparaiso.com  </string>
     <string name="credits_silverbawxer">Additional graphics by Silverbawxer</string>
     <string name="credits_veekun">Database and icons by Veekun  </string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
     <eat-comment/>
     <string name="decline">Decline</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="defense_header">Defense</string>
     <string name="evolutions_header">Evolutions</string>
     <string name="evs_header">EVs</string>
+    <string name="filter">Filter</string>
     <string name="forms_header">Forms</string>
     <string name="gender_header">Genders</string>
     <string name="hp_header">HP</string>
@@ -371,7 +372,7 @@ available. Please contact the developer for assistance.</string>
     <string name="level_hint">Level</string>
     <string name="num_zero">0</string>
     <string name="pokemon_hint">Pokemon</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings_activity_settings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="pref_default_display_name">John Smith</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
@@ -389,33 +390,36 @@ available. Please contact the developer for assistance.</string>
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string name="pref_title_system_sync_settings">System sync settings</string>
     <string name="pref_title_vibrate">Vibrate</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="sp_attack_header">Sp. Attack</string>
     <string name="sp_defense_header">Sp. Defense</string>
     <string name="speed_header">Speed</string>
     <string name="stats_header">Stats</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_strings.xml -->
     <eat-comment/>
     <string name="store_picture_message">"Allow Ad to store image in Picture gallery?"</string>
     <string name="store_picture_title">Save image</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/strings_activity_settings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="title_activity_settings">Settings</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/res/values/wallet_strings.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="tumblr_link"/>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/res/values/wallet_strings.xml -->
     <eat-comment/>
     <string name="wallet_buy_button_place_holder" translation_description="Text on a button that allows a user to make a payment with Google Wallet [CHAR LIMIT=30]">Buy with Google</string>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 		<item name="android:textSize">14sp</item>
 		<!--<item name="android:textColor">#FF222222</item>-->
 		
     </style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.Animation.AppCompat.DropDownUp" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/abc_grow_fade_in_from_bottom</item>
@@ -1270,7 +1274,7 @@ available. Please contact the developer for assistance.</string>
         <item name="android:scaleType">center</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="CalculatorEV" parent="CalculatorItem">
     </style>
@@ -1321,7 +1325,7 @@ available. Please contact the developer for assistance.</string>
 		<item name="android:layout_marginLeft">16dp</item>
 		<item name="android:layout_marginRight">16dp</item>
 	</style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
@@ -1501,7 +1505,7 @@ available. Please contact the developer for assistance.</string>
     <style name="RtlOverlay.Widget.AppCompat.SearchView.MagIcon" parent="android:Widget">
         <item name="android:layout_marginLeft">@dimen/abc_dropdownitem_text_padding_left</item>
     </style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="SmallText" parent="@android:style/TextAppearance.Small">
 		<item name="android:textSize">14sp</item>
@@ -1512,7 +1516,7 @@ available. Please contact the developer for assistance.</string>
 		<item name="android:gravity">center_vertical</item>
 		<!--<item name="android:textStyle">bold</item>-->
 	</style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat" parent="Base.TextAppearance.AppCompat"/>
     <style name="TextAppearance.AppCompat.Body1" parent="Base.TextAppearance.AppCompat.Body1"/>
@@ -1594,7 +1598,7 @@ available. Please contact the developer for assistance.</string>
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_iap_style.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/res/values/admob_iap_style.xml -->
     <eat-comment/>
     <style name="Theme.IAPTheme" parent="android:Theme">
     <item name="android:windowIsTranslucent">true</item>
@@ -1604,14 +1608,14 @@ available. Please contact the developer for assistance.</string>
     <item name="android:windowIsFloating">true</item>
     <item name="android:backgroundDimEnabled">false</item>
   </style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="ThemeOverlay.AppCompat" parent="Base.ThemeOverlay.AppCompat"/>
     <style name="ThemeOverlay.AppCompat.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark"/>
     <style name="ThemeOverlay.AppCompat.Dark.ActionBar" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Light" parent="Base.ThemeOverlay.AppCompat.Light"/>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/res/values/wallet_styles.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/res/values/wallet_styles.xml -->
     <eat-comment/>
     <style name="WalletFragmentDefaultButtonTextAppearance">
         <item name="android:textColor">@color/wallet_primary_text_holo_light</item>
@@ -1645,7 +1649,7 @@ available. Please contact the developer for assistance.</string>
         <item name="maskedWalletDetailsLogoTextColor">@color/wallet_bright_foreground_holo_dark</item>
         <item name="maskedWalletDetailsLogoImageType">classic</item>
     </style>
-    <!-- From: file:/home/mchail/Documents/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Widget.AppCompat.ActionBar" parent="Base.Widget.AppCompat.ActionBar">
     </style>

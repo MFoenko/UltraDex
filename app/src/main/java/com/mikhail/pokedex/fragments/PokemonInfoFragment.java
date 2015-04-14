@@ -188,8 +188,10 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.play_cry, menu);
-		menu.findItem(R.id.play_cry).setVisible(true);
+
+        menuItems = new MenuItem[1];
+        inflater.inflate(R.menu.play_cry, menu);
+		menuItems[0] = menu.findItem(R.id.play_cry);
 		
 	}
 

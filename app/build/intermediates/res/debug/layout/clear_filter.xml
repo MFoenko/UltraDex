@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clear_filter_button"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="@string/clear_filter_button_text"
     android:gravity="center"
-    android:onClick="clearFilters"
     />
-<!-- From: file:/home/mchail/Documents/Ultradex/app/src/main/res/layout/clear_filter.xml -->
+<!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/layout/clear_filter.xml -->
