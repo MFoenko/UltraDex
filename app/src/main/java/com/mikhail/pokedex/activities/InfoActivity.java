@@ -111,11 +111,6 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 		loadData();
 
 	}
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-		menu.clear();
-	}
 
 	/*@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

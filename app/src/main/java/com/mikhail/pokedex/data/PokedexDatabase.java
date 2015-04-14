@@ -20,16 +20,20 @@ public class PokedexDatabase extends SQLiteOpenHelper
 {
 
     public static final String DATABASE_NAME = "veekun-pokedex.sqlite";
-    public static final int DATABASE_VERSION = 14;
+    public static final int DATABASE_VERSION = 16;
 
+	private static String DB_PATH = "/data/data/com.mikhail.pokedex/databases/";
+
+    private static String DB_NAME = "veekun-pokedex.sqlite";
+	
     private static PokedexDatabase instance;
-    public Context mContext;
+    public Context myContext;
     private SQLiteDatabase dex;
 
     public PokedexDatabase(Context context)
 	{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        mContext = context;
+        myContext = context;
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		if (mPrefs.getBoolean("use_time_machine", false))
 		{
@@ -45,13 +49,17 @@ public class PokedexDatabase extends SQLiteOpenHelper
 		{
 			try
 			{
+				createDataBase();
 				dex = getReadableDatabase();
+				
 
 			}
 			catch (SQLiteReadOnlyDatabaseException e)
 			{
 				failcoint++;
 			}
+			catch (IOException e){}
+			
 			Log.e("AAA", "Database retrival loop");
 		}
     }
@@ -79,7 +87,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 		
 	}
 	
-	@Override
+	/*@Override
     public void onCreate(SQLiteDatabase db)
 	{
         copyDatabaseFromAssets(db);
@@ -88,21 +96,24 @@ public class PokedexDatabase extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
+		db.deleteDatabase(new File(db.getPath()));
         copyDatabaseFromAssets(db);
     }
 
     public void copyDatabaseFromAssets(SQLiteDatabase db)
 	{
-
+		if(dex != null)
+		dex.close();
         String oldDbPath = db.getPath();
         try
 		{
-            mContext.getAssets();
-            InputStream input = mContext.getAssets().open(DATABASE_NAME);
-			db.deleteDatabase(new File(oldDbPath));
             //mContext.deleteDatabase(DATABASE_NAME);
+			//db.close();
+			this.getReadableDatabase();
+			this.close();
             OutputStream output = new FileOutputStream(oldDbPath);
-
+			InputStream input = mContext.getAssets().open(DATABASE_NAME);
+			
             byte[] buffer = new byte[1024];
             int length;
             while ((length = input.read(buffer)) > 0)
@@ -120,7 +131,119 @@ public class PokedexDatabase extends SQLiteOpenHelper
         }
     }
 
+*/
 
+	public void createDataBase() throws IOException{
+
+    	boolean dbExist = checkDataBase();
+
+    	if(dbExist){
+    		//do nothing - database already exist
+    	}else{
+
+    		//By calling this method and empty database will be created into the default system path
+			//of your application so we are gonna be able to overwrite that database with our database.
+        	this.getReadableDatabase();
+
+        	try {
+
+    			copyDataBase();
+				this.getReadableDatabase().setVersion(DATABASE_VERSION);
+
+    		} catch (IOException e) {
+
+        		throw new Error("Error copying database");
+
+        	}
+    	}
+
+    }
+
+    /**
+     * Check if the database already exist to avoid re-copying the file each time you open the application.
+     * @return true if it exists, false if it doesn't
+     */
+    private boolean checkDataBase(){
+
+    	SQLiteDatabase checkDB = null;
+
+    	try{
+    		String myPath = DB_PATH + DB_NAME;
+    		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+
+    	}catch(SQLiteException e){
+
+    		//database does't exist yet.
+
+    	}
+
+    	if(checkDB != null){
+
+    		checkDB.close();
+
+    	}
+
+    	return checkDB != null ? true : false;
+    }
+
+    /**
+     * Copies your database from your local assets-folder to the just created empty database in the
+     * system folder, from where it can be accessed and handled.
+     * This is done by transfering bytestream.
+     * */
+    private void copyDataBase() throws IOException{
+
+    	//Open your local db as the input stream
+    	InputStream myInput = myContext.getAssets().open(DB_NAME);
+
+    	// Path to the just created empty db
+    	String outFileName = DB_PATH + DB_NAME;
+
+    	//Open the empty db as the output stream
+    	OutputStream myOutput = new FileOutputStream(outFileName);
+
+    	//transfer bytes from the inputfile to the outputfile
+    	byte[] buffer = new byte[1024];
+    	int length;
+    	while ((length = myInput.read(buffer))>0){
+    		myOutput.write(buffer, 0, length);
+    	}
+
+    	//Close the streams
+    	myOutput.flush();
+    	myOutput.close();
+    	myInput.close();
+
+    }
+
+    public void openDataBase() throws SQLException{
+
+    	//Open the database
+        String myPath = DB_PATH + DB_NAME;
+    	dex = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+
+    }
+
+    @Override
+	public synchronized void close() {
+
+		if(dex != null)
+			dex.close();
+
+		super.close();
+
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		myContext.deleteDatabase(DB_NAME);
+	}
+	
 	public static final int[] GEN_STAT_VERSIONS = {0,1,1,1,1,1};
 	public static final String[][] STAT_LABELS = {
 		{"HP", "Attack", "Defense", "Special", "Speed"},
@@ -136,7 +259,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
     };
 	public static final int[][] STAT_MAXES = {
 		{250, 150, 200, 150, 150},
-		{250, 200, 250, 200, 250, 200}
+		{255, 200, 250, 200, 250, 200}
 	};
 	public static final int STAT_TOTAL_COLOR = 0xAAAAAA;
 	public static final String STAT_TOTAL_LABEL = "Total";

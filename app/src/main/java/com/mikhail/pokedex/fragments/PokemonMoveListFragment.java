@@ -34,6 +34,8 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 
 	};
 
+	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);

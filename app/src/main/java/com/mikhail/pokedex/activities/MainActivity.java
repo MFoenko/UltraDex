@@ -264,6 +264,15 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     }
 
 	@Override
+	protected void onDestroy()
+	{
+		unbindService(mServiceConn);
+		super.onDestroy();
+	}
+
+	
+	
+	@Override
 	protected void onStart()
 	{
 		super.onStart();
@@ -299,7 +308,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
 		super.onRestoreInstanceState(savedInstanceState);
-		onItemClick(null, null, savedInstanceState.getInt(KEY_FRAG), 0);
+	//	onItemClick(null, null, savedInstanceState.getInt(KEY_FRAG), 0);
 	}
 
 
@@ -316,6 +325,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			fm.beginTransaction().replace(R.id.content_view, (Fragment)DRAWER_ITEMS[p3]).commit();
 			getSupportActionBar().setTitle(DRAWER_ITEMS[p3].getDrawerItemName());
 			//mLeftDrawer.setItemChecked(p3, true);
+			mLeftDrawer.setSelection(p3);
 			if (DRAWER_ITEMS[p3] instanceof UsesRightDrawer)
 			{
 				mRightDrawer.removeAllViews();

@@ -11,8 +11,10 @@ public abstract class InfoPagerFragment<I> extends Fragment{
 	protected boolean isPrimary = true;
 
 	public InfoPagerFragment(){
-		//setRetainInstance(true);
+		setRetainInstance(true);
 	}
+	
+	
 	
 	public void loadData(final I data){
 		isDisplayed = false;

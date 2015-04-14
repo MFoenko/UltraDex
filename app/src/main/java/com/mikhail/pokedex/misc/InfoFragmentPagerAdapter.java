@@ -48,6 +48,10 @@ public abstract class InfoFragmentPagerAdapter<T> extends PagerAdapter{
 	public Fragment instantiateItem(ViewGroup container, int position){
 		Fragment fragment = getItem(position);
 		FragmentTransaction trans = fragmentManager.beginTransaction();
+		Fragment old = fragmentManager.findFragmentByTag("fragment:"+position);
+		if(old != null){
+			trans.remove(old);
+		}
 		trans.add(container.getId(), fragment, "fragment:" + position);
 		trans.commit();
 		return fragment;

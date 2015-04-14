@@ -3,32 +3,38 @@
 	android:layout_width="match_parent"
     android:layout_height="match_parent"
 >	
-
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/content"
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:orientation="horizontal">
-		<FrameLayout
-			android:id="@+id/top_content"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="2"
-		/>
-		<android.support.v4.view.ViewPager
-			android:id="@+id/details"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="3"
-			style="@style/InfoPager"
-		>
-			<android.support.v4.view.PagerTitleStrip
-				android:id="@+id/pager_title_strip"
-				android:layout_width="match_parent"
-				android:layout_height="48dp"
-				style="@style/HeaderText"
+		android:orientation="vertical"
+	>
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/content"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:orientation="horizontal">
+			<FrameLayout
+				android:id="@+id/top_content"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="2"
 			/>
-		</android.support.v4.view.ViewPager>
+			<android.support.v4.view.ViewPager
+				android:id="@+id/details"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="3"
+				style="@style/InfoPager"
+			>
+				<android.support.v4.view.PagerTitleStrip
+					android:id="@+id/pager_title_strip"
+					android:layout_width="match_parent"
+					android:layout_height="48dp"
+					style="@style/HeaderText"
+				/>
+			</android.support.v4.view.ViewPager>
+		</LinearLayout>
 		<fragment
 			class = "com.mikhail.pokedex.fragments.AdmobBannerAd"
 			android:layout_width="match_parent"

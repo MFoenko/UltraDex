@@ -2,8 +2,10 @@ package com.mikhail.pokedex.fragments;
 
 import android.content.*;
 import android.media.*;
+import android.net.*;
 import android.os.*;
 import android.text.method.*;
+import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -29,7 +31,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 	int[] mFormIds;
 
 	SoundPool mSoundPool = new SoundPool(1,AudioManager.STREAM_MUSIC,0);
-	
+	MediaPlayer mMediaPlayer = new MediaPlayer();
 
 	private View mLayout;
 
@@ -86,7 +88,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-
+		setHasOptionsMenu(true);
 		mLayout = inflater.inflate(R.layout.pokemon_info_fragment, container, false);
 
 		treeLL = (LinearLayout)mLayout.findViewById(R.id.evolutions_container);
@@ -110,6 +112,8 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 		eggGroupTV = (TextView)mLayout.findViewById(R.id.egg);
 		stepsTV = (TextView)mLayout.findViewById(R.id.steps);
 
+		
+		
 		
 		return mLayout;
 
@@ -151,14 +155,35 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 			mFormIds[i] = mForms[i].id;
 		}
 
-		File sound = new File(pokedexDatabase.mContext.getExternalFilesDir(""), data.getCryFileNameNoExtension()+".ogg");
+		File sound = new File(pokedexDatabase.myContext.getExternalFilesDir("")+"/Cries", data.getCryFileNameNoExtension()+".ogg");
 		if(!sound.exists()){
-			sound = new File(pokedexDatabase.mContext.getExternalFilesDir(""), data.getCryFileNameNoExtension()+".ogg");
+			sound = new File(pokedexDatabase.myContext.getExternalFilesDir("")+"/Cries", data.getCryFileNameNoExtension()+".wav");
 		}
 
-
+	Log.i("AAA", ""+sound);
 		mSoundPool.load(sound.getAbsolutePath(), 1);
+		/*try
+		{
+			mMediaPlayer.setDataSource(sound.getAbsolutePath());
+		}
+		catch (IllegalArgumentException e)
+		{}
+		catch (SecurityException e)
+		{}
+		catch (IllegalStateException e)
+		{}
+		catch (IOException e)
+		{}*/
 	}
+
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		mMediaPlayer.release();
+	}
+	
+	
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -172,7 +197,10 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.play_cry:
-				mSoundPool.play(0, 1.0f, 1.0f, 1, -1, 1.0f);
+				mSoundPool.play(1, 1.0f, 1.0f, 1, 0, 1.0f);
+			//	mSoundPool.pl
+			//	mMediaPlayer.reset();
+			//	mMediaPlayer.start();
 				return true;
 		}
 

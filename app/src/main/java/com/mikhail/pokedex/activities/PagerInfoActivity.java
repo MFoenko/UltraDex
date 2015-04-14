@@ -1,15 +1,13 @@
 package com.mikhail.pokedex.activities;
 
-import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.mikhail.pokedex.R;
-import com.mikhail.pokedex.misc.InfoFragmentPagerAdapter;
-import com.mikhail.pokedex.misc.UsesRightDrawer;
+import android.content.res.*;
+import android.os.*;
+import android.support.v4.view.*;
+import android.support.v4.widget.*;
+import android.util.*;
+import android.view.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.misc.*;
 
 public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements ViewPager.OnPageChangeListener
 {
@@ -61,8 +59,16 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		? DrawerLayout.LOCK_MODE_UNLOCKED
 		: DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		
-		}
+	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState)
+	{
+		mAdapter.destroy();
+		super.onSaveInstanceState(outState, outPersistentState);
+	}
+
+		
 
 	
 	@Override
@@ -75,15 +81,24 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		// TODO: Implement this method
 	}
 
-
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		mAdapter.destroy();
+		Log.i("AAA", ""+newConfig);
+		super.onConfigurationChanged(newConfig);
+	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		//mAdapter.destroy();
+	protected void onStop()
+	{
+		super.onStop();
+		
 	}
+
+
 	
-	
+
 	
 	
 	public abstract int getDefaultPage();
