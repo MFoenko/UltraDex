@@ -7,8 +7,8 @@ android {
         applicationId "com.mikhail.pokedex"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 46
-        versionName "3.3b"
+        versionCode 51
+        versionName "3.0.3"
     }
     buildTypes {
         release {
