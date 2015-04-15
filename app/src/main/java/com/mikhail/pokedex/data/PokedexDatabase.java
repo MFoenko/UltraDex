@@ -473,10 +473,12 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 
 		Cursor c = this.dex.rawQuery(SINGLE_POKEMON_QUERY_BY_IDENTIFIER, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang), id.toString()});
+		Pokemon p = null;
+		
 
-
-		c.moveToFirst();
-		Pokemon p = getPokemon(c);
+		if(c.moveToFirst()){
+		p = getPokemon(c);
+		}
 		c.close();
 		return p;
 	}
@@ -546,13 +548,20 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 	public Pokemon[] getPokemonByCommonMove(int id)
 	{
-		return getPokemonByCommonMove(id, VERSION, LANG);
+		return getPokemonByCommonMove(id, VERSION);
 	}
-
+	public Pokemon[] getPokemonByCommonMove(int id, int ver)
+	{
+		return getPokemonByCommonMove(id, ver, LANG);
+	}
+	
+	
+	
 	public Pokemon[] getPokemonByCommonMove(int id, int ver, int lang)
 	{
-		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]];
+		int gen = GEN;
 		int vgr = VERSION_VERSION_GROUP[ver];
+		//Log.i("AAA", ""+vgr);
 
 		Cursor c = this.dex.rawQuery(MOVE_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(vgr), String.valueOf(id)});
 		return getPokemonArrayFromCursor(c);
@@ -571,14 +580,20 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 	public Pokemon[] getPokemonByCommonAbility(int id)
 	{
-		return getPokemonByCommonAbility(id, VERSION, LANG);
+		return getPokemonByCommonAbility(id, VERSION);
 	}
-
+	public Pokemon[] getPokemonByCommonAbility(int id, int ver)
+	{
+		return getPokemonByCommonAbility(id, ver, LANG);
+	}
+	
 	public Pokemon[] getPokemonByCommonAbility(int id, int ver, int lang)
 	{
-		int gen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]];
-
-		Cursor c = this.dex.rawQuery(ABILITY_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(gen), String.valueOf(id)});
+		int agen = VERSION_GROUP_GENERATION[VERSION_VERSION_GROUP[ver]];
+		int gen = GEN;
+		//Log.i("AAA", ""+gen);
+		
+		Cursor c = this.dex.rawQuery(ABILITY_POKEMON_QUERY, new String[]{String.valueOf(gen), String.valueOf(gen), String.valueOf(gen), String.valueOf(lang),String.valueOf(agen), String.valueOf(id)});
 		return getPokemonArrayFromCursor(c);
 	}
 
@@ -1222,7 +1237,16 @@ public class PokedexDatabase extends SQLiteOpenHelper
 		}
 		if (LINK_POKEMON.equals(tag.toString()))
 		{
-			return getPokemon(data);
+			try
+			{
+				int id=Integer.parseInt(data.toString());
+				return getPokemon(id);
+			}
+			catch (Exception e)
+			{
+				return getPokemon(data);
+			}
+			
 		}
 		if (LINK_ABILITY.equals(tag.toString()))
 		{

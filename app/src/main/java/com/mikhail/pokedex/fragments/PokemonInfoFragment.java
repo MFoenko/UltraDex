@@ -160,7 +160,25 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 			sound = new File(pokedexDatabase.myContext.getExternalFilesDir("")+"/Cries", data.getCryFileNameNoExtension()+".wav");
 		}
 
-	Log.i("AAA", ""+sound);
+		new Thread(new Runnable(){
+
+				@Override
+				public void run() {
+					for (ArrayList<Evolution> branch:mEvolutions) {
+						for (Evolution evo:branch) {
+							evo.evolvedPoke.loadBitmap(getActivity());
+						}
+					}
+					for (Pokemon p: mForms) {
+						p.loadBitmap(getActivity());
+					}
+
+
+				}
+
+
+			}).start();
+//	Log.i("AAA", ""+sound);
 		mSoundPool.load(sound.getAbsolutePath(), 1);
 		/*try
 		{
@@ -219,24 +237,7 @@ public class PokemonInfoFragment extends InfoPagerFragment<Pokemon> {
 			
 		PokedexDatabase pokedexDatabase = PokedexDatabase.getInstance(getActivity());
 		
-		new Thread(new Runnable(){
-
-				@Override
-				public void run() {
-					for (ArrayList<Evolution> branch:mEvolutions) {
-						for (Evolution evo:branch) {
-							evo.evolvedPoke.loadBitmap(getActivity());
-						}
-					}
-					for (Pokemon p: mForms) {
-						p.loadBitmap(getActivity());
-					}
-					
-					
-				}
-				
-			
-		}).start();
+		
 			
 			
 		float density;

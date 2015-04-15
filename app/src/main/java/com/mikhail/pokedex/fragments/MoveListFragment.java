@@ -16,7 +16,7 @@ import com.mikhail.pokedex.misc.*;
 
 import android.view.View.OnClickListener;
 
-public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, MoveListFragment.MoveListAdapter.MoveViewHolder> implements UsesRightDrawer{
+public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, MoveListFragment.MoveListAdapter.MoveViewHolder> implements UsesFilterDrawer{
 
 	View filters;
 	
@@ -60,7 +60,16 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 			filters = inflater.inflate(R.layout.move_list_filter, container, false);
 
             Button clearFilterButton = (Button)filters.findViewById(R.id.clear_filter_button);
-            clearFilterButton.setOnClickListener(mClearFiltersOnClickListener);
+            clearFilterButton.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View p1)
+					{
+						clearFilters();
+					}
+					
+				
+			});
 
 			ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
 			for (int i=0;i < PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length;i++){
@@ -118,7 +127,28 @@ public abstract class MoveListFragment<TT> extends RecyclerFragment<TT, Move, Mo
 		return filters;
 	}
 
+	@Override
+	public void clearFilters()
+	{
+		mFilter.clear();
+		mFilter.filter();
+		ViewGroup typesContainer = (ViewGroup)filters.findViewById(R.id.type_filters);
+		int len = typesContainer.getChildCount();
+		for(int c=0;c<len;c++){
+			((CheckBox)typesContainer.getChildAt(c).findViewById(R.id.check_box)).setChecked(false);
+		}
+		ViewGroup statsContainer = (ViewGroup)filters.findViewById(R.id.stat_filters);
+		len = statsContainer.getChildCount();
+		for(int c=0;c<len;c++){
+			RangeSeekBar<Integer> seekBar = (RangeSeekBar<Integer>)((ViewGroup)statsContainer.getChildAt(c).findViewById(R.id.seek_bar_container)).getChildAt(0);
+			seekBar.setSelectedMinValue(MoveFilter.STAT_MINS[c]);
+			seekBar.setSelectedMaxValue(MoveFilter.STAT_MAXES[c]);
+		}
+		
+	}
 
+
+	
 
 
 

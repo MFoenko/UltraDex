@@ -127,7 +127,7 @@ public abstract class PokedexClasses {
 		public String getModelFileName() {
 			DecimalFormat df = new DecimalFormat("000");
 			String formattedId = df.format(dispId);
-			return formattedId + (suffix != null ?"-" + suffix: "") + ".gif";
+			return formattedId + (suffix != null && isForm ?"-" + suffix: "") + ".gif";
 		}
 		
 		public String getShinyModelFileName(){
@@ -135,7 +135,7 @@ public abstract class PokedexClasses {
 		}
 
 		public String getCryFileNameNoExtension() {
-			return dispId + (suffix != null ?"-" + suffix: "");
+			return dispId + (suffix != null & isForm ?"-" + suffix: "");
 		}
 
 		public static final int SORT_BY_DISP_ID_ASC = 1;

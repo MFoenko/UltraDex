@@ -47,7 +47,7 @@ import com.mikhail.pokedex.fragments.TypeChartFragment;
 import com.mikhail.pokedex.misc.CrashDialog;
 import com.mikhail.pokedex.misc.DrawerHeader;
 import com.mikhail.pokedex.misc.DrawerItem;
-import com.mikhail.pokedex.misc.UsesRightDrawer;
+import com.mikhail.pokedex.misc.UsesFilterDrawer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -331,10 +331,10 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			getSupportActionBar().setTitle(DRAWER_ITEMS[p3].getDrawerItemName());
 			//mLeftDrawer.setItemChecked(p3, true);
 			mLeftDrawer.setSelection(p3);
-			if (DRAWER_ITEMS[p3] instanceof UsesRightDrawer)
+			if (DRAWER_ITEMS[p3] instanceof UsesFilterDrawer)
 			{
 				mRightDrawer.removeAllViews();
-				View filters = ((UsesRightDrawer)DRAWER_ITEMS[p3]).getRightDrawerLayout(getLayoutInflater(), mRightDrawer);
+				View filters = ((UsesFilterDrawer)DRAWER_ITEMS[p3]).getRightDrawerLayout(getLayoutInflater(), mRightDrawer);
 				if (filters.getParent() != null)
 				{
 					((ViewGroup)filters.getParent()).removeAllViews();
@@ -344,7 +344,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			}
 
 			mDrawerLayout.setDrawerLockMode(
-				(DRAWER_ITEMS[p3] instanceof UsesRightDrawer
+				(DRAWER_ITEMS[p3] instanceof UsesFilterDrawer
 				? DrawerLayout.LOCK_MODE_UNLOCKED
 				: DrawerLayout.LOCK_MODE_LOCKED_CLOSED), mRightDrawer);
 
@@ -382,7 +382,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-            menu.findItem(R.id.filter).setVisible(DRAWER_ITEMS[SELECTED_ITEM] instanceof UsesRightDrawer);
+            menu.findItem(R.id.filter).setVisible(DRAWER_ITEMS[SELECTED_ITEM] instanceof UsesFilterDrawer);
 
         return true;
     }

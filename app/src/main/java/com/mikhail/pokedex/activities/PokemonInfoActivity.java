@@ -1,29 +1,18 @@
 package com.mikhail.pokedex.activities;
 
-import android.graphics.Color;
-import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.TextView;
-
-import com.mikhail.pokedex.R;
-import com.mikhail.pokedex.data.PokedexClasses;
-import com.mikhail.pokedex.data.PokedexClasses.Move;
-import com.mikhail.pokedex.data.PokedexClasses.Pokemon;
-import com.mikhail.pokedex.data.PokedexDatabase;
-import com.mikhail.pokedex.fragments.InfoPagerFragment;
-import com.mikhail.pokedex.fragments.PokemonAbilityListFragment;
-import com.mikhail.pokedex.fragments.PokemonInfoFragment;
-import com.mikhail.pokedex.fragments.PokemonMoveListFragment;
-import com.mikhail.pokedex.fragments.PokemonStatsFragment;
-import com.mikhail.pokedex.fragments.PokemonTypingFragment;
-import com.mikhail.pokedex.misc.InfoFragmentPagerAdapter;
-import com.mikhail.pokedex.misc.TypeView;
+import android.graphics.*;
+import android.support.v4.app.*;
+import android.util.*;
+import android.view.*;
+import android.view.View.*;
+import android.webkit.*;
+import android.widget.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.*;
+import com.mikhail.pokedex.data.PokedexClasses.*;
+import com.mikhail.pokedex.fragments.*;
+import com.mikhail.pokedex.misc.*;
+import java.io.*;
 
 public class PokemonInfoActivity extends PagerInfoActivity<Pokemon> {
 
@@ -179,9 +168,17 @@ public class PokemonInfoActivity extends PagerInfoActivity<Pokemon> {
 			String gifUrl;
 			if (isShiny) {
 				gifUrl = PokedexClasses.SHINY_GIF_URL + currentItem.getShinyModelFileName();
+				//Log.d("AAA",gifUrl);
 			} else {
 				gifUrl = "file://" + getExternalFilesDir(null) + "/" + PokedexClasses.MODELS_DIR + currentItem.getModelFileName();
+				File f = new File(getExternalFilesDir(null) + "/" + PokedexClasses.MODELS_DIR + currentItem.getModelFileName());
+				/*if(!f.exists()){
+					Log.e("AAA", f.getAbsolutePath());
+				}else{
+					Log.i("AAA", f.getAbsolutePath());
+				}*/
 			}
+			
 			mModelWV.loadDataWithBaseURL("", "<body style='text-align:center'><img src='" + gifUrl + "'/></body>", "text/html", "UTF-8", null);
 
 		}

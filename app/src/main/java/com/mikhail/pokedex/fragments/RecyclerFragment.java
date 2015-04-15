@@ -3,34 +3,33 @@ package com.mikhail.pokedex.fragments;
 
 import android.app.*;
 import android.os.*;
+import android.preference.*;
+import android.support.v4.view.*;
 import android.support.v7.widget.*;
 import android.text.*;
 import android.util.*;
 import android.view.*;
+import android.view.View.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
 import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
 import com.mikhail.pokedex.misc.*;
 import java.util.*;
 
+import android.view.View.OnClickListener;
+
 public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*, VarComparable<T>*/, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
 
-
+	protected View mLayout;
+	
 	protected RecyclerView mRecyclerView;
 	protected ScrollBarView mScrollerView;
 	protected ListItemAdapter<T, VH> mAdapter;
 	protected Filter mFilter;
 	protected SortAdapter mSortAdapter;
 	protected T[] mData;
-
-    protected View.OnClickListener mClearFiltersOnClickListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            mFilter.clear();
-            mFilter.filter();
-        }
-    };
 
 	Menu menu;
 	
@@ -45,20 +44,21 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		super.onCreateView(inflater, container, savedInstanceState);
-		View layout = inflater.inflate(R.layout.item_list, container, false);
+		mLayout = inflater.inflate(R.layout.item_list, container, false);
 
-		mRecyclerView = (RecyclerView)layout.findViewById(R.id.recycler_view);
+		mRecyclerView = (RecyclerView)mLayout.findViewById(R.id.recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
 		mRecyclerView.setAdapter(mAdapter = getNewAdapter());
 
-		mScrollerView = (ScrollBarView)layout.findViewById(R.id.scrollBar);
+		mScrollerView = (ScrollBarView)mLayout.findViewById(R.id.scrollBar);
 		mScrollerView.setRecyclerView(mRecyclerView);
 
 		mFilter = getNewFilter(getActivity());
         mFilter.filter();
 
-		return layout;
+		return mLayout;
 	}
+
 
 
 	@Override
@@ -71,7 +71,7 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 			inflater.inflate(R.menu.search, menu);
 			MenuItem search = menuItems[0] = menu.findItem(R.id.search);
 			View searchBar = search.getActionView();
-			EditText searchView = (EditText)searchBar.findViewById(R.id.search_box);
+			final EditText searchView = (EditText)searchBar.findViewById(R.id.search_box);
 			searchView.addTextChangedListener(new TextWatcher(){
 
 					@Override
@@ -90,6 +90,34 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 
 
 				});
+		ImageView clearButton = (ImageView)searchBar.findViewById(R.id.clear_search);
+		clearButton.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					searchView.setText("");
+				}
+				
+			
+		});
+		MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.search), new MenuItemCompat.OnActionExpandListener(){
+
+				@Override
+				public boolean onMenuItemActionExpand(MenuItem p1)
+				{
+					return true;
+				}
+
+				@Override
+				public boolean onMenuItemActionCollapse(MenuItem p1)
+				{
+					searchView.setText("");
+					return true;
+				}
+				
+			
+		});
 //		}
 	//	if (menuItems[1] == null){
 			inflater.inflate(R.menu.sort, menu);
@@ -106,13 +134,14 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 		
 	}
 
-
-
-    public void clearFilters(View view){
-        mFilter = getNewFilter(getActivity());
-        mFilter.filter();
-    }
-
+	public void setUsesVersionSpinner(Spinner.OnItemSelectedListener listener){
+		Spinner gameSpinner = (Spinner)mLayout.findViewById(R.id.item_list_spinner);
+		gameSpinner.setVisibility(View.VISIBLE);
+		gameSpinner.setAdapter(new GamesAdapter());
+		gameSpinner.setOnItemSelectedListener(listener);
+		gameSpinner.setSelection(PokedexDatabase.VERSION_VERSION_GROUP[Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(gameSpinner.getContext()).getString("version_index", "24"))]);
+		
+	}
 
 	public abstract ListItemAdapter<T, VH> getNewAdapter();
 	public abstract Filter<T, VH> getNewFilter(Activity a);

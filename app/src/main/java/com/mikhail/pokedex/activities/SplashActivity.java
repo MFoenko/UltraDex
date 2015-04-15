@@ -46,7 +46,7 @@ import java.util.zip.ZipInputStream;
 public class SplashActivity extends Activity
 {
 
-	public static final int MEDIA_VERSION = 30;
+	public static final int MEDIA_VERSION = 51;
     public static final String ICONS_LOC = "Icons/";
     public static final String MODELS_LOC = "Models/";
 
@@ -244,6 +244,8 @@ public class SplashActivity extends Activity
 
 		public SplashActivity act;
 		public static final String INIT_LOADING_MESSAGE = "Upgrading Ultradex";
+		public int lastPercent = 0;
+
 
 		public final String[] LOADING_MESSAGES = new String[]{
 			"Fishing for Feebas",
@@ -254,7 +256,15 @@ public class SplashActivity extends Activity
 			"Making Pokeblocks",
 			"Cooking Poffins",
 			"Watering Berries",
-			"Connecting to Nintendo WFC"
+			"Connecting to Nintendo WFC",
+			"Pressing A",
+			"Pressing B",
+			"Catching \'em All",
+			"Breeding for IVs",
+			"EV Training",
+			"Obtaining Gym Badges",
+			
+			
 
 		};
 		public static final String DONE_LOADING_MESSAGE = "Launching Ultradex";
@@ -436,11 +446,13 @@ public class SplashActivity extends Activity
 
 						ProgressBar bar = (ProgressBar)findViewById(R.id.splashProgressBar);
 						bar.setProgress(values);
-						if (values != 0 && values % BASE_MESSAGE_REFRESH_PERCENT == 0)
+						if (values != 0 && values % BASE_MESSAGE_REFRESH_PERCENT == 0 && values != lastPercent)
 						{
 							if (loadingMessages.size() > 0)
 							{
+								bar.setIndeterminate(false);
 								loadingTV.setText(loadingMessages.remove((int)(Math.random() * loadingMessages.size())));
+								lastPercent = values;
 							}
 							else
 							{
@@ -498,6 +510,8 @@ public class SplashActivity extends Activity
 
 
 		public SplashActivity act;
+		Handler h;
+		Runnable r;
 
 		public PokedexSetup(SplashActivity act)
 		{
@@ -509,15 +523,44 @@ public class SplashActivity extends Activity
 		protected void onPreExecute()
 		{
 			super.onPreExecute();
+
+
+
+
+			h = new Handler();
+			r = new Runnable(){
+
+				@Override
+				public void run()
+				{
+					runOnUiThread(new Runnable(){
+
+							@Override
+							public void run()
+							{
+
+								/*((TextView)findViewById(R.id.loading_message))*/loadingTV.setText("Upgrading Database");
+								ProgressBar bar = (ProgressBar)findViewById(R.id.splashProgressBar);
+								bar.setVisibility(ProgressBar.VISIBLE);
+								bar.setIndeterminate(true);
+							}
+
+
+						});
+				}
+
+
+			};
+			h.postDelayed(r, 200);
 		}
-
-
-
 		@Override
 		protected Void doInBackground(Context[] p1)
 		{
 
+
+
 			PokedexDatabase dex = PokedexDatabase.getInstance(p1[0]);
+			h.removeCallbacks(r);
 			try
 			{
 				dex.getAllPokemon();

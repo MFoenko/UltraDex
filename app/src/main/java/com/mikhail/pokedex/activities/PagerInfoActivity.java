@@ -45,7 +45,7 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.filter).setVisible(mAdapter.getFragment(mViewPager.getCurrentItem()) instanceof UsesRightDrawer);
+        menu.findItem(R.id.filter).setVisible(mAdapter.getFragment(mViewPager.getCurrentItem()) instanceof UsesFilterDrawer);
 
         return true;
     }
@@ -79,9 +79,9 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 	public void onPageSelected(int p1){
 		mAdapter.onPageSelected(p1);
 		invalidateOptionsMenu();
-		if(mAdapter.getFragment(p1) instanceof UsesRightDrawer){
+		if(mAdapter.getFragment(p1) instanceof UsesFilterDrawer){
 			mRightDrawer.removeAllViews();
-			View filters = ((UsesRightDrawer)mAdapter.getFragment(p1)).getRightDrawerLayout(getLayoutInflater(), mRightDrawer);
+			View filters = ((UsesFilterDrawer)mAdapter.getFragment(p1)).getRightDrawerLayout(getLayoutInflater(), mRightDrawer);
 			if(filters.getParent() != null){
 				((ViewGroup)filters.getParent()).removeAllViews();
 			}
@@ -89,7 +89,7 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 			
 		}
 		mDrawerLayout.setDrawerLockMode(
-		mAdapter.getFragment(p1) instanceof UsesRightDrawer
+		mAdapter.getFragment(p1) instanceof UsesFilterDrawer
 		? DrawerLayout.LOCK_MODE_UNLOCKED
 		: DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		

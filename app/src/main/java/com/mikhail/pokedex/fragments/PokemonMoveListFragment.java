@@ -16,13 +16,13 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 
 	public int versionGroup = PokedexDatabase.VERSION_GROUP;
 
-	private Pokemon mPoke;
+	private int mPokeId;
 
 	private final OnItemSelectedListener GAMES_SPINNER_LISTENER = new OnItemSelectedListener(){
 
 		@Override
 		public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4) {
-			mData = PokedexDatabase.getInstance(getActivity()).getMovesByPokemon(mPoke.id, PokedexDatabase.VERSION_GROUP_VERSION[p3]);
+			mData = PokedexDatabase.getInstance(getActivity()).getMovesByPokemon(mPokeId, PokedexDatabase.VERSION_GROUP_VERSION[p3]);
 			displayData();
 		}
 
@@ -39,12 +39,7 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-
-		Spinner gameSpinner = (Spinner)view.findViewById(R.id.item_list_spinner);
-		gameSpinner.setVisibility(View.VISIBLE);
-		gameSpinner.setAdapter(new GamesAdapter());
-		gameSpinner.setOnItemSelectedListener(GAMES_SPINNER_LISTENER);
-		gameSpinner.setSelection(PokedexDatabase.VERSION_VERSION_GROUP[Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(inflater.getContext()).getString("version_index", "24"))]);
+		setUsesVersionSpinner(GAMES_SPINNER_LISTENER);
 		return view;
 	}
 
@@ -52,8 +47,7 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
 
 	@Override
 	public void setData(Pokemon data) {
-		mPoke = data;
-		mData = PokedexDatabase.getInstance(getActivity()).getMovesByPokemon(data.id);
+		mData = PokedexDatabase.getInstance(getActivity()).getMovesByPokemon(mPokeId = data.id);
 	}
 
 	@Override
@@ -84,50 +78,5 @@ public class PokemonMoveListFragment extends MoveListFragment<Pokemon> {
     }
 
 
-	private static class GamesAdapter extends BaseAdapter {
-
-		public String[] mGames;
-
-		public GamesAdapter(){
-			mGames = new String[PokedexDatabase.VERSION_GROUP+1];
-			for(int i=0;i<mGames.length;i++){
-				mGames[i] = PokedexDatabase.VERSION_GROUP_NAMES[i];
-			}
-			
-		}
-		
-		@Override
-		public int getCount() {
-			return mGames.length;
-		}
-
-		@Override
-		public Object getItem(int p1) {
-			return mGames[p1];
-		}
-
-		@Override
-		public long getItemId(int p1) {
-			return p1;
-		}
-
-		@Override
-		public View getView(int p1, View p2, ViewGroup p3) {
-			TextView gameTV;
-			if (p2 == null) {
-				gameTV = new TextView(p3.getContext());
-				gameTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-			} else {
-				gameTV = (TextView)p2;
-			}
-			gameTV.setText(mGames[p1]);
-			return gameTV;
-		}
-
-
-
-
-	}
-
-
+	
 }
