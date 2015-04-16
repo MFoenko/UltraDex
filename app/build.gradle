@@ -9,8 +9,8 @@ android {
         applicationId "com.mikhail.pokedex"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 51
-        versionName "3.0.3"
+        versionCode 54
+        versionName "3.0.6"
     }
     buildTypes {
         release {
@@ -23,10 +23,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
-    compile 'com.google.android.gms:play-services:7.0.0'
-    compile 'com.android.support:palette-v7:22.0.0'
-    compile 'com.android.support:support-v4:22.0.0'
+	compile fileTree(include: ['*.jar'], dir: 'libs')
+	compile fileTree(include: ['*.arr'], dir: 'libs')
+	//compile name:'[arrFileName]', ext:'aar'
+
+	compile 'com.android.support:recyclerview-v7:+'
+	compile 'com.android.support:palette-v7:+'
+	compile 'com.android.support:appcompat-v7:+'
+	compile 'com.google.android.gms:play-services:+'
+	compile 'com.google.android.gms:play-services-analytics:+'
+    compile 'com.android.support:support-v4:+'
 }
