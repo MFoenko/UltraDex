@@ -12,6 +12,8 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
+
+import com.melnykov.fab.FloatingActionButton;
 import com.mikhail.pokedex.*;
 import com.mikhail.pokedex.data.*;
 import com.mikhail.pokedex.data.PokedexClasses.*;
@@ -141,6 +143,14 @@ public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*,
 		gameSpinner.setSelection(PokedexDatabase.VERSION_VERSION_GROUP[Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(gameSpinner.getContext()).getString("version_index", "24"))]);
 		
 	}
+
+    public void setUsesFAB(OnClickListener listener){
+        FloatingActionButton fab = (FloatingActionButton
+                )mLayout.findViewById(R.id.fab);
+        fab.attachToRecyclerView(mRecyclerView);
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(listener);
+    }
 
 	public abstract ListItemAdapter<T, VH> getNewAdapter();
 	public abstract Filter<T, VH> getNewFilter(Activity a);

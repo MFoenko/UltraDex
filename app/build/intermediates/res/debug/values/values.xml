@@ -143,6 +143,11 @@
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
     <color name="link_text_material_dark">@color/material_deep_teal_200</color>
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.3.0/res/values/values.xml -->
+    <eat-comment/>
+    <color name="material_blue_500">#5677fc</color>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
+    <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>
@@ -189,6 +194,7 @@
     <declare-styleable name="CompatTextView"><attr format="reference|boolean" name="textAllCaps"/></declare-styleable>
     <declare-styleable name="CustomWalletTheme"><attr format="enum" name="windowTransitionStyle"><enum name="slide" value="1"/><enum name="none" value="2"/></attr></declare-styleable>
     <declare-styleable name="DrawerArrowToggle"><attr format="color" name="color"/><attr format="boolean" name="spinBars"/><attr format="dimension" name="drawableSize"/><attr format="dimension" name="gapBetweenBars"/><attr format="dimension" name="topBottomBarArrowSize"/><attr format="dimension" name="middleBarArrowSize"/><attr format="dimension" name="barSize"/><attr format="dimension" name="thickness"/></declare-styleable>
+    <declare-styleable name="FloatingActionButton"><attr format="color" name="fab_colorPressed"/><attr format="color" name="fab_colorNormal"/><attr format="color" name="fab_colorRipple"/><attr format="color" name="fab_colorDisabled"/><attr format="boolean" name="fab_shadow"/><attr format="enum" name="fab_type"><enum name="normal" value="0"/><enum name="mini" value="1"/></attr></declare-styleable>
     <declare-styleable name="LinearLayoutCompat"><attr name="android:orientation"/><attr name="android:gravity"/><attr name="android:baselineAligned"/><attr name="android:baselineAlignedChildIndex"/><attr name="android:weightSum"/><attr format="boolean" name="measureWithLargestChild"/><attr name="divider"/><attr name="showDividers"><flag name="none" value="0"/><flag name="beginning" value="1"/><flag name="middle" value="2"/><flag name="end" value="4"/></attr><attr format="dimension" name="dividerPadding"/></declare-styleable>
     <declare-styleable name="LinearLayoutCompat_Layout"><attr name="android:layout_width"/><attr name="android:layout_height"/><attr name="android:layout_weight"/><attr name="android:layout_gravity"/></declare-styleable>
     <declare-styleable name="ListPopupWindow"><attr name="android:dropDownVerticalOffset"/><attr name="android:dropDownHorizontalOffset"/></declare-styleable>
@@ -263,6 +269,18 @@
     <eat-comment/>
     <dimen name="drawer_item_height">48dp</dimen>
     <dimen name="drawer_width">300dp</dimen>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.3.0/res/values/values.xml -->
+    <eat-comment/>
+    <dimen name="fab_elevation_lollipop">8dp</dimen>
+    <dimen name="fab_scroll_threshold">4dp</dimen>
+    <dimen name="fab_shadow_size">12dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
+    <dimen name="fab_size_normal">56dp</dimen>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.bignerdranch.android/recyclerview-multiselect/0.1/res/values/values.xml -->
+    <eat-comment/>
+    <dimen name="touch_raise">12dp</dimen>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/dimensions.xml -->
+    <eat-comment/>
     <dimen name="type_filter_width">150dp</dimen>
     <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
@@ -360,6 +378,11 @@ available. Please contact the developer for assistance.</string>
     <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="defense_header">Defense</string>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.3.0/res/values/values.xml -->
+    <eat-comment/>
+    <string name="define_FloatingActionButton"/>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
     <string name="evolutions_header">Evolutions</string>
     <string name="evs_header">EVs</string>
     <string name="filter">Filter</string>
@@ -370,6 +393,19 @@ available. Please contact the developer for assistance.</string>
     <string name="left_drawer_closed">Left Drawer Closed</string>
     <string name="left_drawer_open">Left Drawer Open</string>
     <string name="level_hint">Level</string>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.3.0/res/values/values.xml -->
+    <eat-comment/>
+    <string name="library_FloatingActionButton_author">Oleksandr Melnykov</string>
+    <string name="library_FloatingActionButton_authorWebsite">https://github.com/makovkastar/FloatingActionButton</string>
+    <string name="library_FloatingActionButton_isOpenSource">true</string>
+    <string name="library_FloatingActionButton_libraryDescription">Android Google+ like floating action button which reacts on the list view scrolling events. Becomes visible when the list view is scrolled up and invisible when scrolled down.</string>
+    <string name="library_FloatingActionButton_libraryName">FloatingActionButton</string>
+    <string name="library_FloatingActionButton_libraryVersion">1.0.0</string>
+    <string name="library_FloatingActionButton_libraryWebsite">https://github.com/makovkastar/FloatingActionButton</string>
+    <string name="library_FloatingActionButton_licenseId">mit</string>
+    <string name="library_FloatingActionButton_repositoryLink">https://github.com/makovkastar/FloatingActionButton</string>
+    <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
     <string name="num_zero">0</string>
     <string name="pokemon_hint">Pokemon</string>
     <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/values/strings_activity_settings.xml -->

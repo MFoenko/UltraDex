@@ -3,46 +3,53 @@
 	android:layout_width="match_parent"
     android:layout_height="match_parent"
 >	
-
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/content"
-		android:layout_width="match_parent"
+	<com.mikhail.pokedex.misc.GestureContainer
+		android:id="@+id/gesture_container"
 		android:layout_height="match_parent"
-		android:orientation="vertical">
-		<FrameLayout
-			android:id="@+id/top_content"
+		android:layout_width="match_parent"
+	>
+
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/content"
 			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="2"
-			android:padding="4dp"
-			/>
-		<android.support.v4.view.ViewPager
-			android:id="@+id/details"
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="3"
-			style="@style/InfoPager"
-		>
-			<android.support.v4.view.PagerTitleStrip
-				android:id="@+id/pager_title_strip"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+			<FrameLayout
+				android:id="@+id/top_content"
 				android:layout_width="match_parent"
-				android:layout_height="48dp"
-				style="@style/HeaderText"
+				android:layout_height="0dp"
+				android:layout_weight="2"
+				android:padding="4dp"
 			/>
-		</android.support.v4.view.ViewPager>
-		<fragment
-			class = "com.mikhail.pokedex.fragments.AdmobBannerAd"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-		/>
-	</LinearLayout>
+			<android.support.v4.view.ViewPager
+				android:id="@+id/details"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="3"
+				style="@style/InfoPager"
+			>
+				<android.support.v4.view.PagerTitleStrip
+					android:id="@+id/pager_title_strip"
+					android:layout_width="match_parent"
+					android:layout_height="48dp"
+					style="@style/HeaderText"
+				/>
+			</android.support.v4.view.ViewPager>
+			<fragment
+				class = "com.mikhail.pokedex.fragments.AdmobBannerAd"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+			/>
+		</LinearLayout>
+	</com.mikhail.pokedex.misc.GestureContainer>
 	<LinearLayout
 		android:id="@+id/right_drawer"
 		android:layout_width="@dimen/drawer_width"
 		android:layout_height="match_parent"
 		android:layout_gravity="end"
 		android:background="@drawable/shadow"
-		/>
-    
+	/>
+
 </android.support.v4.widget.DrawerLayout>
 <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/layout/pager_info_activity.xml -->

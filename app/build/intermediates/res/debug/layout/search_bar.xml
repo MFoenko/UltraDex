@@ -11,6 +11,14 @@
 		android:textColor="#FFFFFFFF"
 		style="@style/SmallText"
 	/>
-
+	<ImageView
+		android:id="@+id/clear_search"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:padding="4dp"
+		android:clickable="true"
+		android:layout_gravity="right|center_vertical"
+		android:src="@drawable/ic_action_remove"
+		/>
 </FrameLayout>    
 <!-- From: file:/home/mchail/Documents/Programming/Android/Ultradex/app/src/main/res/layout/search_bar.xml -->
