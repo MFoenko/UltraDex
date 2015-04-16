@@ -23,7 +23,6 @@ import android.view.View.OnClickListener;
 public abstract class RecyclerFragment<I, T extends VarComparableDexObject<T>/*, VarComparable<T>*/, VH extends RecyclerView.ViewHolder> extends InfoPagerFragment<I>{
 
 	protected View mLayout;
-	
 	protected RecyclerView mRecyclerView;
 	protected ScrollBarView mScrollerView;
 	protected ListItemAdapter<T, VH> mAdapter;

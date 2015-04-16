@@ -416,9 +416,9 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 	private static class PokemonFilter extends Filter<Pokemon, PokemonListAdapter.PokemonViewHolder>
 	{
 
-		public boolean[] types = new boolean[PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length];
-		private int len = PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]].length;
-		public int[][] stats = {Arrays.copyOf(PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len), Arrays.copyOf(PokedexDatabase.STAT_MAXES[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len)};
+		public boolean[] types = new boolean[PokedexDatabase.TYPE_NAMES[PokedexDatabase.getTypeVersion()].length];
+		private int len = PokedexDatabase.STAT_MINS[PokedexDatabase.getStatVersion()].length;
+		public int[][] stats = {Arrays.copyOf(PokedexDatabase.STAT_MINS[PokedexDatabase.getStatVersion()], len), Arrays.copyOf(PokedexDatabase.STAT_MAXES[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len)};
 		public int[] total = {PokedexDatabase.STAT_TOTAL_MIN, PokedexDatabase.STAT_TOTAL_MAX};
 		public boolean showForms;
 		public boolean[] eggGroups = new boolean[PokedexDatabase.EGG_GROUP_NAMES.length];
@@ -440,7 +440,7 @@ public abstract class PokemonListFragment<T> extends RecyclerFragment<T, Pokemon
 		{
             super.clear();
             types = new boolean[PokedexDatabase.TYPE_NAMES[PokedexDatabase.GEN_TYPE_VERSIONS[PokedexDatabase.GEN]].length];
-            len = PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]].length;
+            len = PokedexDatabase.STAT_MINS[PokedexDatabase.getStatVersion()].length;
             stats = new int[][]{Arrays.copyOf(PokedexDatabase.STAT_MINS[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len), Arrays.copyOf(PokedexDatabase.STAT_MAXES[PokedexDatabase.GEN_STAT_VERSIONS[PokedexDatabase.GEN]], len)};
             total = new int[]{PokedexDatabase.STAT_TOTAL_MIN, PokedexDatabase.STAT_TOTAL_MAX};
             eggGroups = new boolean[PokedexDatabase.EGG_GROUP_NAMES.length];

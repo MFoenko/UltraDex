@@ -3,7 +3,8 @@
 	android:layout_width="match_parent"
     android:layout_height="match_parent"
 >	
-	<FrameLayout
+	<com.mikhail.pokedex.misc.GestureContainer
+		android:id="@+id/gesture_container"
 		android:layout_height="match_parent"
 		android:layout_width="match_parent"
 	>
@@ -41,12 +42,7 @@
 				android:layout_height="wrap_content"
 			/>
 		</LinearLayout>
-		<!--<FrameLayout
-			android:id="@+id/swipe_listener"
-			android:layout_height="match_parent"
-			android:layout_width="match_parent"
-		/>-->
-	</FrameLayout>
+	</com.mikhail.pokedex.misc.GestureContainer>
 	<LinearLayout
 		android:id="@+id/right_drawer"
 		android:layout_width="@dimen/drawer_width"

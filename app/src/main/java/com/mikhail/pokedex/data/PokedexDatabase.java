@@ -21,6 +21,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
     public static final String DATABASE_NAME = "veekun-pokedex.sqlite";
     public static final int DATABASE_VERSION = 16;
+	boolean needsUpgrade = false;
 
 	private static String DB_PATH = "/data/data/com.mikhail.pokedex/databases/";
 
@@ -51,16 +52,16 @@ public class PokedexDatabase extends SQLiteOpenHelper
 			{
 				createDataBase();
 				dex = getReadableDatabase();
-				
 
 			}
 			catch (SQLiteReadOnlyDatabaseException e)
 			{
 				failcoint++;
 			}
-			catch (IOException e){}
+			catch(IOException e){}
 			
 			Log.e("AAA", "Database retrival loop");
+			
 		}
     }
 
@@ -136,19 +137,17 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	public void createDataBase() throws IOException{
 
     	boolean dbExist = checkDataBase();
-
-    	if(dbExist){
+		SQLiteDatabase db = getReadableDatabase();
+    	if(dbExist && (db.getVersion() < DATABASE_VERSION || !needsUpgrade)){
     		//do nothing - database already exist
     	}else{
 
     		//By calling this method and empty database will be created into the default system path
 			//of your application so we are gonna be able to overwrite that database with our database.
-        	this.getReadableDatabase();
-
+        	
         	try {
 
     			copyDataBase();
-				this.getReadableDatabase().setVersion(DATABASE_VERSION);
 
     		} catch (IOException e) {
 
@@ -214,6 +213,8 @@ public class PokedexDatabase extends SQLiteOpenHelper
     	myOutput.close();
     	myInput.close();
 
+		this.getReadableDatabase().setVersion(DATABASE_VERSION);
+
     }
 
     public void openDataBase() throws SQLException{
@@ -236,12 +237,11 @@ public class PokedexDatabase extends SQLiteOpenHelper
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		myContext.deleteDatabase(DB_NAME);
+		needsUpgrade = true;
 	}
 	
 	public static final int[] GEN_STAT_VERSIONS = {0,1,1,1,1,1};
@@ -427,7 +427,7 @@ public class PokedexDatabase extends SQLiteOpenHelper
 	private static Pokemon[] preloadedPokemon;
 
 
-	private static final String BASE_POKEMON_QUERY_W_O_SELECT = "p._id, p.species_id, CASE f.form_order WHEN 1 THEN sn.name ELSE fn.pokemon_name END, f.form_identifier, (SELECT GROUP_CONCAT(t.type_id-1,',') FROM pokemon_types AS t WHERE t.pokemon_id=p._id AND generation_id-1 <= CAST(? AS INTEGER) GROUP BY pokemon_id,generation_id ORDER BY slot, generation_id DESC LIMIT 1), (SELECT GROUP_CONCAT(s.base_stat,',') FROM pokemon_stats AS s WHERE s.pokemon_id = p._id AND stat_id != (5*(?=='1')) AND generation_id-1 <= CAST(? AS INTEGER) GROUP BY s.generation_id ORDER BY stat_id, generation_id DESC LIMIT 1), sn.genus, p.height/10.0, p.weight/10.0, s.gender_rate, p.base_experience, s.base_happiness, s.capture_rate, s.hatch_counter, (SELECT group_concat(effort) FROM pokemon_stats AS stats WHERE stats.pokemon_id = p._id GROUP BY stats.generation_id ORDER BY stat_id LIMIT 1), (SELECT egg_group_id-1 FROM pokemon_egg_groups WHERE species_id = s.id), p.identifier FROM pokemon AS p JOIN pokemon_species AS s ON (p.species_id = s.id) JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ?";
+	private static final String BASE_POKEMON_QUERY_W_O_SELECT = "p._id, p.species_id, CASE f.form_order WHEN 1 THEN sn.name ELSE fn.pokemon_name END, f.form_identifier, (SELECT GROUP_CONCAT(t.type_id-1,',') FROM pokemon_types AS t WHERE t.pokemon_id=p._id AND generation_id-1 <= CAST(? AS INTEGER) GROUP BY pokemon_id,generation_id ORDER BY slot, generation_id DESC LIMIT 1), (SELECT GROUP_CONCAT(s.base_stat,',') FROM pokemon_stats AS s WHERE s.pokemon_id = p._id AND stat_id != (5*(?=='0')) AND generation_id-1 <= CAST(? AS INTEGER) GROUP BY s.generation_id ORDER BY stat_id, generation_id DESC LIMIT 1), sn.genus, p.height/10.0, p.weight/10.0, s.gender_rate, p.base_experience, s.base_happiness, s.capture_rate, s.hatch_counter, (SELECT group_concat(effort) FROM pokemon_stats AS stats WHERE stats.pokemon_id = p._id GROUP BY stats.generation_id ORDER BY stat_id LIMIT 1), (SELECT egg_group_id-1 FROM pokemon_egg_groups WHERE species_id = s.id), p.identifier FROM pokemon AS p JOIN pokemon_species AS s ON (p.species_id = s.id) JOIN pokemon_forms AS f ON (p._id = f.pokemon_id) JOIN pokemon_species_names AS sn ON (p.species_id = sn.pokemon_species_id) JOIN pokemon_form_names AS fn ON (f.id = fn.pokemon_form_id AND sn.local_language_id = fn.local_language_id ) WHERE fn.local_language_id = ?";
 	private static final String BASE_POKEMON_QUERY = "SELECT " + BASE_POKEMON_QUERY_W_O_SELECT;
 	private static final String ALL_POKEMON_QUERY = BASE_POKEMON_QUERY + " AND f.introduced_in_version_group_id-1 <= CAST(? AS INTEGER) AND f.is_default = 1 ORDER BY p._id;";
 	private static final String SINGLE_POKEMON_QUERY = BASE_POKEMON_QUERY + " AND p._id = ? ORDER BY RANDOM();";

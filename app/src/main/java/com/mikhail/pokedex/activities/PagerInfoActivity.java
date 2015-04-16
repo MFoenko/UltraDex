@@ -32,7 +32,6 @@ public abstract class PagerInfoActivity<T> extends InfoActivity<T> implements Vi
 		ViewGroup contentContainer = (ViewGroup)findViewById(R.id.top_content); 
 		contentContainer.addView(getContentView(getLayoutInflater(), contentContainer));
 		
-		setSwipeListener(mContentView);
 	}
 
     @Override

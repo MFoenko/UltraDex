@@ -1,21 +1,19 @@
 package com.mikhail.pokedex.activities;
 
-import android.animation.ObjectAnimator;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.View;
-
-import com.mikhail.pokedex.data.PokedexDatabase;
-import com.mikhail.pokedex.misc.CrashDialog;
-import com.mikhail.pokedex.misc.OnSwipeTouchListener;
+import android.animation.*;
+import android.os.*;
+import android.support.v7.app.*;
+import android.view.*;
+import com.mikhail.pokedex.*;
+import com.mikhail.pokedex.data.*;
+import com.mikhail.pokedex.misc.*;
 
 public abstract class InfoActivity<T> extends ActionBarActivity{
 
 	protected int[] mIdArray;
 	protected int mCurrentIndex;
 	protected PokedexDatabase mPokedexDatabase;
-	protected OnSwipeTouchListener mOnSwipeListener;
+	protected GestureContainer.OnGestureListener mOnSwipeListener;
 	protected View mContentView;
 	
 	Menu menu;
@@ -40,8 +38,16 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		mOnSwipeListener = new OnSwipeTouchListener(this){
-			public void onSwipeTop(){
+		mOnSwipeListener = new GestureContainer.OnGestureListener(){
+
+			@Override
+			public void onSwipeRight(){}
+
+			@Override
+			public void onSwipeLeft(){}
+			
+			
+			public void onSwipeUp(){
 				new Thread(new Runnable(){
 
 						@Override
@@ -73,7 +79,7 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 				
 				
 			}
-			public void onSwipeBottom(){
+			public void onSwipeDown(){
 				new Thread(new Runnable(){
 
 						@Override
@@ -112,6 +118,8 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 
 	}
 
+	
+	
 	/*@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
@@ -123,19 +131,19 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 		return super.onOptionsItemSelected(item);
 	}
 	*/
-	
 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		this.menu = menu;
 		return super.onCreateOptionsMenu(menu);
 	}
 	
-
+/*
 	protected void setSwipeListener(View v){
 		v.setOnTouchListener(mOnSwipeListener);
 	}
-	
+	*/
 	private void loadData(){
 		new Thread(new Runnable(){
 				@Override
@@ -150,6 +158,16 @@ public abstract class InfoActivity<T> extends ActionBarActivity{
 				}
 			}).start();
 
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState)
+	{
+		super.onPostCreate(savedInstanceState);
+		try{
+			((GestureContainer)findViewById(R.id.gesture_container)).setOnGestureListener(mOnSwipeListener);
+		}catch(ClassCastException e){}
+		catch(NullPointerException e){}
 	}
 
 
